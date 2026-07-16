@@ -1,0 +1,69 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="RevGameScreen.uss" />
+    <ui:VisualElement name="root" class="screen">
+
+        <!-- Header -->
+        <ui:VisualElement name="header" class="header">
+            <ui:Label name="game-title" text="REVOLUTION MANAGER" class="header__title" />
+            <ui:Label name="clock-label" text="Week 1 - Day 1" class="header__clock" />
+        </ui:VisualElement>
+
+        <!-- Main three-column body -->
+        <ui:VisualElement name="body" class="body">
+
+            <!-- Left: the two bars + numbers -->
+            <ui:VisualElement name="status-panel" class="panel panel--left">
+                <ui:Label text="The Race" class="panel__title" />
+                <ui:Label name="community-bar-label" text="Community" class="bar-label" />
+                <ui:ProgressBar name="community-bar" low-value="0" high-value="100" class="bar bar--community" />
+                <ui:Label name="machine-bar-label" text="The Machine" class="bar-label" />
+                <ui:ProgressBar name="machine-bar" low-value="0" high-value="100" class="bar bar--machine" />
+                <ui:VisualElement class="divider" />
+                <ui:Label text="Commune" class="panel__title" />
+                <ui:Label name="people-label" text="People: 0" class="stat" />
+                <ui:Label name="ap-label" text="Action Points: 0" class="stat" />
+            </ui:VisualElement>
+
+            <!-- Center: actions, grouped by type -->
+            <ui:VisualElement name="actions-panel" class="panel panel--center">
+                <ui:Label text="Actions" class="panel__title" />
+                <ui:ScrollView name="actions-scroll" class="actions-scroll">
+                    <ui:VisualElement name="care-group" class="action-group">
+                        <ui:Label text="Care" class="action-group__title action-group__title--care" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="grow-group" class="action-group">
+                        <ui:Label text="Grow" class="action-group__title action-group__title--grow" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="fight-group" class="action-group">
+                        <ui:Label text="Fight" class="action-group__title action-group__title--fight" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+                <ui:Button name="end-day-button" text="End Day" class="end-day-button" />
+            </ui:VisualElement>
+
+            <!-- Right: weekend choice (hidden on weekdays) -->
+            <ui:VisualElement name="weekend-panel" class="panel panel--right">
+                <ui:Label text="The Weekend" class="panel__title" />
+                <ui:Label text="The week is over. What does the movement do with it?" class="weekend-blurb" />
+                <ui:VisualElement name="weekend-container" class="weekend-container" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Bottom: journal feed -->
+        <ui:VisualElement name="journal-panel" class="panel journal-panel">
+            <ui:Label text="Journal" class="panel__title" />
+            <ui:ScrollView name="journal-scroll" class="journal-scroll" />
+        </ui:VisualElement>
+
+        <!-- Ending overlay (hidden until game end) -->
+        <ui:VisualElement name="ending-overlay" class="ending-overlay">
+            <ui:VisualElement class="ending-card">
+                <ui:Label name="ending-title" text="Ending Title" class="ending-card__title" />
+                <ui:Label name="ending-body" text="Ending body text." class="ending-card__body" />
+                <ui:Button name="restart-button" text="Fight Again" class="ending-card__restart" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

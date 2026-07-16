@@ -15,6 +15,6 @@ MonoBehaviour:
   m_EventName: 
   m_EventDescription: 
   m_DebugLog: 0
-  m_InitialValue: 1
+  m_InitialValue: 59
   m_MinValue: 0
   m_MaxValue: 100

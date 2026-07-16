@@ -1,0 +1,263 @@
+/* Terraformental-inspired dark panel look. Placeholder styling: swap fonts,
+   colors, and textures during the stolen-asset art pass. */
+
+.screen {
+    flex-grow: 1;
+    background-color: rgb(18, 18, 18);
+    padding: 8px;
+}
+
+/* ---- Header ---- */
+
+.header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-width: 2px;
+    border-color: rgb(70, 70, 70);
+    background-color: rgb(10, 10, 10);
+    padding: 6px 14px;
+    margin-bottom: 8px;
+}
+
+.header__title {
+    font-size: 28px;
+    -unity-font-style: bold;
+    color: rgb(235, 235, 235);
+    letter-spacing: 6px;
+}
+
+.header__clock {
+    font-size: 18px;
+    color: rgb(200, 200, 200);
+}
+
+/* ---- Layout ---- */
+
+.body {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.panel {
+    background-color: rgb(32, 32, 32);
+    border-width: 1px;
+    border-color: rgb(70, 70, 70);
+    border-radius: 3px;
+    padding: 8px;
+    margin: 4px;
+}
+
+.panel--left {
+    width: 26%;
+}
+
+.panel--center {
+    flex-grow: 1;
+}
+
+.panel--right {
+    width: 26%;
+}
+
+.panel__title {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(230, 230, 230);
+    -unity-text-align: upper-center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(120, 120, 120);
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+}
+
+.divider {
+    height: 1px;
+    background-color: rgb(70, 70, 70);
+    margin: 10px 0;
+}
+
+/* ---- Bars ---- */
+
+.bar-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(220, 220, 220);
+    margin-top: 6px;
+}
+
+.bar {
+    margin: 2px 0 4px 0;
+    height: 24px;
+}
+
+.bar .unity-progress-bar__background {
+    background-color: rgb(15, 15, 15);
+    border-color: rgb(90, 90, 90);
+}
+
+.bar--community .unity-progress-bar__progress {
+    background-color: rgb(76, 175, 80);
+}
+
+.bar--machine .unity-progress-bar__progress {
+    background-color: rgb(198, 40, 40);
+}
+
+.stat {
+    font-size: 14px;
+    color: rgb(210, 210, 210);
+    margin: 2px 0;
+}
+
+/* ---- Actions ---- */
+
+.actions-scroll {
+    flex-grow: 1;
+}
+
+.action-group {
+    margin-bottom: 10px;
+}
+
+.action-group__title {
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding: 2px 6px;
+    margin-bottom: 4px;
+    color: rgb(20, 20, 20);
+}
+
+.action-group__title--care { background-color: rgb(129, 199, 132); }
+.action-group__title--grow { background-color: rgb(255, 213, 79); }
+.action-group__title--fight { background-color: rgb(229, 115, 115); }
+
+.action-button {
+    -unity-text-align: middle-left;
+    padding: 6px 10px;
+    margin: 2px 0;
+    background-color: rgb(48, 48, 48);
+    border-color: rgb(90, 90, 90);
+    border-width: 1px;
+    border-radius: 2px;
+    color: rgb(225, 225, 225);
+    font-size: 14px;
+}
+
+.action-button:hover:enabled {
+    background-color: rgb(64, 64, 64);
+}
+
+.action-button:disabled {
+    opacity: 0.35;
+}
+
+.end-day-button {
+    height: 34px;
+    margin-top: 6px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    background-color: rgb(55, 71, 79);
+    color: rgb(230, 230, 230);
+    border-color: rgb(120, 144, 156);
+    border-width: 1px;
+}
+
+.end-day-button:disabled {
+    opacity: 0.35;
+}
+
+/* ---- Weekend ---- */
+
+.weekend-blurb {
+    font-size: 13px;
+    color: rgb(180, 180, 180);
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.weekend-container {
+    flex-grow: 1;
+}
+
+.weekend-button {
+    padding: 8px 10px;
+    margin: 3px 0;
+    background-color: rgb(48, 40, 40);
+    border-color: rgb(120, 90, 90);
+    border-width: 1px;
+    color: rgb(230, 220, 220);
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.weekend-button:disabled {
+    opacity: 0.35;
+}
+
+/* ---- Journal ---- */
+
+.journal-panel {
+    height: 26%;
+}
+
+.journal-scroll {
+    flex-grow: 1;
+}
+
+.journal-entry {
+    font-size: 13px;
+    margin: 1px 0;
+    white-space: normal;
+}
+
+.journal-entry--flavor { color: rgb(160, 160, 160); }
+.journal-entry--important { color: rgb(255, 213, 79); }
+.journal-entry--crisis { color: rgb(239, 83, 80); }
+
+/* ---- Ending overlay ---- */
+
+.ending-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.ending-overlay--visible {
+    display: flex;
+}
+
+.ending-card {
+    width: 55%;
+    background-color: rgb(25, 25, 25);
+    border-width: 2px;
+    border-color: rgb(120, 120, 120);
+    padding: 24px;
+}
+
+.ending-card__title {
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: rgb(235, 235, 235);
+    -unity-text-align: upper-center;
+    margin-bottom: 12px;
+}
+
+.ending-card__body {
+    font-size: 15px;
+    color: rgb(200, 200, 200);
+    white-space: normal;
+    margin-bottom: 18px;
+}
+
+.ending-card__restart {
+    height: 36px;
+    font-size: 16px;
+    -unity-font-style: bold;
+}

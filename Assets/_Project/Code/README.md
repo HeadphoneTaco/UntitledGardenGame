@@ -58,10 +58,21 @@ the Inspector, not editing code.
   news firing, ending selection. UI talks to: `TryExecuteAction`, `EndDay`,
   `ChooseWeekend`, `JournalUpdated`, `GameEnded`.
 
+## UI (UI Toolkit)
+
+The screen is `_Project/UI/RevGameScreen.uxml` + `RevGameScreen.uss`, driven
+by `Code/UI/RevGameScreenController.cs` on a UIDocument. Action and weekend
+buttons are generated from the buckets at runtime, so new content assets
+appear in the UI automatically. Layout and styling changes are text edits to
+the uxml/uss files; no scene surgery.
+
+The old uGUI binding components (ActionButtonBinding, WeekendButtonBinding,
+NamedValueTextBinding) are superseded by this and safe to delete.
+
 ## Not built yet (on purpose)
 
-- All UI (Terraformental-style layout comes next)
 - Timed/visual action queue (actions resolve instantly for now; a queue is
   presentation on top of the same calls)
 - EffectsIfIgnored on news (stretch goal from the doc)
-- Title / pause / end screens (jam requirement, quick to add at the end)
+- VCR collage payoff screen (weekend resolution currently journal-only)
+- Title / pause screens (jam requirement, quick to add at the end)

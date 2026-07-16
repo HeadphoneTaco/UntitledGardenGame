@@ -88,6 +88,12 @@ namespace RevManager {
 
         public GameVariableFloatRange Community => m_Community;
         public GameVariableFloatRange Machine => m_Machine;
+        public GameVariableFloat People => m_People;
+        public GameVariableInt Week => m_Week;
+        public GameVariableInt Day => m_Day;
+        public GameVariableInt ActionPointsLeft => m_ActionPointsLeft;
+        public int TotalWeeks => m_TotalWeeks;
+        public int DaysPerWeek => m_DaysPerWeek;
         public ActionBucket Actions => m_Actions;
         public WeekendOptionBucket WeekendOptions => m_WeekendOptions;
 
