@@ -61,6 +61,10 @@ namespace RevManager {
         [Header("News")]
         [SerializeField, Range(0f, 1f)] private float m_NewsChancePerDay = 0.5f;
 
+        [Header("Game Flow (CoreUtils StateMachine)")]
+        [SerializeField, Tooltip("StateMachine with child GameObjects named Weekday, Weekend, and Ending. Mirrors the phase so scene objects can react via State/StateEvents. Optional but recommended.")]
+        private StateMachine m_GameFlow;
+
         [Header("Content Buckets")]
         [SerializeField] private ActionBucket m_Actions;
         [SerializeField] private NewsEventBucket m_News;
@@ -111,7 +115,7 @@ namespace RevManager {
 
             m_Week.Value = 1;
             m_Day.Value = 1;
-            Phase = GamePhase.Weekday;
+            SetPhase(GamePhase.Weekday);
 
             // Watch for collapse via Changed, not MinReached: MinReached only fires
             // when a hit lands exactly on the minimum, and most killing blows overshoot.
@@ -159,7 +163,7 @@ namespace RevManager {
             TryFireNews();
 
             if (m_Day.Value >= m_DaysPerWeek) {
-                Phase = GamePhase.Weekend;
+                SetPhase(GamePhase.Weekend);
                 RaiseIfSet(m_OnWeekendReached);
             } else {
                 m_Day.Value += 1;
@@ -217,7 +221,7 @@ namespace RevManager {
             } else {
                 m_Week.Value += 1;
                 m_Day.Value = 1;
-                Phase = GamePhase.Weekday;
+                SetPhase(GamePhase.Weekday);
                 BeginDay();
             }
         }
@@ -273,7 +277,7 @@ namespace RevManager {
         }
 
         private void FinishRun(bool earlyCollapse) {
-            Phase = GamePhase.Finished;
+            SetPhase(GamePhase.Finished);
             m_Community.Changed -= OnCommunityChanged;
 
             Ending = PickEnding(earlyCollapse);
@@ -298,6 +302,28 @@ namespace RevManager {
             return all.Where(e => e && !e.IsEarlyCollapse)
                 .OrderByDescending(e => e.Priority)
                 .FirstOrDefault(e => e.Matches(m_Machine.Progress, m_Community.Progress));
+        }
+
+        /// <summary>
+        /// Phase changes route through here so the CoreUtils StateMachine stays in
+        /// sync. The machine activates the matching child GameObject, letting any
+        /// scene object react to phases via State/StateEvents with no code.
+        /// </summary>
+        private void SetPhase(GamePhase phase) {
+            Phase = phase;
+            if (m_GameFlow) {
+                switch (phase) {
+                    case GamePhase.Weekday:
+                        m_GameFlow.ChangeState("Weekday");
+                        break;
+                    case GamePhase.Weekend:
+                        m_GameFlow.ChangeState("Weekend");
+                        break;
+                    case GamePhase.Finished:
+                        m_GameFlow.ChangeState("Ending");
+                        break;
+                }
+            }
         }
 
         private static void RaiseIfSet(GameEvent gameEvent) {
