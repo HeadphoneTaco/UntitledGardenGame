@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
-  m_Name: NewNewsEvent
+  m_Name: LocalFlooding
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
-  Headline: 
-  Body: 
+  Headline: Swollen River
+  Body: A local neighborhood is in danger of flooding! Volunteers urgently needed
+    for flood mitigation and evactuation efforts.
   Image: {fileID: 0}
-  Tone: 0
+  Tone: 1
   EarliestWeek: 1
   Weight: 1
-  OneTimeOnly: 1
-  EffectsOnFire: []
+  OneTimeOnly: 0
+  EffectsOnFire:
+  - Variable: {fileID: 11400000, guid: 5e286db65864d7f41b0aa998543f767a, type: 2}
+    Delta: 4
+  - Variable: {fileID: 11400000, guid: b73403ea76a609349a2c601cb00319a4, type: 2}
+    Delta: 2
   EffectsIfIgnored: []

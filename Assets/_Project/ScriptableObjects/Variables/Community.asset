@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31ff3025dab8fc34cad76d3c3a7d4a06, type: 3}
   m_Name: Community
   m_EditorClassIdentifier: CoreUtils::CoreUtils.GameVariables.GameVariableFloatRange
-  m_EventName: 
-  m_EventDescription: 
-  m_DebugLog: 0
+  m_EventName: Commune strength
+  m_EventDescription: How strong is the community
+  m_DebugLog: 1
   m_InitialValue: 59
   m_MinValue: 0
   m_MaxValue: 100

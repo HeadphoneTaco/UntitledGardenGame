@@ -14,10 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.WeekendOptionData
   DisplayName: WeekendBig
   Description: A big weekend activity
-  MinCommunityProgress: 0
-  Costs: []
-  MachineDamage: 0
-  EffectsOnSuccess: []
-  EffectsOnFailure: []
+  MinCommunityProgress: 0.777
+  Costs:
+  - Variable: {fileID: 11400000, guid: b73403ea76a609349a2c601cb00319a4, type: 2}
+    Amount: 10
+  MachineDamage: 10
+  EffectsOnSuccess:
+  - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
+    Delta: 5
+  - Variable: {fileID: 11400000, guid: b73403ea76a609349a2c601cb00319a4, type: 2}
+    Delta: 15
+  EffectsOnFailure:
+  - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
+    Delta: -25
+  - Variable: {fileID: 11400000, guid: b73403ea76a609349a2c601cb00319a4, type: 2}
+    Delta: -5
   RetaliationMultiplier: 1
   CollageFrames: []

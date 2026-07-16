@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31ff3025dab8fc34cad76d3c3a7d4a06, type: 3}
-  m_Name: Health
+  m_Name: AmountFood
   m_EditorClassIdentifier: CoreUtils::CoreUtils.GameVariables.GameVariableFloatRange
-  m_EventName: 
-  m_EventDescription: 
-  m_DebugLog: 0
+  m_EventName: Food storage
+  m_EventDescription: Amount of food stored in the commune
+  m_DebugLog: 1
   m_InitialValue: 50
   m_MinValue: 0
   m_MaxValue: 100

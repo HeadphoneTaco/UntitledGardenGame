@@ -14,6 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventBucket
   m_BucketName: 
   m_Sources:
-  - {fileID: 0}
-  m_AssetRefs: []
+  - {fileID: 102900000, guid: 995743248f71aaa46aef88308e08c01f, type: 3}
+  m_AssetRefs:
+  - Name: localflooding
+    Guid: 3e6e5f4fd0b2d0046bada59c55a38fd4
+    Asset: {fileID: 11400000, guid: 3e6e5f4fd0b2d0046bada59c55a38fd4, type: 2}
+  - Name: poweroutage
+    Guid: 78990160427bb7c4c84cce494feb64c7
+    Asset: {fileID: 11400000, guid: 78990160427bb7c4c84cce494feb64c7, type: 2}
+  - Name: hungrysquirrels
+    Guid: 806cc27c32a778044b951fe98b0fdff9
+    Asset: {fileID: 11400000, guid: 806cc27c32a778044b951fe98b0fdff9, type: 2}
+  - Name: naturaldisaster
+    Guid: c244f7f2158c8b8428321390aa59bf9a
+    Asset: {fileID: 11400000, guid: c244f7f2158c8b8428321390aa59bf9a, type: 2}
   m_ManualUpdate: 0

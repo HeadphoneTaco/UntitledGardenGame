@@ -14,6 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionBucket
   m_BucketName: 
   m_Sources:
-  - {fileID: 0}
-  m_AssetRefs: []
+  - {fileID: 102900000, guid: fee80b71fce050b43b41c736d2954d7d, type: 3}
+  m_AssetRefs:
+  - Name: fight
+    Guid: 0b562cd7b27186549bc6b4d177c177be
+    Asset: {fileID: 11400000, guid: 0b562cd7b27186549bc6b4d177c177be, type: 2}
+  - Name: care
+    Guid: 5fa3e4ce3e292ce4a8cdcb863d8969e0
+    Asset: {fileID: 11400000, guid: 5fa3e4ce3e292ce4a8cdcb863d8969e0, type: 2}
+  - Name: grow
+    Guid: 76d44f838648e054cb56539a7dd3bf4e
+    Asset: {fileID: 11400000, guid: 76d44f838648e054cb56539a7dd3bf4e, type: 2}
   m_ManualUpdate: 0

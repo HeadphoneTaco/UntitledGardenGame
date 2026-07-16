@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710d204b34a7af6438d72f7503be4f83, type: 3}
   m_Name: EndingFallback
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.EndingData
-  Title: 
-  Body: Fallback ending
+  Title: Fallback ending
+  Body: This is the fallback ending
   Image: {fileID: 0}
   MaxMachineProgress: 1
   MinCommunityProgress: 0

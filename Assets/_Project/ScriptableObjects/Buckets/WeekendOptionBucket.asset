@@ -14,6 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.WeekendOptionBucket
   m_BucketName: 
   m_Sources:
-  - {fileID: 0}
-  m_AssetRefs: []
+  - {fileID: 102900000, guid: a3923c8a0c2335c4aa6a209d65744e14, type: 3}
+  m_AssetRefs:
+  - Name: rest
+    Guid: 1bba5e9e7a9f6c244be3d6139c8506c8
+    Asset: {fileID: 11400000, guid: 1bba5e9e7a9f6c244be3d6139c8506c8, type: 2}
+  - Name: big
+    Guid: 4765e89f5ca409447b4ec87c5bfc005f
+    Asset: {fileID: 11400000, guid: 4765e89f5ca409447b4ec87c5bfc005f, type: 2}
+  - Name: small
+    Guid: fe526a3b9363e2b4688168bc8e3fb62d
+    Asset: {fileID: 11400000, guid: fe526a3b9363e2b4688168bc8e3fb62d, type: 2}
   m_ManualUpdate: 0

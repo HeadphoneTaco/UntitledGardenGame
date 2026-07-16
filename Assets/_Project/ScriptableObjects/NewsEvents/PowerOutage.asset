@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
+  m_Name: PowerOutage
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
+  Headline: Hey, who turned out the lights!?
+  Body: There has been an unscheduled disconnection of local power lines to our city.
+    Residents are urged to stay indoors, and not cause any confrontations.
+  Image: {fileID: 0}
+  Tone: 1
+  EarliestWeek: 1
+  Weight: 1
+  OneTimeOnly: 0
+  EffectsOnFire:
+  - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
+    Delta: 6
+  - Variable: {fileID: 11400000, guid: 5e286db65864d7f41b0aa998543f767a, type: 2}
+    Delta: 5
+  - Variable: {fileID: 11400000, guid: b73403ea76a609349a2c601cb00319a4, type: 2}
+    Delta: 3
+  EffectsIfIgnored: []

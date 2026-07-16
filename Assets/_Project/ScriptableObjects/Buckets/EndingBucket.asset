@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.EndingBucket
   m_BucketName: 
   m_Sources:
-  - {fileID: 0}
-  m_AssetRefs: []
+  - {fileID: 102900000, guid: 40b05511359ff354b8c40c21c154535f, type: 3}
+  m_AssetRefs:
+  - Name: endingfallback
+    Guid: 1901bf1a43c97e54093d6213ed7db17b
+    Asset: {fileID: 11400000, guid: 1901bf1a43c97e54093d6213ed7db17b, type: 2}
+  - Name: endingearly
+    Guid: 4d03bedb6ffa6e248aae01074e0a712c
+    Asset: {fileID: 11400000, guid: 4d03bedb6ffa6e248aae01074e0a712c, type: 2}
   m_ManualUpdate: 0
