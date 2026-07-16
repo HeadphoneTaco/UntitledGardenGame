@@ -29,6 +29,9 @@ namespace RevManager {
 
         private readonly List<(Button button, ActionData action)> m_ActionButtons = new List<(Button, ActionData)>();
         private readonly List<(Button button, WeekendOptionData option)> m_WeekendButtons = new List<(Button, WeekendOptionData)>();
+        private readonly List<VisualElement> m_CalendarCells = new List<VisualElement>();
+
+        private static readonly string[] s_DayNames = { "MON", "TUE", "WED", "THU", "FRI" };
 
         private RevGameManager Manager => RevGameManager.Exists ? RevGameManager.Instance : null;
         private bool m_Built;
@@ -110,6 +113,30 @@ namespace RevManager {
                 }
             }
 
+            // Calendar strip: one tile per weekday, then Saturday and Sunday.
+            VisualElement calendar = root.Q<VisualElement>("calendar");
+            int weekdays = Manager.DaysPerWeek;
+            for (int i = 0; i < weekdays + 2; i++) {
+                bool isWeekend = i >= weekdays;
+                var cell = new VisualElement();
+                cell.AddToClassList("calendar-cell");
+                if (isWeekend) {
+                    cell.AddToClassList("calendar-cell--weekend");
+                }
+
+                string dayName = isWeekend ? (i == weekdays ? "SAT" : "SUN")
+                    : weekdays == s_DayNames.Length ? s_DayNames[i] : "DAY";
+                var name = new Label(dayName);
+                name.AddToClassList("calendar-cell__name");
+                var num = new Label((i + 1).ToString());
+                num.AddToClassList("calendar-cell__num");
+
+                cell.Add(name);
+                cell.Add(num);
+                calendar.Add(cell);
+                m_CalendarCells.Add(cell);
+            }
+
             // Backfill journal entries that fired before the UI was ready.
             foreach (JournalEntry entry in Manager.Journal) {
                 OnJournalUpdated(entry);
@@ -130,9 +157,33 @@ namespace RevManager {
             m_MachineBar.value = Manager.Machine.Progress * 100f;
             m_MachineBarLabel.text = $"The Machine  {Manager.Machine.Progress * 100f:0}%";
 
-            m_ClockLabel.text = Manager.Phase == GamePhase.Weekend
-                ? $"Week {Manager.Week.Value} - Weekend"
-                : $"Week {Manager.Week.Value} - Day {Manager.Day.Value} of {Manager.DaysPerWeek}";
+            m_ClockLabel.text = $"Week {Manager.Week.Value} of {Manager.TotalWeeks}";
+
+            for (int i = 0; i < m_CalendarCells.Count; i++) {
+                VisualElement cell = m_CalendarCells[i];
+                bool isWeekendCell = i >= Manager.DaysPerWeek;
+                bool isPast;
+                bool isCurrent;
+
+                switch (Manager.Phase) {
+                    case GamePhase.Weekday:
+                        isCurrent = i == Manager.Day.Value - 1;
+                        isPast = i < Manager.Day.Value - 1;
+                        break;
+                    case GamePhase.Weekend:
+                        // The weekend resolves as one choice, so SAT and SUN light up together.
+                        isCurrent = isWeekendCell;
+                        isPast = !isWeekendCell;
+                        break;
+                    default:
+                        isCurrent = false;
+                        isPast = true;
+                        break;
+                }
+
+                cell.EnableInClassList("calendar-cell--past", isPast);
+                cell.EnableInClassList("calendar-cell--current", isCurrent);
+            }
             m_PeopleLabel.text = $"People: {Manager.People.Value:0}";
             m_ApLabel.text = $"Action Points: {Manager.ActionPointsLeft.Value}";
 

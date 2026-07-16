@@ -32,6 +32,72 @@
     color: rgb(200, 200, 200);
 }
 
+/* ---- Calendar strip ---- */
+
+.calendar-row {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 4px 4px 4px;
+}
+
+.calendar-week {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(200, 200, 200);
+    margin-right: 14px;
+}
+
+.calendar {
+    flex-direction: row;
+}
+
+.calendar-cell {
+    width: 64px;
+    padding: 4px 4px 6px 4px;
+    margin: 0 3px;
+    align-items: center;
+    background-color: rgb(32, 32, 32);
+    border-width: 1px;
+    border-color: rgb(90, 90, 90);
+    border-radius: 3px;
+}
+
+.calendar-cell__name {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgb(170, 170, 170);
+}
+
+.calendar-cell__num {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(225, 225, 225);
+}
+
+.calendar-cell--weekend {
+    border-color: rgb(150, 80, 80);
+}
+
+.calendar-cell--weekend .calendar-cell__name {
+    color: rgb(220, 140, 140);
+}
+
+.calendar-cell--past {
+    opacity: 0.35;
+}
+
+.calendar-cell--current {
+    border-width: 2px;
+    border-color: rgb(76, 175, 80);
+    background-color: rgb(40, 52, 40);
+}
+
+.calendar-cell--weekend.calendar-cell--current {
+    border-color: rgb(229, 115, 115);
+    background-color: rgb(52, 40, 40);
+}
+
 /* ---- Layout ---- */
 
 .body {
