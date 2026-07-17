@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
-  m_Name: Fight
+  m_Name: Work Slowdown
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: FightAction
-  Description: Damage the opppresor
+  DisplayName: Work Slowdown
+  Description: Everything done exactly by the book, and no faster.
   Icon: {fileID: 0}
   Type: 2
   TimeCost: 1
-  Costs: []
+  Costs:
+  - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
+    Amount: 3
   Effects:
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
-    Delta: -1
+    Delta: -5

@@ -16,13 +16,43 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: fee80b71fce050b43b41c736d2954d7d, type: 3}
   m_AssetRefs:
-  - Name: fight
-    Guid: 0b562cd7b27186549bc6b4d177c177be
-    Asset: {fileID: 11400000, guid: 0b562cd7b27186549bc6b4d177c177be, type: 2}
-  - Name: care
-    Guid: 5fa3e4ce3e292ce4a8cdcb863d8969e0
-    Asset: {fileID: 11400000, guid: 5fa3e4ce3e292ce4a8cdcb863d8969e0, type: 2}
-  - Name: grow
-    Guid: 76d44f838648e054cb56539a7dd3bf4e
-    Asset: {fileID: 11400000, guid: 76d44f838648e054cb56539a7dd3bf4e, type: 2}
+  - Name: build together
+    Guid: 02db84495ce3cca489baf632dfefbb2a
+    Asset: {fileID: 11400000, guid: 02db84495ce3cca489baf632dfefbb2a, type: 2}
+  - Name: door to door
+    Guid: 063567a1f855fdb48ba90c841d295745
+    Asset: {fileID: 11400000, guid: 063567a1f855fdb48ba90c841d295745, type: 2}
+  - Name: sabotage the depot
+    Guid: 10f349d8f0ebbda468bb11655e8b7549
+    Asset: {fileID: 11400000, guid: 10f349d8f0ebbda468bb11655e8b7549, type: 2}
+  - Name: draft policies
+    Guid: 433732907481d43409368e2dc7bd3942
+    Asset: {fileID: 11400000, guid: 433732907481d43409368e2dc7bd3942, type: 2}
+  - Name: tear down propaganda
+    Guid: 485c8a28dc695c5489fb57d3bc623022
+    Asset: {fileID: 11400000, guid: 485c8a28dc695c5489fb57d3bc623022, type: 2}
+  - Name: run the clinic
+    Guid: 53e8a501bc3ef0a4bb30a2325a101307
+    Asset: {fileID: 11400000, guid: 53e8a501bc3ef0a4bb30a2325a101307, type: 2}
+  - Name: haul clean water
+    Guid: a6a77c739b9bf4a408b8c739e72cd093
+    Asset: {fileID: 11400000, guid: a6a77c739b9bf4a408b8c739e72cd093, type: 2}
+  - Name: print the message
+    Guid: bc700f608d5ba9545a5d8bfa3655ce65
+    Asset: {fileID: 11400000, guid: bc700f608d5ba9545a5d8bfa3655ce65, type: 2}
+  - Name: tend the farms
+    Guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1
+    Asset: {fileID: 11400000, guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1, type: 2}
+  - Name: live stream
+    Guid: cb7c62d5b0e19fc439e53480ff45bfbe
+    Asset: {fileID: 11400000, guid: cb7c62d5b0e19fc439e53480ff45bfbe, type: 2}
+  - Name: art festival
+    Guid: d94897a7136ab9e4eb7b1686c3891e5f
+    Asset: {fileID: 11400000, guid: d94897a7136ab9e4eb7b1686c3891e5f, type: 2}
+  - Name: work slowdown
+    Guid: dc8b6b0005ce46743b55bd7609d8dbbf
+    Asset: {fileID: 11400000, guid: dc8b6b0005ce46743b55bd7609d8dbbf, type: 2}
+  - Name: community kitchen
+    Guid: f970601ec4d02d44990e9b4f1ccf8fcb
+    Asset: {fileID: 11400000, guid: f970601ec4d02d44990e9b4f1ccf8fcb, type: 2}
   m_ManualUpdate: 0

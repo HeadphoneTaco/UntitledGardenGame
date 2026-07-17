@@ -16,6 +16,15 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: 995743248f71aaa46aef88308e08c01f, type: 3}
   m_AssetRefs:
+  - Name: a nurse defects to the clinic
+    Guid: 202010db4fda7b4479c600b07fef7095
+    Asset: {fileID: 11400000, guid: 202010db4fda7b4479c600b07fef7095, type: 2}
+  - Name: rations seized at the northern checkpoint
+    Guid: 24696ad71b4fa4848a1cfa8631f5fac8
+    Asset: {fileID: 11400000, guid: 24696ad71b4fa4848a1cfa8631f5fac8, type: 2}
+  - Name: police sweep the market district
+    Guid: 24d46a2f6d6e53e4b9b835fee990a650
+    Asset: {fileID: 11400000, guid: 24d46a2f6d6e53e4b9b835fee990a650, type: 2}
   - Name: localflooding
     Guid: 3e6e5f4fd0b2d0046bada59c55a38fd4
     Asset: {fileID: 11400000, guid: 3e6e5f4fd0b2d0046bada59c55a38fd4, type: 2}
@@ -25,7 +34,22 @@ MonoBehaviour:
   - Name: hungrysquirrels
     Guid: 806cc27c32a778044b951fe98b0fdff9
     Asset: {fileID: 11400000, guid: 806cc27c32a778044b951fe98b0fdff9, type: 2}
+  - Name: state tv admits irregularities
+    Guid: 8defc348c8344e74ab0604a6c6cb63d5
+    Asset: {fileID: 11400000, guid: 8defc348c8344e74ab0604a6c6cb63d5, type: 2}
+  - Name: curfew declared
+    Guid: 99c7da37b7647c441bd702c31b7e2e8c
+    Asset: {fileID: 11400000, guid: 99c7da37b7647c441bd702c31b7e2e8c, type: 2}
+  - Name: editorial calls the movement a nuisance
+    Guid: ab2558878e32f8a45b892ad20a72403a
+    Asset: {fileID: 11400000, guid: ab2558878e32f8a45b892ad20a72403a, type: 2}
+  - Name: a well runs dry
+    Guid: b451bd3511d21cb449ccc3b17b9679fb
+    Asset: {fileID: 11400000, guid: b451bd3511d21cb449ccc3b17b9679fb, type: 2}
   - Name: naturaldisaster
     Guid: c244f7f2158c8b8428321390aa59bf9a
     Asset: {fileID: 11400000, guid: c244f7f2158c8b8428321390aa59bf9a, type: 2}
+  - Name: neighbors ask about the kitchen
+    Guid: ee75a834a0d9c6642876db35d4fa2713
+    Asset: {fileID: 11400000, guid: ee75a834a0d9c6642876db35d4fa2713, type: 2}
   m_ManualUpdate: 0

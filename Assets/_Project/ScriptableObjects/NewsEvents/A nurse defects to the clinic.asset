@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
+  m_Name: A nurse defects to the clinic
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
+  Headline: A nurse defects to the clinic
+  Body: '(Placeholder copy for tone and shape. Real material: Dulce.)'
+  Image: {fileID: 0}
+  Tone: 0
+  EarliestWeek: 2
+  Weight: 1
+  OneTimeOnly: 1
+  EffectsOnFire:
+  - Variable: {fileID: 11400000, guid: 1131069fc2040e942bb132db8727f221, type: 2}
+    Delta: 3
+  EffectsIfIgnored: []

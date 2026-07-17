@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b00f13b9e7a144498243359fda5acd1f, type: 3}
   m_Name: Week
   m_EditorClassIdentifier: CoreUtils::CoreUtils.GameVariables.GameVariableInt
-  m_EventName: Week number
-  m_EventDescription: What is the current week of this month
-  m_DebugLog: 1
+  m_EventName: 
+  m_EventDescription: 
+  m_DebugLog: 0
   m_InitialValue: 1

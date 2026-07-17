@@ -27,6 +27,9 @@
                 <ui:Label text="Commune" class="panel__title" />
                 <ui:Label name="people-label" text="People: 0" class="stat" />
                 <ui:Label name="ap-label" text="Action Points: 0" class="stat" />
+                <ui:VisualElement class="divider" />
+                <ui:Label text="Stores" class="panel__title" />
+                <ui:VisualElement name="resources" />
             </ui:VisualElement>
 
             <!-- Center: actions, grouped by type -->
@@ -46,10 +49,10 @@
                 <ui:Button name="end-day-button" text="End Day" class="end-day-button" />
             </ui:VisualElement>
 
-            <!-- Right: weekend choice (hidden on weekdays) -->
+            <!-- Right: the agenda (always visible; weekend buttons enable on Fridays) -->
             <ui:VisualElement name="weekend-panel" class="panel panel--right">
-                <ui:Label text="The Weekend" class="panel__title" />
-                <ui:Label text="The week is over. What does the movement do with it?" class="weekend-blurb" />
+                <ui:Label text="Agenda" class="panel__title" />
+                <ui:Label name="agenda-blurb" text="" class="weekend-blurb" />
                 <ui:VisualElement name="weekend-container" class="weekend-container" />
             </ui:VisualElement>
 

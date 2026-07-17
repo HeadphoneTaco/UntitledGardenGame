@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CoreUtils.GameVariables;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,6 +14,9 @@ namespace RevManager {
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class RevGameScreenController : MonoBehaviour {
+        [SerializeField, Tooltip("Resource variables shown in the Stores list (Food, Water, Health...).")]
+        private GameVariableFloat[] m_ResourceVariables;
+
         private ProgressBar m_CommunityBar;
         private ProgressBar m_MachineBar;
         private Label m_CommunityBarLabel;
@@ -20,7 +24,8 @@ namespace RevManager {
         private Label m_ClockLabel;
         private Label m_PeopleLabel;
         private Label m_ApLabel;
-        private VisualElement m_WeekendPanel;
+        private Label m_AgendaBlurb;
+        private readonly List<(Label label, GameVariableFloat variable)> m_ResourceLabels = new List<(Label, GameVariableFloat)>();
         private VisualElement m_EndingOverlay;
         private Label m_EndingTitle;
         private Label m_EndingBody;
@@ -46,7 +51,20 @@ namespace RevManager {
             m_ClockLabel = root.Q<Label>("clock-label");
             m_PeopleLabel = root.Q<Label>("people-label");
             m_ApLabel = root.Q<Label>("ap-label");
-            m_WeekendPanel = root.Q<VisualElement>("weekend-panel");
+            m_AgendaBlurb = root.Q<Label>("agenda-blurb");
+
+            VisualElement resources = root.Q<VisualElement>("resources");
+            if (m_ResourceVariables != null) {
+                foreach (GameVariableFloat variable in m_ResourceVariables) {
+                    if (!variable) {
+                        continue;
+                    }
+                    var label = new Label();
+                    label.AddToClassList("stat");
+                    resources.Add(label);
+                    m_ResourceLabels.Add((label, variable));
+                }
+            }
             m_EndingOverlay = root.Q<VisualElement>("ending-overlay");
             m_EndingTitle = root.Q<Label>("ending-title");
             m_EndingBody = root.Q<Label>("ending-body");
@@ -187,9 +205,14 @@ namespace RevManager {
             m_PeopleLabel.text = $"People: {Manager.People.Value:0}";
             m_ApLabel.text = $"Action Points: {Manager.ActionPointsLeft.Value}";
 
-            bool weekend = Manager.Phase == GamePhase.Weekend;
-            m_WeekendPanel.style.display = weekend ? DisplayStyle.Flex : DisplayStyle.None;
+            m_AgendaBlurb.text = Manager.Phase == GamePhase.Weekend
+                ? "The week is over. What does the movement do with it?"
+                : "The weekend is coming. Will your people be ready?";
             m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday);
+
+            foreach ((Label label, GameVariableFloat variable) in m_ResourceLabels) {
+                label.text = $"{variable.Name}: {variable.Value:0}";
+            }
 
             foreach ((Button button, ActionData action) in m_ActionButtons) {
                 button.SetEnabled(Manager.CanExecute(action));
