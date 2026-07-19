@@ -58,8 +58,11 @@ namespace RevManager {
         [SerializeField, Tooltip("Machine bar regained each week. Set above 0 to punish slow play.")]
         private float m_MachineRecoveryPerWeek;
 
-        [Header("News")]
-        [SerializeField, Range(0f, 1f)] private float m_NewsChancePerDay = 0.5f;
+        [Header("Day Clock (hybrid: only runs while the queue is working)")]
+        [SerializeField, Min(0.1f), Tooltip("Real seconds per in-game hour while the queue is processing. Lower = faster days.")]
+        private float m_SecondsPerHour = 1.5f;
+        [SerializeField, Tooltip("DrainResourceBucket (Food/Water). These lose DrainPerHour while the clock runs.")]
+        private ResourceBucket m_DrainingResources;
 
         [Header("Game Flow (CoreUtils StateMachine)")]
         [SerializeField, Tooltip("StateMachine with child GameObjects named Weekday, Weekend, and Ending. Mirrors the phase so scene objects can react via State/StateEvents. Optional but recommended.")]
@@ -80,6 +83,8 @@ namespace RevManager {
         private readonly List<JournalEntry> m_Journal = new List<JournalEntry>();
         private readonly HashSet<NewsEventData> m_FiredNews = new HashSet<NewsEventData>();
         private readonly List<ActionData> m_TodaysActions = new List<ActionData>();
+        private readonly List<ActionData> m_Queue = new List<ActionData>();
+        private float m_ActiveHoursRemaining;
 
         public event Action<JournalEntry> JournalUpdated;
         public event Action<WeekendOptionData, bool> ProtestResolved;
@@ -88,7 +93,16 @@ namespace RevManager {
         public GamePhase Phase { get; private set; } = GamePhase.Weekday;
         public IReadOnlyList<JournalEntry> Journal => m_Journal;
         public IReadOnlyList<ActionData> TodaysActions => m_TodaysActions;
+        public IReadOnlyList<ActionData> Queue => m_Queue;
         public EndingData Ending { get; private set; }
+
+        /// <summary>Bumped on every queue mutation so the UI can rebuild only when needed.</summary>
+        public int QueueVersion { get; private set; }
+
+        /// <summary>0..1 progress of the item at the front of the queue.</summary>
+        public float ActiveProgress => m_Queue.Count > 0 && m_Queue[0].TimeCost > 0
+            ? 1f - Mathf.Clamp01(m_ActiveHoursRemaining / m_Queue[0].TimeCost)
+            : 0f;
 
         public GameVariableFloatRange Community => m_Community;
         public GameVariableFloatRange Machine => m_Machine;
@@ -111,6 +125,7 @@ namespace RevManager {
             m_People.ResetValue();
             m_Journal.Clear();
             m_FiredNews.Clear();
+            ClearQueue();
             Ending = null;
 
             m_Week.Value = 1;
@@ -127,40 +142,148 @@ namespace RevManager {
         }
 
         // ---- Weekday flow ----
+        //
+        // Hybrid time: the day clock is frozen while the queue is empty (plan in
+        // peace), and runs at m_SecondsPerHour while it has items — like a
+        // factory belt that only moves when there's something on it. Costs and
+        // effects settle when an action FINISHES, so canceling never needs a
+        // refund, but a resource can drain out from under a queued action (it
+        // gets skipped with a journal note).
 
         /// <summary>How many points the commune gets today. Growth literally buys time.</summary>
         public int DailyActionPoints => m_BaseActionPoints + Mathf.FloorToInt(m_People.Value / m_PeoplePerBonusPoint);
 
-        public bool CanExecute(ActionData action) {
-            return Phase == GamePhase.Weekday
-                   && action
-                   && action.TimeCost <= m_ActionPointsLeft.Value
-                   && action.CanAfford;
+        /// <summary>Hours already promised to the queue. Adds are gated on what's left after this.</summary>
+        public int QueuedHours => m_Queue.Sum(a => a.TimeCost);
+
+        /// <summary>Hours neither spent nor queued — the number the player can still plan with.</summary>
+        public int UnreservedHours => m_ActionPointsLeft.Value - QueuedHours;
+
+        /// <summary>Time is the only gate at queue time; resource costs are checked on completion.</summary>
+        public bool CanQueue(ActionData action) {
+            return Phase == GamePhase.Weekday && action && action.TimeCost <= UnreservedHours;
         }
 
-        /// <summary>Runs an action immediately and spends its time. A visual timed queue can layer on later.</summary>
-        public bool TryExecuteAction(ActionData action) {
-            if (!CanExecute(action)) {
+        /// <summary>
+        /// Adds an action to the queue. "First" slots in right behind the item
+        /// already in progress (never preempts it mid-run).
+        /// </summary>
+        public bool TryEnqueue(ActionData action, bool first) {
+            if (!CanQueue(action)) {
                 return false;
             }
 
-            m_ActionPointsLeft.Value -= action.TimeCost;
-            action.Execute();
-            m_TodaysActions.Add(action);
+            if (first && m_Queue.Count > 0) {
+                m_Queue.Insert(1, action);
+            } else if (first) {
+                m_Queue.Insert(0, action);
+            } else {
+                m_Queue.Add(action);
+            }
+
+            if (m_Queue.Count == 1) {
+                m_ActiveHoursRemaining = m_Queue[0].TimeCost;
+            }
+            QueueVersion++;
             return true;
         }
 
         /// <summary>Void wrapper so Button OnClick can call it (UnityEvents hide bool-returning methods).</summary>
         public void ExecuteAction(ActionData action) {
-            TryExecuteAction(action);
+            TryEnqueue(action, false);
         }
 
-        public void EndDay() {
+        /// <summary>
+        /// Removes a queued item. Nothing was paid yet, so there's nothing to
+        /// refund — canceling the active item just throws away its progress.
+        /// The expected action guards against a stale index from the UI.
+        /// </summary>
+        public bool TryCancelQueued(int index, ActionData expected) {
+            if (index < 0 || index >= m_Queue.Count || m_Queue[index] != expected) {
+                return false;
+            }
+
+            m_Queue.RemoveAt(index);
+            if (index == 0 && m_Queue.Count > 0) {
+                m_ActiveHoursRemaining = m_Queue[0].TimeCost;
+            }
+            QueueVersion++;
+            return true;
+        }
+
+        private void Update() {
             if (Phase != GamePhase.Weekday) {
                 return;
             }
 
-            TryFireNews();
+            if (m_Queue.Count == 0) {
+                // Auto day-end: out of time and nothing left on the belt.
+                if (m_ActionPointsLeft.Value <= 0) {
+                    EndDay();
+                }
+                return;
+            }
+
+            float hours = Time.deltaTime / m_SecondsPerHour;
+            DrainResources(hours);
+
+            // Drain (or a skipped action's fallout) can collapse the community
+            // mid-tick, which changes Phase via the Changed callback.
+            if (Phase != GamePhase.Weekday) {
+                return;
+            }
+
+            m_ActiveHoursRemaining -= hours;
+            while (m_ActiveHoursRemaining <= 0f && m_Queue.Count > 0 && Phase == GamePhase.Weekday) {
+                CompleteFront();
+                if (m_Queue.Count > 0) {
+                    // Carry the overshoot so back-to-back items keep smooth timing.
+                    m_ActiveHoursRemaining += m_Queue[0].TimeCost;
+                }
+            }
+        }
+
+        /// <summary>Food/Water tick down only while the belt is moving. Time spent is life spent.</summary>
+        private void DrainResources(float hours) {
+            if (!m_DrainingResources) {
+                return;
+            }
+
+            foreach (ResourceData resource in m_DrainingResources.Items) {
+                if (resource && resource.Variable && resource.DrainPerHour > 0f) {
+                    resource.Variable.Value -= resource.DrainPerHour * hours;
+                }
+            }
+        }
+
+        private void CompleteFront() {
+            ActionData action = m_Queue[0];
+            m_Queue.RemoveAt(0);
+            QueueVersion++;
+
+            // Pay-on-completion: both checks happen here, at the last moment.
+            if (action.TimeCost > m_ActionPointsLeft.Value || !action.CanAfford) {
+                AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value,
+                    $"{action.DisplayName} fell through. Not enough left to see it done.", NewsTone.Crisis));
+                return;
+            }
+
+            m_ActionPointsLeft.Value -= action.TimeCost;
+            action.Execute();
+            m_TodaysActions.Add(action);
+        }
+
+        /// <summary>
+        /// Ends the day. Fires automatically when the queue drains with 0 hours
+        /// left; the End Day button can also call it early (queue must be idle).
+        /// Every day ends with a news event — the world moves whether you do or not.
+        /// </summary>
+        public void EndDay() {
+            if (Phase != GamePhase.Weekday || m_Queue.Count > 0) {
+                return;
+            }
+
+            FireNews();
 
             if (m_Day.Value >= m_DaysPerWeek) {
                 SetPhase(GamePhase.Weekend);
@@ -173,8 +296,15 @@ namespace RevManager {
 
         private void BeginDay() {
             m_TodaysActions.Clear();
+            ClearQueue();
             m_ActionPointsLeft.Value = DailyActionPoints;
             RaiseIfSet(m_OnDayStarted);
+        }
+
+        private void ClearQueue() {
+            m_Queue.Clear();
+            m_ActiveHoursRemaining = 0f;
+            QueueVersion++;
         }
 
         // ---- Weekend flow ----
@@ -228,8 +358,9 @@ namespace RevManager {
 
         // ---- News ----
 
-        private void TryFireNews() {
-            if (!m_News || Random.value > m_NewsChancePerDay) {
+        /// <summary>Guaranteed one event per day end (Noah's design) — as long as something is eligible.</summary>
+        private void FireNews() {
+            if (!m_News) {
                 return;
             }
 

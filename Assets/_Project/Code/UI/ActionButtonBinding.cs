@@ -32,7 +32,8 @@ namespace RevManager {
         }
 
         private void Update() {
-            m_Button.interactable = RevGameManager.Exists && RevGameManager.Instance.CanExecute(m_Action);
+            // Legacy uGUI binding (superseded by RevGameScreenController); kept compiling against the queue API.
+            m_Button.interactable = RevGameManager.Exists && RevGameManager.Instance.CanQueue(m_Action);
         }
 
         private void OnClick() {
