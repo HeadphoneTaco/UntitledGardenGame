@@ -28,6 +28,9 @@ MonoBehaviour:
   - Name: localflooding
     Guid: 3e6e5f4fd0b2d0046bada59c55a38fd4
     Asset: {fileID: 11400000, guid: 3e6e5f4fd0b2d0046bada59c55a38fd4, type: 2}
+  - Name: is your fridge running
+    Guid: 58beb870bae7b154e806ddbbe33f00bd
+    Asset: {fileID: 11400000, guid: 58beb870bae7b154e806ddbbe33f00bd, type: 2}
   - Name: poweroutage
     Guid: 78990160427bb7c4c84cce494feb64c7
     Asset: {fileID: 11400000, guid: 78990160427bb7c4c84cce494feb64c7, type: 2}
