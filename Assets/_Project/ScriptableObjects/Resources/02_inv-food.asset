@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0928eb1e0c11ce4408cc4c16f73d7e2a, type: 3}
+  m_Name: 02_inv-food
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
+  DisplayName: Food
+  Description: 
+  Icon: {fileID: 21300000, guid: a6a6357b27f4c433884242c19ff9611f, type: 3}
+  Tile: {fileID: 21300000, guid: ce460d23677164c2b822d82358752d94, type: 3}
+  DrainLabel: 
+  Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f43b530e4a55ed2429cc22ec84b8b672, type: 3}
+  m_Name: DrainResourcesBucket
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceBucket
+  m_BucketName: 
+  m_Sources:
+  - {fileID: 102900000, guid: 52cc878f1a7d9ff4f8d31e6ef5f9d2b1, type: 3}
+  m_AssetRefs: []
+  m_ManualUpdate: 0

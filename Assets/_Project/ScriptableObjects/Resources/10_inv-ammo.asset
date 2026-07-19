@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0928eb1e0c11ce4408cc4c16f73d7e2a, type: 3}
-  m_Name: Water
+  m_Name: 10_inv-ammo
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
-  DisplayName: 
+  DisplayName: Ammunition
   Description: 
-  Icon: {fileID: 0}
-  Variable: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 38e429872588f48f7aa44ad3436dbbde, type: 3}
+  Tile: {fileID: 21300000, guid: 295a86d639b484ef3bab47b2143310af, type: 3}
+  DrainLabel: 
+  Variable: {fileID: 11400000, guid: 5042e14660489744db6857c780bf8060, type: 2}

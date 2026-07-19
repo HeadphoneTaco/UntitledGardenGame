@@ -1,42 +1,84 @@
+using System;
 using System.Collections.Generic;
 using CoreUtils.GameVariables;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace RevManager {
     /// <summary>
-    /// Binds RevGameScreen.uxml to the game. Generates action and weekend
-    /// buttons from the buckets (new content assets appear automatically),
-    /// updates bars and labels, feeds the journal, and shows the ending.
+    /// Binds RevGameScreen.uxml (Du's mockup layout) to the game.
+    ///
+    /// Layout map:
+    ///   Top bar     - day counter, action points (time), Support/Community/Machine bars.
+    ///   Left panel  - Community Resources: one bar row per resource (full
+    ///                 height; draining ones carry a DrainLabel badge).
+    ///   Center      - Available Actions grouped by category; clicking a row shows
+    ///                 the detail card (costs/gains) with Add First/Last In Queue.
+    ///   Right       - Daily Queue (actions taken today) + End Of Week Plan buttons.
+    ///   Bottom      - "stuff" inventory grid + "news" journal feed.
+    ///
+    /// NOTE: Add First/Add Last both execute immediately for now. When the
+    /// real-time queue lands in RevGameManager, point them at the queue API and
+    /// this UI keeps working.
     ///
     /// Display updates poll on a 100ms schedule instead of subscribing to
-    /// every variable: simpler, and plenty fast for a turn-based game.
+    /// every variable: simpler, and plenty fast at this scale.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public class RevGameScreenController : MonoBehaviour {
-        [SerializeField, Tooltip("Resource variables shown in the Stores list (Food, Water, Health...).")]
-        private GameVariableFloat[] m_ResourceVariables;
+        [Header("Resources (auto-collects from its source folder)")]
+        [SerializeField, FormerlySerializedAs("m_Inventory")]
+        [Tooltip("Every resource shows as a bar row in the Community Resources panel. Source folder: ScriptableObjects/Resources (includes Draining).")]
+        private ResourceBucket m_Resources;
 
-        private ProgressBar m_CommunityBar;
-        private ProgressBar m_MachineBar;
-        private Label m_CommunityBarLabel;
-        private Label m_MachineBarLabel;
-        private Label m_ClockLabel;
-        private Label m_PeopleLabel;
+        [Header("End of week plan (weekend options, top to bottom)")]
+        [SerializeField] private WeekendOptionData m_RestOption;
+        [SerializeField] private WeekendOptionData m_LocalOption;
+        [SerializeField] private WeekendOptionData m_BigOption;
+
+        [Header("Support bar cap (People has no max; bar fills toward this)")]
+        [SerializeField, Min(1f)] private float m_SupportBarCap = 100f;
+
+        // Top bar
+        private Label m_DayLabel;
         private Label m_ApLabel;
-        private Label m_AgendaBlurb;
-        private readonly List<(Label label, GameVariableFloat variable)> m_ResourceLabels = new List<(Label, GameVariableFloat)>();
+        private Label m_SupportValue;
+        private Label m_CommunityValue;
+        private Label m_MachineValue;
+        private VisualElement m_SupportFill;
+        private VisualElement m_CommunityFill;
+        private VisualElement m_MachineFill;
+
+        // Left panel
+        private readonly List<(VisualElement fill, Label value, ResourceData resource)> m_ResourceRows =
+            new List<(VisualElement, Label, ResourceData)>();
+
+        // Center panel
+        private readonly List<(Button button, ActionData action)> m_ActionButtons = new List<(Button, ActionData)>();
+        private ActionData m_Selected;
+        private VisualElement m_DetailIcon;
+        private Label m_DetailName;
+        private Label m_DetailDesc;
+        private VisualElement m_DetailCosts;
+        private VisualElement m_DetailGains;
+        private Button m_AddFirstButton;
+        private Button m_AddLastButton;
+
+        // Right panel
+        private ScrollView m_QueueList;
+        private Button m_EndDayButton;
+        private readonly List<(Button button, WeekendOptionData option)> m_WeekendButtons = new List<(Button, WeekendOptionData)>();
+        private int m_QueueShownCount = -1;
+        private int m_QueueShownDay = -1;
+
+        // Bottom
+        private ScrollView m_JournalScroll;
+
+        // Ending
         private VisualElement m_EndingOverlay;
         private Label m_EndingTitle;
         private Label m_EndingBody;
-        private Button m_EndDayButton;
-        private ScrollView m_JournalScroll;
-
-        private readonly List<(Button button, ActionData action)> m_ActionButtons = new List<(Button, ActionData)>();
-        private readonly List<(Button button, WeekendOptionData option)> m_WeekendButtons = new List<(Button, WeekendOptionData)>();
-        private readonly List<VisualElement> m_CalendarCells = new List<VisualElement>();
-
-        private static readonly string[] s_DayNames = { "MON", "TUE", "WED", "THU", "FRI" };
 
         private RevGameManager Manager => RevGameManager.Exists ? RevGameManager.Instance : null;
         private bool m_Built;
@@ -44,34 +86,40 @@ namespace RevManager {
         private void OnEnable() {
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
-            m_CommunityBar = root.Q<ProgressBar>("community-bar");
-            m_MachineBar = root.Q<ProgressBar>("machine-bar");
-            m_CommunityBarLabel = root.Q<Label>("community-bar-label");
-            m_MachineBarLabel = root.Q<Label>("machine-bar-label");
-            m_ClockLabel = root.Q<Label>("clock-label");
-            m_PeopleLabel = root.Q<Label>("people-label");
+            m_DayLabel = root.Q<Label>("day-label");
             m_ApLabel = root.Q<Label>("ap-label");
-            m_AgendaBlurb = root.Q<Label>("agenda-blurb");
+            m_SupportValue = root.Q<Label>("support-value");
+            m_CommunityValue = root.Q<Label>("community-value");
+            m_MachineValue = root.Q<Label>("machine-value");
+            m_SupportFill = root.Q<VisualElement>("support-fill");
+            m_CommunityFill = root.Q<VisualElement>("community-fill");
+            m_MachineFill = root.Q<VisualElement>("machine-fill");
 
-            VisualElement resources = root.Q<VisualElement>("resources");
-            if (m_ResourceVariables != null) {
-                foreach (GameVariableFloat variable in m_ResourceVariables) {
-                    if (!variable) {
-                        continue;
-                    }
-                    var label = new Label();
-                    label.AddToClassList("stat");
-                    resources.Add(label);
-                    m_ResourceLabels.Add((label, variable));
-                }
-            }
+            BuildResourceRows(root.Q<ScrollView>("drain-list"));
+
+            m_DetailIcon = root.Q<VisualElement>("detail-icon");
+            m_DetailName = root.Q<Label>("detail-name");
+            m_DetailDesc = root.Q<Label>("detail-desc");
+            m_DetailCosts = root.Q<VisualElement>("detail-costs");
+            m_DetailGains = root.Q<VisualElement>("detail-gains");
+            m_AddFirstButton = root.Q<Button>("add-first-button");
+            m_AddLastButton = root.Q<Button>("add-last-button");
+            m_AddFirstButton.clicked += OnAddToQueueClicked;
+            m_AddLastButton.clicked += OnAddToQueueClicked;
+
+            m_QueueList = root.Q<ScrollView>("queue-list");
+            m_EndDayButton = root.Q<Button>("end-day-button");
+            m_EndDayButton.clicked += OnEndDayClicked;
+
+            BuildWeekendButton(root, "eow-rest-button", m_RestOption);
+            BuildWeekendButton(root, "eow-local-button", m_LocalOption);
+            BuildWeekendButton(root, "eow-big-button", m_BigOption);
+
+            m_JournalScroll = root.Q<ScrollView>("journal-scroll");
+
             m_EndingOverlay = root.Q<VisualElement>("ending-overlay");
             m_EndingTitle = root.Q<Label>("ending-title");
             m_EndingBody = root.Q<Label>("ending-body");
-            m_EndDayButton = root.Q<Button>("end-day-button");
-            m_JournalScroll = root.Q<ScrollView>("journal-scroll");
-
-            m_EndDayButton.clicked += OnEndDayClicked;
             root.Q<Button>("restart-button").clicked += OnRestartClicked;
 
             // Manager may not exist yet (script order); build once it does.
@@ -86,8 +134,76 @@ namespace RevManager {
             m_Built = false;
         }
 
-        // ---- One-time build from buckets ----
+        // ---- One-time build ----
 
+        /// <summary>One bar row per resource, so every stat reads the same way.
+        /// Rows come from the bucket: new ResourceData assets appear automatically.</summary>
+        private void BuildResourceRows(ScrollView container) {
+            if (!m_Resources) {
+                return;
+            }
+
+            foreach (ResourceData resource in m_Resources.Items) {
+                if (!resource || !resource.Variable) {
+                    continue;
+                }
+
+                var row = new VisualElement();
+                row.AddToClassList("drain-row");
+
+                var icon = new VisualElement();
+                icon.AddToClassList("drain-row__icon");
+                if (resource.Icon) {
+                    icon.style.backgroundImage = new StyleBackground(resource.Icon);
+                }
+
+                var col = new VisualElement();
+                col.AddToClassList("drain-row__col");
+                var name = new Label(resource.DisplayName);
+                name.AddToClassList("drain-row__name");
+                var value = new Label("000");
+                value.AddToClassList("drain-row__value");
+                col.Add(name);
+                col.Add(value);
+
+                // Bar sits beside the text, filling the rectangle's empty right side.
+                var bar = new VisualElement();
+                bar.AddToClassList("fill-bar");
+                bar.AddToClassList("drain-row__bar");
+                var fill = new VisualElement();
+                fill.AddToClassList("fill-bar__fill");
+                bar.Add(fill);
+
+                row.Add(icon);
+                row.Add(col);
+                row.Add(bar);
+
+                if (!string.IsNullOrEmpty(resource.DrainLabel)) {
+                    var badge = new Label(resource.DrainLabel);
+                    badge.AddToClassList("drain-row__badge");
+                    row.Add(badge);
+                }
+
+                container.Add(row);
+                m_ResourceRows.Add((fill, value, resource));
+            }
+        }
+
+        private void BuildWeekendButton(VisualElement root, string elementName, WeekendOptionData option) {
+            Button button = root.Q<Button>(elementName);
+            if (button == null) {
+                return;
+            }
+            if (!option) {
+                button.style.display = DisplayStyle.None;
+                return;
+            }
+            button.tooltip = option.Description;
+            button.clicked += () => Manager?.ChooseWeekend(option);
+            m_WeekendButtons.Add((button, option));
+        }
+
+        /// <summary>Action rows come from the bucket, so new ActionData assets appear automatically.</summary>
         private void BuildOnce() {
             if (m_Built || Manager == null) {
                 return;
@@ -106,59 +222,83 @@ namespace RevManager {
 
             if (Manager.Actions) {
                 foreach (ActionData action in Manager.Actions.Items) {
+                    if (!action) {
+                        continue;
+                    }
                     ActionData captured = action;
-                    var button = new Button(() => Manager.ExecuteAction(captured)) {
-                        text = $"{action.DisplayName}  ({action.TimeCost} pt)",
-                        tooltip = action.Description,
-                    };
-                    button.AddToClassList("action-button");
+                    var button = new Button(() => SelectAction(captured));
+                    button.AddToClassList("action-row");
+
+                    var icon = new VisualElement();
+                    icon.AddToClassList("action-row__icon");
+                    if (action.Icon) {
+                        icon.style.backgroundImage = new StyleBackground(action.Icon);
+                    }
+                    var name = new Label(action.DisplayName);
+                    name.AddToClassList("action-row__name");
+                    var time = new Label($"{action.TimeCost}h");
+                    time.AddToClassList("action-row__time");
+
+                    button.Add(icon);
+                    button.Add(name);
+                    button.Add(time);
+
                     groups[action.Type].Add(button);
                     m_ActionButtons.Add((button, action));
+
+                    if (!m_Selected) {
+                        SelectAction(action);
+                    }
                 }
-            }
-
-            VisualElement weekendContainer = root.Q<VisualElement>("weekend-container");
-            if (Manager.WeekendOptions) {
-                foreach (WeekendOptionData option in Manager.WeekendOptions.Items) {
-                    WeekendOptionData captured = option;
-                    var button = new Button(() => Manager.ChooseWeekend(captured)) {
-                        text = option.DisplayName,
-                        tooltip = option.Description,
-                    };
-                    button.AddToClassList("weekend-button");
-                    weekendContainer.Add(button);
-                    m_WeekendButtons.Add((button, option));
-                }
-            }
-
-            // Calendar strip: one tile per weekday, then Saturday and Sunday.
-            VisualElement calendar = root.Q<VisualElement>("calendar");
-            int weekdays = Manager.DaysPerWeek;
-            for (int i = 0; i < weekdays + 2; i++) {
-                bool isWeekend = i >= weekdays;
-                var cell = new VisualElement();
-                cell.AddToClassList("calendar-cell");
-                if (isWeekend) {
-                    cell.AddToClassList("calendar-cell--weekend");
-                }
-
-                string dayName = isWeekend ? (i == weekdays ? "SAT" : "SUN")
-                    : weekdays == s_DayNames.Length ? s_DayNames[i] : "DAY";
-                var name = new Label(dayName);
-                name.AddToClassList("calendar-cell__name");
-                var num = new Label((i + 1).ToString());
-                num.AddToClassList("calendar-cell__num");
-
-                cell.Add(name);
-                cell.Add(num);
-                calendar.Add(cell);
-                m_CalendarCells.Add(cell);
             }
 
             // Backfill journal entries that fired before the UI was ready.
             foreach (JournalEntry entry in Manager.Journal) {
                 OnJournalUpdated(entry);
             }
+        }
+
+        // ---- Selection + detail card ----
+
+        private void SelectAction(ActionData action) {
+            m_Selected = action;
+
+            foreach ((Button button, ActionData a) in m_ActionButtons) {
+                button.EnableInClassList("action-row--selected", a == action);
+            }
+
+            m_DetailIcon.style.backgroundImage = action && action.Icon ? new StyleBackground(action.Icon) : new StyleBackground();
+            m_DetailName.text = action ? action.DisplayName : "Select an action";
+            m_DetailDesc.text = action ? action.Description : "";
+
+            m_DetailCosts.Clear();
+            m_DetailGains.Clear();
+            if (!action) {
+                return;
+            }
+
+            AddDetailLine(m_DetailCosts, $"{action.TimeCost} HOURS");
+            if (action.Costs != null) {
+                foreach (VariableCost cost in action.Costs) {
+                    if (cost.Variable) {
+                        AddDetailLine(m_DetailCosts, $"x{cost.Amount:0} {cost.Variable.Name.ToUpperInvariant()}");
+                    }
+                }
+            }
+
+            if (action.Effects != null) {
+                foreach (VariableEffect effect in action.Effects) {
+                    if (effect.Variable) {
+                        AddDetailLine(m_DetailGains, $"{effect.Delta:+0;-0} {effect.Variable.Name.ToUpperInvariant()}");
+                    }
+                }
+            }
+        }
+
+        private static void AddDetailLine(VisualElement container, string text) {
+            var line = new Label(text);
+            line.AddToClassList("detail-line");
+            container.Add(line);
         }
 
         // ---- Polled display refresh ----
@@ -170,59 +310,95 @@ namespace RevManager {
 
             BuildOnce();
 
-            m_CommunityBar.value = Manager.Community.Progress * 100f;
-            m_CommunityBarLabel.text = $"Community  {Manager.Community.Progress * 100f:0}%";
-            m_MachineBar.value = Manager.Machine.Progress * 100f;
-            m_MachineBarLabel.text = $"The Machine  {Manager.Machine.Progress * 100f:0}%";
+            // Top bar. Day counter runs across the whole campaign, mockup-style 00/00.
+            int dayOverall = (Manager.Week.Value - 1) * Manager.DaysPerWeek + Manager.Day.Value;
+            int dayTotal = Manager.TotalWeeks * Manager.DaysPerWeek;
+            m_DayLabel.text = $"{dayOverall:00}/{dayTotal:00}";
+            m_ApLabel.text = $"{Manager.ActionPointsLeft.Value}h";
 
-            m_ClockLabel.text = $"Week {Manager.Week.Value} of {Manager.TotalWeeks}";
+            float support = Manager.People.Value;
+            m_SupportValue.text = $"{support:000}/{m_SupportBarCap:000}";
+            SetFill(m_SupportFill, support / m_SupportBarCap);
 
-            for (int i = 0; i < m_CalendarCells.Count; i++) {
-                VisualElement cell = m_CalendarCells[i];
-                bool isWeekendCell = i >= Manager.DaysPerWeek;
-                bool isPast;
-                bool isCurrent;
+            m_CommunityValue.text = $"{Manager.Community.Progress * 100f:000}/100";
+            SetFill(m_CommunityFill, Manager.Community.Progress);
 
-                switch (Manager.Phase) {
-                    case GamePhase.Weekday:
-                        isCurrent = i == Manager.Day.Value - 1;
-                        isPast = i < Manager.Day.Value - 1;
-                        break;
-                    case GamePhase.Weekend:
-                        // The weekend resolves as one choice, so SAT and SUN light up together.
-                        isCurrent = isWeekendCell;
-                        isPast = !isWeekendCell;
-                        break;
-                    default:
-                        isCurrent = false;
-                        isPast = true;
-                        break;
-                }
+            m_MachineValue.text = $"{Manager.Machine.Progress * 100f:000}/100";
+            SetFill(m_MachineFill, Manager.Machine.Progress);
 
-                cell.EnableInClassList("calendar-cell--past", isPast);
-                cell.EnableInClassList("calendar-cell--current", isCurrent);
-            }
-            m_PeopleLabel.text = $"People: {Manager.People.Value:0}";
-            m_ApLabel.text = $"Action Points: {Manager.ActionPointsLeft.Value}";
-
-            m_AgendaBlurb.text = Manager.Phase == GamePhase.Weekend
-                ? "The week is over. What does the movement do with it?"
-                : "The weekend is coming. Will your people be ready?";
-            m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday);
-
-            foreach ((Label label, GameVariableFloat variable) in m_ResourceLabels) {
-                label.text = $"{variable.Name}: {variable.Value:0}";
+            // Left panel resource bars.
+            foreach ((VisualElement fill, Label value, ResourceData resource) in m_ResourceRows) {
+                value.text = $"{resource.Variable.Value:000}";
+                SetFill(fill, resource.Variable.Progress);
             }
 
+            // Center panel.
             foreach ((Button button, ActionData action) in m_ActionButtons) {
-                button.SetEnabled(Manager.CanExecute(action));
+                button.SetEnabled(Manager.Phase == GamePhase.Weekday && action.CanAfford);
             }
+            bool canQueue = Manager.CanExecute(m_Selected);
+            m_AddFirstButton.SetEnabled(canQueue);
+            m_AddLastButton.SetEnabled(canQueue);
+
+            // Right panel.
+            RefreshQueue();
+            m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday);
             foreach ((Button button, WeekendOptionData option) in m_WeekendButtons) {
                 button.SetEnabled(Manager.CanChoose(option));
+            }
+
+        }
+
+        private static void SetFill(VisualElement fill, float progress) {
+            fill.style.width = Length.Percent(Mathf.Clamp01(progress) * 100f);
+        }
+
+        private void RefreshQueue() {
+            IReadOnlyList<ActionData> actions = Manager.TodaysActions;
+            if (actions.Count == m_QueueShownCount && Manager.Day.Value == m_QueueShownDay) {
+                return;
+            }
+            m_QueueShownCount = actions.Count;
+            m_QueueShownDay = Manager.Day.Value;
+
+            m_QueueList.Clear();
+            foreach (ActionData action in actions) {
+                var row = new VisualElement();
+                row.AddToClassList("queue-row");
+
+                var icon = new VisualElement();
+                icon.AddToClassList("queue-row__icon");
+                if (action.Icon) {
+                    icon.style.backgroundImage = new StyleBackground(action.Icon);
+                }
+
+                var col = new VisualElement();
+                col.AddToClassList("queue-row__col");
+                var name = new Label(action.DisplayName);
+                name.AddToClassList("queue-row__name");
+                var bar = new VisualElement();
+                bar.AddToClassList("fill-bar");
+                var fill = new VisualElement();
+                fill.AddToClassList("fill-bar__fill");
+                fill.style.width = Length.Percent(100f); // Instant for now; shrinks live once actions take real time.
+                bar.Add(fill);
+                col.Add(name);
+                col.Add(bar);
+
+                row.Add(icon);
+                row.Add(col);
+                m_QueueList.Add(row);
             }
         }
 
         // ---- Events ----
+
+        private void OnAddToQueueClicked() {
+            // Both queue buttons execute immediately until the timed queue exists.
+            if (m_Selected) {
+                Manager?.ExecuteAction(m_Selected);
+            }
+        }
 
         private void OnEndDayClicked() {
             Manager?.EndDay();
@@ -230,14 +406,15 @@ namespace RevManager {
 
         private void OnRestartClicked() {
             m_JournalScroll.Clear();
+            m_QueueShownCount = -1;
             m_EndingOverlay.RemoveFromClassList("ending-overlay--visible");
             Manager?.StartRun();
         }
 
         private void OnJournalUpdated(JournalEntry entry) {
             var label = new Label($"W{entry.Week}D{entry.Day}  {entry.Headline}");
-            label.AddToClassList("journal-entry");
-            label.AddToClassList($"journal-entry--{entry.Tone.ToString().ToLowerInvariant()}");
+            label.AddToClassList("news-entry");
+            label.AddToClassList($"news-entry--{entry.Tone.ToString().ToLowerInvariant()}");
             m_JournalScroll.Add(label);
             m_JournalScroll.schedule.Execute(() => m_JournalScroll.ScrollTo(label));
         }
