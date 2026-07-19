@@ -10,6 +10,9 @@
 
 /* ============ TOP BAR ============ */
 
+/* The upperbar sprite has red divider lines baked in at sprite x 702/1184/1639,
+   which land at 557/940/1301 on the 1920-wide reference. The stat blocks below
+   are sized to sit exactly between them - change widths/margins together. */
 .top-bar {
     flex-direction: row;
     align-items: center;
@@ -17,13 +20,13 @@
     flex-shrink: 0;
     background-image: url("../Art/Sprites/RevMan-upperbar.png");
     -unity-background-scale-mode: stretch-to-fill;
-    padding: 0 30px;
 }
 
+/* Section 4: after the 1301 divider, clear of the bar's stylized right end. */
 .day-flag {
     width: 78px;
     height: 100px;
-    margin-left: 30px;
+    margin-left: 45px;
     margin-top: 10px; /* flag hangs from the bar's top edge */
     background-image: url("../Art/Sprites/RevMan-daybanner.png");
     -unity-background-scale-mode: scale-to-fit;
@@ -58,16 +61,26 @@
 .topstat {
     flex-direction: row;
     align-items: center;
-    flex-grow: 1;
-    margin-right: 40px;
-    border-left-width: 2px;
-    border-left-color: rgb(190, 30, 45);
-    padding-left: 20px;
+    flex-shrink: 0;
     height: 86px;
 }
 
+/* Section 1: right-anchored against the 557 divider, sized like the others. */
 #support-stat {
-    border-left-width: 0;
+    width: 330px;
+    margin-left: 200px;
+}
+
+/* Section 2: between the 557 and 940 dividers. */
+#community-stat {
+    width: 340px;
+    margin-left: 54px;
+}
+
+/* Section 3: between the 940 and 1301 dividers. */
+#machine-stat {
+    width: 320px;
+    margin-left: 43px;
 }
 
 .topstat__icon {
@@ -188,9 +201,10 @@
 }
 
 .drain-row {
-    height: 64px;
-    margin: 4px 2px;
-    padding: 8px 12px;
+    height: 60px;
+    flex-shrink: 0;
+    margin: 2px;
+    padding: 6px 12px;
     background-image: url("../Art/Sprites/RevMan-resourcesfiled.png");
     -unity-background-scale-mode: stretch-to-fill;
     flex-direction: row;
@@ -205,16 +219,21 @@
 }
 
 .drain-row__col {
-    flex-shrink: 0;
+    flex-grow: 1;
     justify-content: center;
 }
 
-/* The bar lives inside the rectangle, spanning the leftover width. */
+/* Name left, count right, on one line above the bar. */
+.drain-row__head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4px;
+}
+
+/* Full-width bar under the head line: same length on every row. */
 .drain-row__bar {
-    flex-grow: 1;
     max-width: none;
-    align-self: center;
-    margin-left: 12px;
 }
 
 .drain-row__name {
@@ -224,9 +243,9 @@
 }
 
 .drain-row__value {
-    font-size: 12px;
+    font-size: 13px;
+    -unity-font-style: bold;
     color: rgb(60, 55, 50);
-    margin-bottom: 2px;
 }
 
 .drain-row__badge {

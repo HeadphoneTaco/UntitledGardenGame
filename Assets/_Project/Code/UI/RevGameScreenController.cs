@@ -51,8 +51,14 @@ namespace RevManager {
         private VisualElement m_MachineFill;
 
         // Left panel
-        private readonly List<(VisualElement fill, Label value, ResourceData resource)> m_ResourceRows =
-            new List<(VisualElement, Label, ResourceData)>();
+        private class ResourceRow {
+            public VisualElement Fill;
+            public Label Value;
+            public ResourceData Resource;
+            public float Max; // Derived from Value/Progress (package hides MaxValue); cached once valid.
+        }
+
+        private readonly List<ResourceRow> m_ResourceRows = new List<ResourceRow>();
 
         // Center panel
         private readonly List<(Button button, ActionData action)> m_ActionButtons = new List<(Button, ActionData)>();
@@ -157,16 +163,20 @@ namespace RevManager {
                     icon.style.backgroundImage = new StyleBackground(resource.Icon);
                 }
 
+                // Name + count on one line, full-width bar underneath, so every
+                // bar is the same length no matter how long the name is.
                 var col = new VisualElement();
                 col.AddToClassList("drain-row__col");
+
+                var head = new VisualElement();
+                head.AddToClassList("drain-row__head");
                 var name = new Label(resource.DisplayName);
                 name.AddToClassList("drain-row__name");
-                var value = new Label("000");
+                var value = new Label("000/000");
                 value.AddToClassList("drain-row__value");
-                col.Add(name);
-                col.Add(value);
+                head.Add(name);
+                head.Add(value);
 
-                // Bar sits beside the text, filling the rectangle's empty right side.
                 var bar = new VisualElement();
                 bar.AddToClassList("fill-bar");
                 bar.AddToClassList("drain-row__bar");
@@ -174,9 +184,11 @@ namespace RevManager {
                 fill.AddToClassList("fill-bar__fill");
                 bar.Add(fill);
 
+                col.Add(head);
+                col.Add(bar);
+
                 row.Add(icon);
                 row.Add(col);
-                row.Add(bar);
 
                 if (!string.IsNullOrEmpty(resource.DrainLabel)) {
                     var badge = new Label(resource.DrainLabel);
@@ -185,7 +197,7 @@ namespace RevManager {
                 }
 
                 container.Add(row);
-                m_ResourceRows.Add((fill, value, resource));
+                m_ResourceRows.Add(new ResourceRow { Fill = fill, Value = value, Resource = resource });
             }
         }
 
@@ -327,9 +339,20 @@ namespace RevManager {
             SetFill(m_MachineFill, Manager.Machine.Progress);
 
             // Left panel resource bars.
-            foreach ((VisualElement fill, Label value, ResourceData resource) in m_ResourceRows) {
-                value.text = $"{resource.Variable.Value:000}";
-                SetFill(fill, resource.Variable.Progress);
+            foreach (ResourceRow rowBinding in m_ResourceRows) {
+                float current = rowBinding.Resource.Variable.Value;
+                float progress = rowBinding.Resource.Variable.Progress;
+
+                // Package hides MaxValue, so derive it (resources are 0-based)
+                // and cache the first valid result.
+                if (rowBinding.Max <= 0f && progress > 0.0001f) {
+                    rowBinding.Max = Mathf.Round(current / progress);
+                }
+
+                rowBinding.Value.text = rowBinding.Max > 0f
+                    ? $"{current:000}/{rowBinding.Max:000}"
+                    : $"{current:000}";
+                SetFill(rowBinding.Fill, progress);
             }
 
             // Center panel.
