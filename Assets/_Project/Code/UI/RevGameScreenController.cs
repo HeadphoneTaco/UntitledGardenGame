@@ -18,9 +18,10 @@ namespace RevManager {
     ///   Right       - Daily Queue (actions taken today) + End Of Week Plan buttons.
     ///   Bottom      - "stuff" inventory grid + "news" journal feed.
     ///
-    /// NOTE: Add First/Add Last both execute immediately for now. When the
-    /// real-time queue lands in RevGameManager, point them at the queue API and
-    /// this UI keeps working.
+    /// Queue: Add First/Add Last feed RevGameManager's timed queue. The front
+    /// item's bar drains live; clicking any queued row cancels it (nothing is
+    /// paid until an action completes, so no refund math). End Day only lights
+    /// up while the queue is idle — with 0 hours left the day ends by itself.
     ///
     /// Display updates poll on a 100ms schedule instead of subscribing to
     /// every variable: simpler, and plenty fast at this scale.
@@ -75,8 +76,8 @@ namespace RevManager {
         private ScrollView m_QueueList;
         private Button m_EndDayButton;
         private readonly List<(Button button, WeekendOptionData option)> m_WeekendButtons = new List<(Button, WeekendOptionData)>();
-        private int m_QueueShownCount = -1;
-        private int m_QueueShownDay = -1;
+        private int m_ShownQueueVersion = -1;
+        private VisualElement m_ActiveQueueFill; // Front item's bar; drains every poll without a rebuild.
 
         // Bottom
         private ScrollView m_JournalScroll;
@@ -110,8 +111,8 @@ namespace RevManager {
             m_DetailGains = root.Q<VisualElement>("detail-gains");
             m_AddFirstButton = root.Q<Button>("add-first-button");
             m_AddLastButton = root.Q<Button>("add-last-button");
-            m_AddFirstButton.clicked += OnAddToQueueClicked;
-            m_AddLastButton.clicked += OnAddToQueueClicked;
+            m_AddFirstButton.clicked += () => OnAddToQueueClicked(true);
+            m_AddLastButton.clicked += () => OnAddToQueueClicked(false);
 
             m_QueueList = root.Q<ScrollView>("queue-list");
             m_EndDayButton = root.Q<Button>("end-day-button");
@@ -326,7 +327,9 @@ namespace RevManager {
             int dayOverall = (Manager.Week.Value - 1) * Manager.DaysPerWeek + Manager.Day.Value;
             int dayTotal = Manager.TotalWeeks * Manager.DaysPerWeek;
             m_DayLabel.text = $"{dayOverall:00}/{dayTotal:00}";
-            m_ApLabel.text = $"{Manager.ActionPointsLeft.Value}h";
+            // Unreserved hours: what's still plannable. Costs settle on completion,
+            // so raw ActionPointsLeft wouldn't move when you queue — confusing.
+            m_ApLabel.text = $"{Manager.UnreservedHours}h";
 
             float support = Manager.People.Value;
             m_SupportValue.text = $"{support:000}/{m_SupportBarCap:000}";
@@ -359,13 +362,13 @@ namespace RevManager {
             foreach ((Button button, ActionData action) in m_ActionButtons) {
                 button.SetEnabled(Manager.Phase == GamePhase.Weekday && action.CanAfford);
             }
-            bool canQueue = Manager.CanExecute(m_Selected);
+            bool canQueue = Manager.CanQueue(m_Selected);
             m_AddFirstButton.SetEnabled(canQueue);
             m_AddLastButton.SetEnabled(canQueue);
 
             // Right panel.
             RefreshQueue();
-            m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday);
+            m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday && Manager.Queue.Count == 0);
             foreach ((Button button, WeekendOptionData option) in m_WeekendButtons) {
                 button.SetEnabled(Manager.CanChoose(option));
             }
@@ -376,51 +379,76 @@ namespace RevManager {
             fill.style.width = Length.Percent(Mathf.Clamp01(progress) * 100f);
         }
 
+        /// <summary>
+        /// Shows the PENDING queue (front item on top, bar draining as it works).
+        /// Rows rebuild only when the manager bumps QueueVersion; between
+        /// rebuilds each poll just updates the front bar's width.
+        /// Clicking a row cancels it — nothing's paid until completion, so a
+        /// cancel is free.
+        /// </summary>
         private void RefreshQueue() {
-            IReadOnlyList<ActionData> actions = Manager.TodaysActions;
-            if (actions.Count == m_QueueShownCount && Manager.Day.Value == m_QueueShownDay) {
-                return;
-            }
-            m_QueueShownCount = actions.Count;
-            m_QueueShownDay = Manager.Day.Value;
+            if (Manager.QueueVersion != m_ShownQueueVersion) {
+                m_ShownQueueVersion = Manager.QueueVersion;
+                m_QueueList.Clear();
+                m_ActiveQueueFill = null;
 
-            m_QueueList.Clear();
-            foreach (ActionData action in actions) {
-                var row = new VisualElement();
-                row.AddToClassList("queue-row");
+                IReadOnlyList<ActionData> queue = Manager.Queue;
+                for (int i = 0; i < queue.Count; i++) {
+                    ActionData action = queue[i];
+                    int index = i;
 
-                var icon = new VisualElement();
-                icon.AddToClassList("queue-row__icon");
-                if (action.Icon) {
-                    icon.style.backgroundImage = new StyleBackground(action.Icon);
+                    var row = new VisualElement();
+                    row.AddToClassList("queue-row");
+                    row.tooltip = "Click to cancel";
+                    row.RegisterCallback<ClickEvent>(_ => OnQueueRowClicked(index, action));
+
+                    var icon = new VisualElement();
+                    icon.AddToClassList("queue-row__icon");
+                    if (action.Icon) {
+                        icon.style.backgroundImage = new StyleBackground(action.Icon);
+                    }
+
+                    var col = new VisualElement();
+                    col.AddToClassList("queue-row__col");
+                    var name = new Label($"{action.DisplayName}  ({action.TimeCost}h)");
+                    name.AddToClassList("queue-row__name");
+                    var bar = new VisualElement();
+                    bar.AddToClassList("fill-bar");
+                    var fill = new VisualElement();
+                    fill.AddToClassList("fill-bar__fill");
+                    fill.style.width = Length.Percent(100f); // Full = untouched; front row drains below.
+                    bar.Add(fill);
+                    col.Add(name);
+                    col.Add(bar);
+
+                    row.Add(icon);
+                    row.Add(col);
+                    m_QueueList.Add(row);
+
+                    if (i == 0) {
+                        m_ActiveQueueFill = fill;
+                    }
                 }
+            }
 
-                var col = new VisualElement();
-                col.AddToClassList("queue-row__col");
-                var name = new Label(action.DisplayName);
-                name.AddToClassList("queue-row__name");
-                var bar = new VisualElement();
-                bar.AddToClassList("fill-bar");
-                var fill = new VisualElement();
-                fill.AddToClassList("fill-bar__fill");
-                fill.style.width = Length.Percent(100f); // Instant for now; shrinks live once actions take real time.
-                bar.Add(fill);
-                col.Add(name);
-                col.Add(bar);
-
-                row.Add(icon);
-                row.Add(col);
-                m_QueueList.Add(row);
+            // Live drain on the working item: full bar -> empty as its hours run out.
+            if (m_ActiveQueueFill != null) {
+                m_ActiveQueueFill.style.width = Length.Percent((1f - Manager.ActiveProgress) * 100f);
             }
         }
 
         // ---- Events ----
 
-        private void OnAddToQueueClicked() {
-            // Both queue buttons execute immediately until the timed queue exists.
+        private void OnAddToQueueClicked(bool first) {
             if (m_Selected) {
-                Manager?.ExecuteAction(m_Selected);
+                Manager?.TryEnqueue(m_Selected, first);
             }
+        }
+
+        private void OnQueueRowClicked(int index, ActionData action) {
+            // Index was captured at build time; the manager double-checks it
+            // against the action so a stale click can't cancel the wrong row.
+            Manager?.TryCancelQueued(index, action);
         }
 
         private void OnEndDayClicked() {
@@ -429,7 +457,7 @@ namespace RevManager {
 
         private void OnRestartClicked() {
             m_JournalScroll.Clear();
-            m_QueueShownCount = -1;
+            m_ShownQueueVersion = -1;
             m_EndingOverlay.RemoveFromClassList("ending-overlay--visible");
             Manager?.StartRun();
         }

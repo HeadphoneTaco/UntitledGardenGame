@@ -8,8 +8,13 @@ the Inspector, not editing code.
 
 4 weeks. Each week = 5 weekday turns + 1 weekend choice.
 
-- Weekday: spend action points on actions (instant resolve). End Day may fire
-  a news event into the journal. After day 5, the weekend unlocks.
+- Weekday: queue actions onto a timed belt. The day clock only runs while the
+  queue has items (hybrid time: plan frozen, execute live). Costs and effects
+  settle when an action FINISHES — cancel is free, but a drained resource can
+  make a queued action fall through (journal notes it). Food/Water drain per
+  in-game hour while the clock runs. When the queue empties with 0 hours left,
+  the day ends itself and fires a guaranteed news event. After day 5, the
+  weekend unlocks.
 - Weekend: choose one option (rest / small action / big mobilization). Success
   requires the Community bar to be above that option's threshold. Tired hungry
   people fail big protests. That rule IS the theme.
@@ -54,9 +59,11 @@ the Inspector, not editing code.
 - `Data/` : the ScriptableObject definitions (ActionData, NewsEventData,
   WeekendOptionData, EndingData, ResourceData, VariableEffect/VariableCost)
 - `Buckets/` : CoreUtils asset buckets that auto-collect content assets
-- `Systems/RevGameManager.cs` : the clock, protest resolution, retaliation,
-  news firing, ending selection. UI talks to: `TryExecuteAction`, `EndDay`,
-  `ChooseWeekend`, `JournalUpdated`, `GameEnded`.
+- `Systems/RevGameManager.cs` : the clock, timed queue, resource drain,
+  protest resolution, retaliation, news firing, ending selection. UI talks to:
+  `TryEnqueue`, `TryCancelQueued`, `CanQueue`, `UnreservedHours`,
+  `ActiveProgress`, `QueueVersion`, `EndDay`, `ChooseWeekend`,
+  `JournalUpdated`, `GameEnded`.
 
 ## UI (UI Toolkit)
 
@@ -69,10 +76,17 @@ the uxml/uss files; no scene surgery.
 The old uGUI binding components (ActionButtonBinding, WeekendButtonBinding,
 NamedValueTextBinding) are superseded by this and safe to delete.
 
+## Inspector setup for the queue/clock (one-time)
+
+1. `RevGameManager` > Day Clock: set **Seconds Per Hour** (1.5 default) and
+   assign **Draining Resources** = the `DrainResourceBucket` asset.
+2. On the `Food` and `Water` ResourceData assets: set **Drain Per Hour**
+   (DrainLabel stays display-only — keep both in sync by hand).
+3. The End Day button now only works while the queue is idle; with 0 hours
+   left the day ends automatically.
+
 ## Not built yet (on purpose)
 
-- Timed/visual action queue (actions resolve instantly for now; a queue is
-  presentation on top of the same calls)
 - EffectsIfIgnored on news (stretch goal from the doc)
 - VCR collage payoff screen (weekend resolution currently journal-only)
 - Title / pause screens (jam requirement, quick to add at the end)
