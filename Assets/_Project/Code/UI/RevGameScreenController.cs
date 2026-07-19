@@ -18,10 +18,9 @@ namespace RevManager {
     ///   Right       - Daily Queue (actions taken today) + End Of Week Plan buttons.
     ///   Bottom      - "stuff" inventory grid + "news" journal feed.
     ///
-    /// Queue: Add First/Add Last feed RevGameManager's timed queue. The front
-    /// item's bar drains live; clicking any queued row cancels it (nothing is
-    /// paid until an action completes, so no refund math). End Day only lights
-    /// up while the queue is idle — with 0 hours left the day ends by itself.
+    /// NOTE: Add First/Add Last both execute immediately for now. When the
+    /// real-time queue lands in RevGameManager, point them at the queue API and
+    /// this UI keeps working.
     ///
     /// Display updates poll on a 100ms schedule instead of subscribing to
     /// every variable: simpler, and plenty fast at this scale.
@@ -52,14 +51,8 @@ namespace RevManager {
         private VisualElement m_MachineFill;
 
         // Left panel
-        private class ResourceRow {
-            public VisualElement Fill;
-            public Label Value;
-            public ResourceData Resource;
-            public float Max; // Derived from Value/Progress (package hides MaxValue); cached once valid.
-        }
-
-        private readonly List<ResourceRow> m_ResourceRows = new List<ResourceRow>();
+        private readonly List<(VisualElement fill, Label value, ResourceData resource)> m_ResourceRows =
+            new List<(VisualElement, Label, ResourceData)>();
 
         // Center panel
         private readonly List<(Button button, ActionData action)> m_ActionButtons = new List<(Button, ActionData)>();
@@ -76,8 +69,8 @@ namespace RevManager {
         private ScrollView m_QueueList;
         private Button m_EndDayButton;
         private readonly List<(Button button, WeekendOptionData option)> m_WeekendButtons = new List<(Button, WeekendOptionData)>();
-        private int m_ShownQueueVersion = -1;
-        private VisualElement m_ActiveQueueFill; // Front item's bar; drains every poll without a rebuild.
+        private int m_QueueShownCount = -1;
+        private int m_QueueShownDay = -1;
 
         // Bottom
         private ScrollView m_JournalScroll;
@@ -111,8 +104,8 @@ namespace RevManager {
             m_DetailGains = root.Q<VisualElement>("detail-gains");
             m_AddFirstButton = root.Q<Button>("add-first-button");
             m_AddLastButton = root.Q<Button>("add-last-button");
-            m_AddFirstButton.clicked += () => OnAddToQueueClicked(true);
-            m_AddLastButton.clicked += () => OnAddToQueueClicked(false);
+            m_AddFirstButton.clicked += OnAddToQueueClicked;
+            m_AddLastButton.clicked += OnAddToQueueClicked;
 
             m_QueueList = root.Q<ScrollView>("queue-list");
             m_EndDayButton = root.Q<Button>("end-day-button");
@@ -164,20 +157,16 @@ namespace RevManager {
                     icon.style.backgroundImage = new StyleBackground(resource.Icon);
                 }
 
-                // Name + count on one line, full-width bar underneath, so every
-                // bar is the same length no matter how long the name is.
                 var col = new VisualElement();
                 col.AddToClassList("drain-row__col");
-
-                var head = new VisualElement();
-                head.AddToClassList("drain-row__head");
                 var name = new Label(resource.DisplayName);
                 name.AddToClassList("drain-row__name");
-                var value = new Label("000/000");
+                var value = new Label("000");
                 value.AddToClassList("drain-row__value");
-                head.Add(name);
-                head.Add(value);
+                col.Add(name);
+                col.Add(value);
 
+                // Bar sits beside the text, filling the rectangle's empty right side.
                 var bar = new VisualElement();
                 bar.AddToClassList("fill-bar");
                 bar.AddToClassList("drain-row__bar");
@@ -185,11 +174,9 @@ namespace RevManager {
                 fill.AddToClassList("fill-bar__fill");
                 bar.Add(fill);
 
-                col.Add(head);
-                col.Add(bar);
-
                 row.Add(icon);
                 row.Add(col);
+                row.Add(bar);
 
                 if (!string.IsNullOrEmpty(resource.DrainLabel)) {
                     var badge = new Label(resource.DrainLabel);
@@ -198,7 +185,7 @@ namespace RevManager {
                 }
 
                 container.Add(row);
-                m_ResourceRows.Add(new ResourceRow { Fill = fill, Value = value, Resource = resource });
+                m_ResourceRows.Add((fill, value, resource));
             }
         }
 
@@ -327,9 +314,7 @@ namespace RevManager {
             int dayOverall = (Manager.Week.Value - 1) * Manager.DaysPerWeek + Manager.Day.Value;
             int dayTotal = Manager.TotalWeeks * Manager.DaysPerWeek;
             m_DayLabel.text = $"{dayOverall:00}/{dayTotal:00}";
-            // Unreserved hours: what's still plannable. Costs settle on completion,
-            // so raw ActionPointsLeft wouldn't move when you queue — confusing.
-            m_ApLabel.text = $"{Manager.UnreservedHours}h";
+            m_ApLabel.text = $"{Manager.ActionPointsLeft.Value}h";
 
             float support = Manager.People.Value;
             m_SupportValue.text = $"{support:000}/{m_SupportBarCap:000}";
@@ -342,33 +327,22 @@ namespace RevManager {
             SetFill(m_MachineFill, Manager.Machine.Progress);
 
             // Left panel resource bars.
-            foreach (ResourceRow rowBinding in m_ResourceRows) {
-                float current = rowBinding.Resource.Variable.Value;
-                float progress = rowBinding.Resource.Variable.Progress;
-
-                // Package hides MaxValue, so derive it (resources are 0-based)
-                // and cache the first valid result.
-                if (rowBinding.Max <= 0f && progress > 0.0001f) {
-                    rowBinding.Max = Mathf.Round(current / progress);
-                }
-
-                rowBinding.Value.text = rowBinding.Max > 0f
-                    ? $"{current:000}/{rowBinding.Max:000}"
-                    : $"{current:000}";
-                SetFill(rowBinding.Fill, progress);
+            foreach ((VisualElement fill, Label value, ResourceData resource) in m_ResourceRows) {
+                value.text = $"{resource.Variable.Value:000}";
+                SetFill(fill, resource.Variable.Progress);
             }
 
             // Center panel.
             foreach ((Button button, ActionData action) in m_ActionButtons) {
                 button.SetEnabled(Manager.Phase == GamePhase.Weekday && action.CanAfford);
             }
-            bool canQueue = Manager.CanQueue(m_Selected);
+            bool canQueue = Manager.CanExecute(m_Selected);
             m_AddFirstButton.SetEnabled(canQueue);
             m_AddLastButton.SetEnabled(canQueue);
 
             // Right panel.
             RefreshQueue();
-            m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday && Manager.Queue.Count == 0);
+            m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday);
             foreach ((Button button, WeekendOptionData option) in m_WeekendButtons) {
                 button.SetEnabled(Manager.CanChoose(option));
             }
@@ -379,76 +353,51 @@ namespace RevManager {
             fill.style.width = Length.Percent(Mathf.Clamp01(progress) * 100f);
         }
 
-        /// <summary>
-        /// Shows the PENDING queue (front item on top, bar draining as it works).
-        /// Rows rebuild only when the manager bumps QueueVersion; between
-        /// rebuilds each poll just updates the front bar's width.
-        /// Clicking a row cancels it — nothing's paid until completion, so a
-        /// cancel is free.
-        /// </summary>
         private void RefreshQueue() {
-            if (Manager.QueueVersion != m_ShownQueueVersion) {
-                m_ShownQueueVersion = Manager.QueueVersion;
-                m_QueueList.Clear();
-                m_ActiveQueueFill = null;
-
-                IReadOnlyList<ActionData> queue = Manager.Queue;
-                for (int i = 0; i < queue.Count; i++) {
-                    ActionData action = queue[i];
-                    int index = i;
-
-                    var row = new VisualElement();
-                    row.AddToClassList("queue-row");
-                    row.tooltip = "Click to cancel";
-                    row.RegisterCallback<ClickEvent>(_ => OnQueueRowClicked(index, action));
-
-                    var icon = new VisualElement();
-                    icon.AddToClassList("queue-row__icon");
-                    if (action.Icon) {
-                        icon.style.backgroundImage = new StyleBackground(action.Icon);
-                    }
-
-                    var col = new VisualElement();
-                    col.AddToClassList("queue-row__col");
-                    var name = new Label($"{action.DisplayName}  ({action.TimeCost}h)");
-                    name.AddToClassList("queue-row__name");
-                    var bar = new VisualElement();
-                    bar.AddToClassList("fill-bar");
-                    var fill = new VisualElement();
-                    fill.AddToClassList("fill-bar__fill");
-                    fill.style.width = Length.Percent(100f); // Full = untouched; front row drains below.
-                    bar.Add(fill);
-                    col.Add(name);
-                    col.Add(bar);
-
-                    row.Add(icon);
-                    row.Add(col);
-                    m_QueueList.Add(row);
-
-                    if (i == 0) {
-                        m_ActiveQueueFill = fill;
-                    }
-                }
+            IReadOnlyList<ActionData> actions = Manager.TodaysActions;
+            if (actions.Count == m_QueueShownCount && Manager.Day.Value == m_QueueShownDay) {
+                return;
             }
+            m_QueueShownCount = actions.Count;
+            m_QueueShownDay = Manager.Day.Value;
 
-            // Live drain on the working item: full bar -> empty as its hours run out.
-            if (m_ActiveQueueFill != null) {
-                m_ActiveQueueFill.style.width = Length.Percent((1f - Manager.ActiveProgress) * 100f);
+            m_QueueList.Clear();
+            foreach (ActionData action in actions) {
+                var row = new VisualElement();
+                row.AddToClassList("queue-row");
+
+                var icon = new VisualElement();
+                icon.AddToClassList("queue-row__icon");
+                if (action.Icon) {
+                    icon.style.backgroundImage = new StyleBackground(action.Icon);
+                }
+
+                var col = new VisualElement();
+                col.AddToClassList("queue-row__col");
+                var name = new Label(action.DisplayName);
+                name.AddToClassList("queue-row__name");
+                var bar = new VisualElement();
+                bar.AddToClassList("fill-bar");
+                var fill = new VisualElement();
+                fill.AddToClassList("fill-bar__fill");
+                fill.style.width = Length.Percent(100f); // Instant for now; shrinks live once actions take real time.
+                bar.Add(fill);
+                col.Add(name);
+                col.Add(bar);
+
+                row.Add(icon);
+                row.Add(col);
+                m_QueueList.Add(row);
             }
         }
 
         // ---- Events ----
 
-        private void OnAddToQueueClicked(bool first) {
+        private void OnAddToQueueClicked() {
+            // Both queue buttons execute immediately until the timed queue exists.
             if (m_Selected) {
-                Manager?.TryEnqueue(m_Selected, first);
+                Manager?.ExecuteAction(m_Selected);
             }
-        }
-
-        private void OnQueueRowClicked(int index, ActionData action) {
-            // Index was captured at build time; the manager double-checks it
-            // against the action so a stale click can't cancel the wrong row.
-            Manager?.TryCancelQueued(index, action);
         }
 
         private void OnEndDayClicked() {
@@ -457,7 +406,7 @@ namespace RevManager {
 
         private void OnRestartClicked() {
             m_JournalScroll.Clear();
-            m_ShownQueueVersion = -1;
+            m_QueueShownCount = -1;
             m_EndingOverlay.RemoveFromClassList("ending-overlay--visible");
             Manager?.StartRun();
         }

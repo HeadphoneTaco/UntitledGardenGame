@@ -22,9 +22,6 @@ namespace RevManager {
         [Tooltip("Badge text on the drain bar row, e.g. '-10/min'. Only shown for resources in the drain bucket. Leave empty to hide.")]
         public string DrainLabel;
 
-        [Tooltip("Amount lost per in-game hour while the day clock is running (the clock only runs while the action queue is working). Only resources in the DrainResourceBucket drain. DrainLabel is display-only; this is the real number.")]
-        [Min(0f)] public float DrainPerHour;
-
         [Tooltip("The variable asset holding the current amount (create via CoreUtils/GameVariable/FloatRange).")]
         public GameVariableFloatRange Variable;
     }
