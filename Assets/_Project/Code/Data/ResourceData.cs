@@ -13,8 +13,14 @@ namespace RevManager {
         public string DisplayName;
         [TextArea] public string Description;
 
-        [Tooltip("Scavenged + credited, like all art.")]
+        [Tooltip("Small icon (RevMan-Icon-*). Used in drain rows and cost/gain lines. Scavenged + credited, like all art.")]
         public Sprite Icon;
+
+        [Tooltip("Full tile art for the bottom 'stuff' grid (RevMan-inventory-*). Falls back to Icon if empty.")]
+        public Sprite Tile;
+
+        [Tooltip("Badge text on the drain bar row, e.g. '-10/min'. Only shown for resources in the drain bucket. Leave empty to hide.")]
+        public string DrainLabel;
 
         [Tooltip("The variable asset holding the current amount (create via CoreUtils/GameVariable/FloatRange).")]
         public GameVariableFloatRange Variable;

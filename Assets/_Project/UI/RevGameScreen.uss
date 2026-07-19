@@ -1,287 +1,525 @@
-/* Terraformental-inspired dark panel look. Placeholder styling: swap fonts,
-   colors, and textures during the stolen-asset art pass. */
+/* Revolution Manager — skinned to Du's mockup (RevMang 2.png reference).
+   All art lives in Assets/_Project/Art/Sprites; text is baked into most
+   banners/tabs/buttons, so those elements are background-image only. */
 
 .screen {
     flex-grow: 1;
-    background-color: rgb(18, 18, 18);
-    padding: 8px;
+    background-image: url("../Art/Sprites/RevMang 2.png");
+    -unity-background-scale-mode: scale-and-crop;
 }
 
-/* ---- Header ---- */
+/* ============ TOP BAR ============ */
 
-.header {
+.top-bar {
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    border-width: 2px;
-    border-color: rgb(70, 70, 70);
-    background-color: rgb(10, 10, 10);
-    padding: 6px 14px;
-    margin-bottom: 8px;
+    height: 110px;
+    flex-shrink: 0;
+    background-image: url("../Art/Sprites/RevMan-upperbar.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    padding: 0 30px;
 }
 
-.header__title {
-    font-size: 28px;
-    -unity-font-style: bold;
-    color: rgb(235, 235, 235);
-    letter-spacing: 6px;
-}
-
-.header__clock {
-    font-size: 18px;
-    color: rgb(200, 200, 200);
-}
-
-/* ---- Calendar strip ---- */
-
-.calendar-row {
-    flex-direction: row;
-    justify-content: center;
+.day-flag {
+    width: 78px;
+    height: 100px;
+    margin-left: 30px;
+    margin-top: 10px; /* flag hangs from the bar's top edge */
+    background-image: url("../Art/Sprites/RevMan-daybanner.png");
+    -unity-background-scale-mode: scale-to-fit;
     align-items: center;
-    margin: 0 4px 4px 4px;
+    justify-content: flex-end;
+    align-self: flex-start;
 }
 
-.calendar-week {
-    font-size: 16px;
-    -unity-font-style: bold;
-    color: rgb(200, 200, 200);
-    margin-right: 14px;
-}
-
-.calendar {
-    flex-direction: row;
-}
-
-.calendar-cell {
-    width: 64px;
-    padding: 4px 4px 6px 4px;
-    margin: 0 3px;
-    align-items: center;
-    background-color: rgb(32, 32, 32);
-    border-width: 1px;
-    border-color: rgb(90, 90, 90);
-    border-radius: 3px;
-}
-
-.calendar-cell__name {
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: rgb(170, 170, 170);
-}
-
-.calendar-cell__num {
+.day-flag__num {
+    color: rgb(240, 235, 225);
     font-size: 20px;
     -unity-font-style: bold;
-    color: rgb(225, 225, 225);
+    margin-bottom: 26px;
 }
 
-.calendar-cell--weekend {
-    border-color: rgb(150, 80, 80);
+.time-banner {
+    width: 220px;
+    height: 90px;
+    margin-left: 16px;
+    background-image: url("../Art/Sprites/RevMan-hourbanner.png");
+    -unity-background-scale-mode: scale-to-fit;
+    align-items: center;
+    justify-content: center;
 }
 
-.calendar-cell--weekend .calendar-cell__name {
-    color: rgb(220, 140, 140);
+.time-banner__num {
+    color: rgb(25, 25, 25);
+    font-size: 26px;
+    -unity-font-style: bold;
 }
 
-.calendar-cell--past {
-    opacity: 0.35;
+.topstat {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 40px;
+    border-left-width: 2px;
+    border-left-color: rgb(190, 30, 45);
+    padding-left: 20px;
+    height: 86px;
 }
 
-.calendar-cell--current {
-    border-width: 2px;
-    border-color: rgb(76, 175, 80);
-    background-color: rgb(40, 52, 40);
+#support-stat {
+    border-left-width: 0;
 }
 
-.calendar-cell--weekend.calendar-cell--current {
-    border-color: rgb(229, 115, 115);
-    background-color: rgb(52, 40, 40);
+.topstat__icon {
+    width: 78px;
+    height: 78px;
+    margin-right: 14px;
+    -unity-background-scale-mode: scale-and-crop;
 }
 
-/* ---- Layout ---- */
+.topstat__icon--support { background-image: url("../Art/Sprites/RevMan-support.png"); }
+.topstat__icon--community { background-image: url("../Art/Sprites/RevMan-community.png"); }
+.topstat__icon--machine { background-image: url("../Art/Sprites/RevMan-machine.png"); }
+
+.topstat__col {
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.topstat__title {
+    color: rgb(240, 235, 225);
+    font-size: 15px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+}
+
+.topstat__value {
+    color: rgb(240, 235, 225);
+    font-size: 24px;
+    -unity-font-style: bold;
+    margin: 2px 0 4px 0;
+}
+
+/* Shared bar: white base strip, red fill on top */
+
+.fill-bar {
+    height: 11px;
+    max-width: 260px;
+    background-image: url("../Art/Sprites/RevMan-bartofill.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    flex-direction: row;
+}
+
+.fill-bar__fill {
+    width: 50%;
+    background-image: url("../Art/Sprites/RevMan-fillingbar.png");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+/* ============ MAIN LAYOUT ============ */
+
+.main {
+    flex-direction: row;
+    flex-grow: 1;
+    padding: 14px 20px 12px 20px;
+}
+
+.main-right {
+    flex-grow: 1;
+}
 
 .body {
     flex-direction: row;
     flex-grow: 1;
 }
 
-.panel {
-    background-color: rgb(32, 32, 32);
-    border-width: 1px;
-    border-color: rgb(70, 70, 70);
-    border-radius: 3px;
-    padding: 8px;
-    margin: 4px;
+.paper-panel {
+    margin: 0 8px;
+    padding: 34px 18px 14px 18px;
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
-.panel--left {
-    width: 26%;
+.paper-panel--resources {
+    width: 22%;
+    background-image: url("../Art/Sprites/RevMan-Resrources.png");
 }
 
-.panel--center {
+.paper-panel--actions {
     flex-grow: 1;
+    background-image: url("../Art/Sprites/RevMan-actionspanel.png");
 }
 
-.panel--right {
+.paper-panel--queue {
     width: 26%;
+    background-image: url("../Art/Sprites/RevMan-Dailyqueue.png");
 }
 
-.panel__title {
+/* Black label tabs that overlap each panel's top-left corner */
+
+.panel-tab {
+    position: absolute;
+    top: -2px;
+    left: 14px;
+    width: 210px;
+    height: 30px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.panel-tab--hr { background-image: url("../Art/Sprites/RevMan-hr.png"); }
+.panel-tab--direct { background-image: url("../Art/Sprites/RevMan-actiondirect.png"); }
+.panel-tab--focus { background-image: url("../Art/Sprites/RevMan-focus.png"); }
+
+.stencil-title {
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: rgb(20, 20, 20);
+    letter-spacing: 2px;
+    margin: 4px 6px 10px 6px;
+}
+
+.stencil-title--right {
+    -unity-text-align: upper-right;
+}
+
+/* ---- Left panel: draining resource bars ---- */
+
+.drain-list {
+    flex-grow: 1; /* Takes the leftover space; inventory + motto pin to the bottom. */
+}
+
+.drain-row {
+    height: 64px;
+    margin: 4px 2px;
+    padding: 8px 12px;
+    background-image: url("../Art/Sprites/RevMan-resourcesfiled.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    flex-direction: row;
+    align-items: center;
+}
+
+.drain-row__icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.drain-row__col {
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+/* The bar lives inside the rectangle, spanning the leftover width. */
+.drain-row__bar {
+    flex-grow: 1;
+    max-width: none;
+    align-self: center;
+    margin-left: 12px;
+}
+
+.drain-row__name {
     font-size: 16px;
     -unity-font-style: bold;
-    color: rgb(230, 230, 230);
-    -unity-text-align: upper-center;
-    border-bottom-width: 1px;
-    border-bottom-color: rgb(120, 120, 120);
-    padding-bottom: 3px;
-    margin-bottom: 8px;
+    color: rgb(25, 25, 25);
 }
 
-.divider {
-    height: 1px;
-    background-color: rgb(70, 70, 70);
-    margin: 10px 0;
+.drain-row__value {
+    font-size: 12px;
+    color: rgb(60, 55, 50);
+    margin-bottom: 2px;
 }
 
-/* ---- Bars ---- */
-
-.bar-label {
-    font-size: 13px;
+.drain-row__badge {
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    background-color: rgb(190, 30, 45);
+    color: rgb(240, 235, 225);
+    font-size: 11px;
     -unity-font-style: bold;
-    color: rgb(220, 220, 220);
-    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 8px;
 }
 
-.bar {
-    margin: 2px 0 4px 0;
-    height: 24px;
+/* ---- Center panel: actions ---- */
+
+.nosilence-banner {
+    width: 340px;
+    height: 38px;
+    background-image: url("../Art/Sprites/RevMan-nosilence.png");
+    -unity-background-scale-mode: scale-to-fit;
+    margin: -6px 0 2px 6px;
 }
 
-.bar .unity-progress-bar__background {
-    background-color: rgb(15, 15, 15);
-    border-color: rgb(90, 90, 90);
+.actions-body {
+    flex-direction: row;
+    flex-grow: 1;
 }
-
-.bar--community .unity-progress-bar__progress {
-    background-color: rgb(76, 175, 80);
-}
-
-.bar--machine .unity-progress-bar__progress {
-    background-color: rgb(198, 40, 40);
-}
-
-.stat {
-    font-size: 14px;
-    color: rgb(210, 210, 210);
-    margin: 2px 0;
-}
-
-/* ---- Actions ---- */
 
 .actions-scroll {
-    flex-grow: 1;
+    width: 55%;
+    margin-right: 10px;
 }
 
 .action-group {
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
 
-.action-group__title {
-    font-size: 13px;
-    -unity-font-style: bold;
-    padding: 2px 6px;
+.action-group__bar {
+    height: 26px;
+    -unity-background-scale-mode: stretch-to-fill;
     margin-bottom: 4px;
-    color: rgb(20, 20, 20);
 }
 
-.action-group__title--care { background-color: rgb(129, 199, 132); }
-.action-group__title--grow { background-color: rgb(255, 213, 79); }
-.action-group__title--fight { background-color: rgb(229, 115, 115); }
+.action-group__bar--care { background-image: url("../Art/Sprites/RevMan-growcommunity.png"); }
+.action-group__bar--grow { background-image: url("../Art/Sprites/RevMan-organization.png"); }
+.action-group__bar--fight { background-image: url("../Art/Sprites/RevMan-resistandrebel.png"); }
 
-.action-button {
-    -unity-text-align: middle-left;
-    padding: 6px 10px;
+.action-row {
+    height: 36px;
     margin: 2px 0;
-    background-color: rgb(48, 48, 48);
-    border-color: rgb(90, 90, 90);
-    border-width: 1px;
-    border-radius: 2px;
-    color: rgb(225, 225, 225);
-    font-size: 14px;
+    padding: 0 10px;
+    background-image: url("../Art/Sprites/RevMan-actionfield.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    flex-direction: row;
+    align-items: center;
+    -unity-text-align: middle-left;
 }
 
-.action-button:hover:enabled {
-    background-color: rgb(64, 64, 64);
+.action-row:hover:enabled {
+    -unity-background-image-tint-color: rgb(255, 235, 215);
 }
 
-.action-button:disabled {
-    opacity: 0.35;
+.action-row:disabled {
+    opacity: 0.45;
 }
 
-.end-day-button {
-    height: 34px;
-    margin-top: 6px;
-    font-size: 16px;
-    -unity-font-style: bold;
-    background-color: rgb(55, 71, 79);
-    color: rgb(230, 230, 230);
-    border-color: rgb(120, 144, 156);
-    border-width: 1px;
+.action-row--selected {
+    -unity-background-image-tint-color: rgb(255, 215, 180);
 }
 
-.end-day-button:disabled {
-    opacity: 0.35;
+.action-row__icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-/* ---- Weekend ---- */
+.action-row__name {
+    flex-grow: 1;
+    font-size: 15px;
+    color: rgb(25, 25, 25);
+    -unity-text-align: middle-left;
+}
 
-.weekend-blurb {
+.action-row__time {
     font-size: 13px;
-    color: rgb(180, 180, 180);
-    white-space: normal;
+    -unity-font-style: bold;
+    color: rgb(60, 55, 50);
+}
+
+/* Detail card */
+
+.action-detail {
+    flex-grow: 1;
+    background-image: url("../Art/Sprites/RevMan-ActionFile.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    padding: 26px 24px;
+}
+
+.action-detail__header {
+    flex-direction: row;
+    align-items: center;
     margin-bottom: 8px;
 }
 
-.weekend-container {
-    flex-grow: 1;
+.action-detail__icon {
+    width: 34px;
+    height: 34px;
+    margin-right: 10px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-.weekend-button {
-    padding: 8px 10px;
-    margin: 3px 0;
-    background-color: rgb(48, 40, 40);
-    border-color: rgb(120, 90, 90);
-    border-width: 1px;
-    color: rgb(230, 220, 220);
-    font-size: 14px;
+.action-detail__name {
+    font-size: 20px;
     -unity-font-style: bold;
+    color: rgb(25, 25, 25);
+    white-space: normal;
+    flex-shrink: 1;
 }
 
-.weekend-button:disabled {
-    opacity: 0.35;
+.action-detail__desc {
+    font-size: 13px;
+    color: rgb(60, 55, 50);
+    white-space: normal;
+    margin-bottom: 10px;
 }
 
-/* ---- Journal ---- */
-
-.journal-panel {
-    height: 26%;
+.action-detail__section {
+    font-size: 18px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    color: rgb(25, 25, 25);
+    margin: 6px 0 4px 0;
 }
 
-.journal-scroll {
+.action-detail__section--cost {
+    color: rgb(190, 30, 45);
+}
+
+.action-detail__list {
+    margin-left: 6px;
+}
+
+.detail-line {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(40, 38, 35);
+    margin: 1px 0;
+}
+
+.action-detail__buttons {
+    margin-top: 12px;
+}
+
+/* Image buttons (text baked into the sprite) */
+
+.img-button {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    padding: 0;
+    margin: 4px 0;
+    height: 42px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.img-button:hover:enabled {
+    -unity-background-image-tint-color: rgb(255, 220, 220);
+}
+
+.img-button:disabled {
+    opacity: 0.45;
+}
+
+.img-button--addfirst { background-image: url("../Art/Sprites/RevMan-button-addfirst.png"); }
+.img-button--addlast { background-image: url("../Art/Sprites/RevMan-button-addlast.png"); }
+.img-button--rest { background-image: url("../Art/Sprites/RevMan-button-rest.png"); }
+.img-button--local { background-image: url("../Art/Sprites/RevMan-button-localaction.png"); }
+.img-button--big { background-image: url("../Art/Sprites/RevMan-button-mobilization.png"); }
+
+/* ---- Right panel: daily queue + end of week ---- */
+
+.queue-list {
     flex-grow: 1;
 }
 
-.journal-entry {
-    font-size: 13px;
-    margin: 1px 0;
+.queue-row {
+    margin: 3px 2px;
+    padding: 4px 8px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.queue-row__icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    background-color: rgb(25, 25, 25);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.queue-row__col {
+    flex-grow: 1;
+}
+
+.queue-row__name {
+    font-size: 14px;
+    color: rgb(25, 25, 25);
     white-space: normal;
 }
 
-.journal-entry--flavor { color: rgb(160, 160, 160); }
-.journal-entry--important { color: rgb(255, 213, 79); }
-.journal-entry--crisis { color: rgb(239, 83, 80); }
+.queue-row .fill-bar {
+    max-width: 160px;
+    margin-top: 2px;
+}
 
-/* ---- Ending overlay ---- */
+.end-day-button {
+    height: 36px;
+    margin: 6px 2px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    background-color: rgb(190, 30, 45);
+    color: rgb(240, 235, 225);
+    border-width: 0;
+}
+
+.end-day-button:disabled {
+    opacity: 0.45;
+}
+
+.eow-card {
+    height: 220px;
+    background-image: url("../Art/Sprites/RevMan-endofweek.png");
+    -unity-background-scale-mode: scale-to-fit;
+    padding: 60px 40px 20px 40px;
+    justify-content: center;
+    align-self: center;
+    width: 280px;
+}
+
+.stuff-motto {
+    background-color: rgb(190, 30, 45);
+    color: rgb(240, 235, 225);
+    font-size: 13px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    flex-shrink: 0;
+    padding: 4px;
+    margin: 8px 3px 0 3px;
+}
+
+/* ============ NEWS (below actions/queue) ============ */
+
+.news-panel {
+    height: 30%;
+    flex-shrink: 0;
+    margin: 10px 8px 0 8px;
+}
+
+.flag {
+    width: 130px;
+    height: 64px;
+    -unity-background-scale-mode: scale-to-fit;
+    margin-bottom: 2px;
+}
+
+.flag--news { background-image: url("../Art/Sprites/RevMan-newsflag.png"); }
+
+.news-scroll {
+    flex-grow: 1;
+    margin-top: 2px;
+}
+
+.news-entry {
+    min-height: 34px;
+    margin: 3px 0;
+    padding: 6px 14px;
+    background-image: url("../Art/Sprites/RevMan-newsfield.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    font-size: 13px;
+    color: rgb(40, 38, 35);
+    white-space: normal;
+}
+
+.news-entry--important { color: rgb(120, 70, 10); }
+.news-entry--crisis { color: rgb(160, 20, 30); }
+
+/* ============ Ending overlay ============ */
 
 .ending-overlay {
     position: absolute;
@@ -301,29 +539,32 @@
 
 .ending-card {
     width: 55%;
-    background-color: rgb(25, 25, 25);
-    border-width: 2px;
-    border-color: rgb(120, 120, 120);
-    padding: 24px;
+    background-image: url("../Art/Sprites/RevMan-emergencypanel.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    padding: 44px 40px;
 }
 
 .ending-card__title {
     font-size: 26px;
     -unity-font-style: bold;
-    color: rgb(235, 235, 235);
+    color: rgb(25, 25, 25);
     -unity-text-align: upper-center;
     margin-bottom: 12px;
 }
 
 .ending-card__body {
     font-size: 15px;
-    color: rgb(200, 200, 200);
+    color: rgb(60, 55, 50);
     white-space: normal;
     margin-bottom: 18px;
 }
 
 .ending-card__restart {
-    height: 36px;
+    height: 40px;
     font-size: 16px;
     -unity-font-style: bold;
+    letter-spacing: 2px;
+    background-color: rgb(190, 30, 45);
+    color: rgb(240, 235, 225);
+    border-width: 0;
 }

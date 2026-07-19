@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0928eb1e0c11ce4408cc4c16f73d7e2a, type: 3}
+  m_Name: 04_inv-tool
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
+  DisplayName: Tools
+  Description: 
+  Icon: {fileID: 21300000, guid: 7d01fcfd7ced548e68be5e35a064868b, type: 3}
+  Tile: {fileID: 21300000, guid: e982c4e8d734347469e103f73d1ddc55, type: 3}
+  DrainLabel: 
+  Variable: {fileID: 11400000, guid: a165150c1987c9644adf1f9e26fe4ba1, type: 2}

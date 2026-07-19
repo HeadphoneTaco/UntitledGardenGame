@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31ff3025dab8fc34cad76d3c3a7d4a06, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: CoreUtils::CoreUtils.GameVariables.GameVariableFloatRange
-  m_EventName: Liters of available water
-  m_EventDescription: Amount of water stored in the commune
-  m_DebugLog: 1
-  m_InitialValue: 50
+  m_EventName: 
+  m_EventDescription: 
+  m_DebugLog: 0
+  m_InitialValue: 67
   m_MinValue: 0
   m_MaxValue: 100
