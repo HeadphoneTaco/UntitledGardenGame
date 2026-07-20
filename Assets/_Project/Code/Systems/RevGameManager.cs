@@ -98,6 +98,7 @@ namespace RevManager {
         private readonly List<JournalEntry> m_Journal = new List<JournalEntry>();
         private readonly HashSet<NewsEventData> m_FiredNews = new HashSet<NewsEventData>();
         private readonly List<ActionData> m_TodaysActions = new List<ActionData>();
+        private readonly HashSet<ActionData> m_CompletedThisRun = new HashSet<ActionData>();
         private readonly List<QueuedAction> m_Queue = new List<QueuedAction>();
 
         // One guaranteed news event per day, BREAKING at a random hour while
@@ -119,6 +120,9 @@ namespace RevManager {
 
         /// <summary>Bumped on every queue mutation so the UI can rebuild only when needed.</summary>
         public int QueueVersion { get; private set; }
+
+        /// <summary>Tech-tree tier the commune has reached. Starts at 1; tier actions raise it.</summary>
+        public int CurrentTier { get; private set; } = 1;
 
         /// <summary>0..1 progress of the item at the front of the queue.</summary>
         public float ActiveProgress => m_Queue.Count > 0 ? m_Queue[0].Progress : 0f;
@@ -144,6 +148,8 @@ namespace RevManager {
             m_People.ResetValue();
             m_Journal.Clear();
             m_FiredNews.Clear();
+            m_CompletedThisRun.Clear();
+            CurrentTier = 1;
             ClearQueue();
             Ending = null;
 
@@ -181,9 +187,43 @@ namespace RevManager {
         /// <summary>Hours neither spent nor queued — the number the player can still plan with.</summary>
         public int UnreservedHours => m_ActionPointsLeft.Value - QueuedHours;
 
-        /// <summary>Time is the only gate at queue time; resource costs are checked on completion.</summary>
+        /// <summary>Completed at least once this run (persists across days, resets on restart).</summary>
+        public bool IsCompleted(ActionData action) {
+            return m_CompletedThisRun.Contains(action);
+        }
+
+        /// <summary>
+        /// Locked actions are HIDDEN, not greyed out (Du's call): visible means
+        /// tier reached, prerequisites completed, and one-shots not already done.
+        /// </summary>
+        public bool IsVisible(ActionData action) {
+            if (!action || action.Tier > CurrentTier) {
+                return false;
+            }
+            if (!action.Repeatable && IsCompleted(action)) {
+                return false;
+            }
+            if (action.Prerequisites != null) {
+                foreach (ActionData prerequisite in action.Prerequisites) {
+                    if (prerequisite && !IsCompleted(prerequisite)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Gates at queue time: visibility, the supporter requirement, and time.
+        /// Resource costs are still checked on completion.
+        /// </summary>
         public bool CanQueue(ActionData action) {
-            return Phase == GamePhase.Weekday && action && action.TimeCost <= UnreservedHours;
+            return Phase == GamePhase.Weekday
+                   && IsVisible(action)
+                   && m_People.Value >= action.MinSupporters
+                   && action.TimeCost <= UnreservedHours
+                   // A one-shot can't be queued twice.
+                   && (action.Repeatable || m_Queue.All(e => e.Action != action));
         }
 
         /// <summary>
@@ -288,8 +328,10 @@ namespace RevManager {
             m_Queue.RemoveAt(0);
             QueueVersion++;
 
-            // Pay-on-completion: both checks happen here, at the last moment.
-            if (action.TimeCost > m_ActionPointsLeft.Value || !action.CanAfford) {
+            // Pay-on-completion: all checks happen here, at the last moment.
+            // (The one-shot check covers a duplicate that slipped into the queue.)
+            if (action.TimeCost > m_ActionPointsLeft.Value || !action.CanAfford
+                || !action.Repeatable && IsCompleted(action)) {
                 AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value,
                     $"{action.DisplayName} fell through. Not enough left to see it done.", NewsTone.Crisis));
                 return;
@@ -298,6 +340,15 @@ namespace RevManager {
             m_ActionPointsLeft.Value -= action.TimeCost;
             action.Execute();
             m_TodaysActions.Add(action);
+            m_CompletedThisRun.Add(action);
+
+            // Tier actions push the whole tree open. New actions appear in the
+            // list on the next UI poll; the journal announces the shift.
+            if (action.UnlocksTier > CurrentTier) {
+                CurrentTier = action.UnlocksTier;
+                AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value,
+                    $"{action.DisplayName} changes everything. The movement can attempt more.", NewsTone.Important));
+            }
         }
 
         /// <summary>

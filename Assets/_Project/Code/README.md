@@ -59,6 +59,7 @@ the Inspector, not editing code.
 | Multiple endings ladder    | EndingData          | MaxMachineProgress, MinCommunityProgress, Priority |
 | VCR collage screen         | WeekendOptionData.CollageFrames | |
 | Recruit = more capacity    | RevGameManager: BaseActionPoints + PeoplePerBonusPoint | |
+| Tier tech tree (Noah/Du)   | ActionData          | Tier, UnlocksTier, Prerequisites, MinSupporters, Repeatable |
 
 ## Code map
 
