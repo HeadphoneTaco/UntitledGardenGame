@@ -193,24 +193,38 @@ namespace RevManager {
         }
 
         /// <summary>
-        /// Locked actions are HIDDEN, not greyed out (Du's call): visible means
-        /// tier reached, prerequisites completed, and one-shots not already done.
+        /// Tier-locked actions are HIDDEN (design call: the tree reveals itself).
+        /// Prereq-locked actions within a reached tier stay VISIBLE but greyed,
+        /// so the player can see what to work toward.
         /// </summary>
         public bool IsVisible(ActionData action) {
-            if (!action || action.Tier > CurrentTier) {
-                return false;
+            return action
+                   && action.Tier <= CurrentTier
+                   && (action.Repeatable || !IsCompleted(action));
+        }
+
+        public bool PrerequisitesMet(ActionData action) {
+            if (!action || action.Prerequisites == null) {
+                return true;
             }
-            if (!action.Repeatable && IsCompleted(action)) {
-                return false;
-            }
-            if (action.Prerequisites != null) {
-                foreach (ActionData prerequisite in action.Prerequisites) {
-                    if (prerequisite && !IsCompleted(prerequisite)) {
-                        return false;
-                    }
+            foreach (ActionData prerequisite in action.Prerequisites) {
+                if (prerequisite && !IsCompleted(prerequisite)) {
+                    return false;
                 }
             }
             return true;
+        }
+
+        /// <summary>Prerequisites still standing between the player and this action, for UI messaging.</summary>
+        public IEnumerable<ActionData> MissingPrerequisites(ActionData action) {
+            if (!action || action.Prerequisites == null) {
+                yield break;
+            }
+            foreach (ActionData prerequisite in action.Prerequisites) {
+                if (prerequisite && !IsCompleted(prerequisite)) {
+                    yield return prerequisite;
+                }
+            }
         }
 
         /// <summary>
@@ -220,6 +234,7 @@ namespace RevManager {
         public bool CanQueue(ActionData action) {
             return Phase == GamePhase.Weekday
                    && IsVisible(action)
+                   && PrerequisitesMet(action)
                    && m_People.Value >= action.MinSupporters
                    && action.TimeCost <= UnreservedHours
                    // A one-shot can't be queued twice.
@@ -447,7 +462,7 @@ namespace RevManager {
 
         // ---- News ----
 
-        /// <summary>Guaranteed one event per day end (Noah's design) — as long as something is eligible.</summary>
+        /// <summary>Guaranteed one event per day end (per the design doc) — as long as something is eligible.</summary>
         private void FireNews() {
             if (!m_News) {
                 return;

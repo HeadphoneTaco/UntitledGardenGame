@@ -25,3 +25,8 @@ MonoBehaviour:
   Effects:
   - Variable: {fileID: 11400000, guid: f30e94cd194bc7a458413084c547bb7b, type: 2}
     Delta: 5
+  Tier: 1
+  UnlocksTier: 0
+  Prerequisites: []
+  MinSupporters: 0
+  Repeatable: 1

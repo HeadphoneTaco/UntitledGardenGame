@@ -1,4 +1,4 @@
-/* Revolution Manager — skinned to Du's mockup (RevMang 2.png reference).
+/* Revolution Manager — skinned to the reference mockup (RevMang 2.png).
    All art lives in Assets/_Project/Art/Sprites; text is baked into most
    banners/tabs/buttons, so those elements are background-image only. */
 
@@ -158,7 +158,11 @@
 }
 
 .paper-panel--actions {
+    /* flex-basis 0 = panel width comes from the layout, never from content.
+       Long cost lists used to inflate the card and stretch this whole panel. */
     flex-grow: 1;
+    flex-basis: 0;
+    overflow: hidden;
     background-image: url("../Art/Sprites/RevMan-actionspanel.png");
 }
 
@@ -343,9 +347,23 @@
 
 .action-detail {
     flex-grow: 1;
+    flex-basis: 0;
+    overflow: hidden;
     background-image: url("../Art/Sprites/RevMan-ActionFile.png");
     -unity-background-scale-mode: stretch-to-fill;
     padding: 26px 24px;
+}
+
+/* COST | GAIN two-column block */
+.action-detail__columns {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.action-detail__col {
+    flex-grow: 1;
+    flex-basis: 0;
+    overflow: hidden;
 }
 
 .action-detail__header {
@@ -381,7 +399,7 @@
     -unity-font-style: bold;
     letter-spacing: 2px;
     color: rgb(25, 25, 25);
-    margin: 6px 0 4px 0;
+    margin: 4px 0 2px 0;
 }
 
 .action-detail__section--cost {
@@ -393,10 +411,31 @@
 }
 
 .detail-line {
-    font-size: 13px;
+    font-size: 12px;
     -unity-font-style: bold;
     color: rgb(40, 38, 35);
-    margin: 1px 0;
+    margin: 0; /* big actions list 6+ costs; every pixel counts */
+    white-space: normal; /* wrap instead of pushing the card wider */
+}
+
+/* Blocked rows stay clickable (to read WHY in the card) but look dead */
+.action-row--blocked {
+    opacity: 0.45;
+}
+
+/* Blocker message under the cost/gain columns */
+.action-detail__status {
+    font-size: 12px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    color: rgb(190, 30, 45);
+    white-space: normal;
+    margin-top: 6px;
+}
+
+/* Cost lines the commune can't currently cover */
+.detail-line--missing {
+    color: rgb(190, 30, 45);
 }
 
 .action-detail__buttons {

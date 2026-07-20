@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CoreUtils.GameVariables;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace RevManager {
     /// <summary>
-    /// Binds RevGameScreen.uxml (Du's mockup layout) to the game.
+    /// Binds RevGameScreen.uxml (the reference mockup layout) to the game.
     ///
     /// Layout map:
     ///   Top bar     - day counter, action points (time), Support/Community/Machine bars.
@@ -69,8 +70,12 @@ namespace RevManager {
         private Label m_DetailDesc;
         private VisualElement m_DetailCosts;
         private VisualElement m_DetailGains;
+        private Label m_DetailStatus;
         private Button m_AddFirstButton;
         private Button m_AddLastButton;
+        // Cost lines of the selected action, re-checked every poll so lines
+        // turn red the moment a resource drains below the price.
+        private readonly List<(Label line, VariableCost cost)> m_SelectedCostLines = new List<(Label, VariableCost)>();
 
         // Right panel
         private ScrollView m_QueueList;
@@ -109,6 +114,7 @@ namespace RevManager {
             m_DetailDesc = root.Q<Label>("detail-desc");
             m_DetailCosts = root.Q<VisualElement>("detail-costs");
             m_DetailGains = root.Q<VisualElement>("detail-gains");
+            m_DetailStatus = root.Q<Label>("detail-status");
             m_AddFirstButton = root.Q<Button>("add-first-button");
             m_AddLastButton = root.Q<Button>("add-last-button");
             m_AddFirstButton.clicked += () => OnAddToQueueClicked(true);
@@ -249,7 +255,7 @@ namespace RevManager {
                     }
                     var name = new Label(action.DisplayName);
                     name.AddToClassList("action-row__name");
-                    var time = new Label($"{action.TimeCost}h");
+                    var time = new Label($"{action.TimeCost}mh");
                     time.AddToClassList("action-row__time");
 
                     button.Add(icon);
@@ -290,7 +296,8 @@ namespace RevManager {
                 return;
             }
 
-            AddDetailLine(m_DetailCosts, $"{action.TimeCost} HOURS");
+            m_SelectedCostLines.Clear();
+            AddDetailLine(m_DetailCosts, $"{action.TimeCost} MAN-HOURS");
             if (action.MinSupporters > 0f) {
                 // A requirement, not a cost: nothing is spent, but it gives
                 // tier actions a visible goal to push toward.
@@ -299,7 +306,8 @@ namespace RevManager {
             if (action.Costs != null) {
                 foreach (VariableCost cost in action.Costs) {
                     if (cost.Variable) {
-                        AddDetailLine(m_DetailCosts, $"x{cost.Amount:0} {cost.Variable.Name.ToUpperInvariant()}");
+                        Label line = AddDetailLine(m_DetailCosts, $"x{cost.Amount:0} {cost.Variable.Name.ToUpperInvariant()}");
+                        m_SelectedCostLines.Add((line, cost));
                     }
                 }
             }
@@ -313,10 +321,41 @@ namespace RevManager {
             }
         }
 
-        private static void AddDetailLine(VisualElement container, string text) {
+        private static Label AddDetailLine(VisualElement container, string text) {
             var line = new Label(text);
             line.AddToClassList("detail-line");
             container.Add(line);
+            return line;
+        }
+
+        /// <summary>
+        /// Why the selected action can't be queued right now. Null = it can.
+        /// Ordered by what the player should fix first.
+        /// </summary>
+        private string BlockReason(ActionData action) {
+            if (!action || Manager.Phase != GamePhase.Weekday) {
+                return null;
+            }
+            if (!Manager.PrerequisitesMet(action)) {
+                return "REQUIRES: " + string.Join(", ",
+                    Manager.MissingPrerequisites(action).Select(p => p.DisplayName.ToUpperInvariant()));
+            }
+            if (Manager.People.Value < action.MinSupporters) {
+                return $"NEEDS {action.MinSupporters:0} SUPPORTERS. {Manager.People.Value:0} ARE WITH US.";
+            }
+            if (!action.Repeatable && Manager.Queue.Any(e => e.Action == action)) {
+                return "ALREADY IN TODAY'S QUEUE";
+            }
+            if (action.TimeCost > Manager.DailyActionPoints) {
+                return $"NEEDS {action.TimeCost} MAN-HOURS. THE COMMUNE MUSTERS {Manager.DailyActionPoints} A DAY. GROW.";
+            }
+            if (action.TimeCost > Manager.UnreservedHours) {
+                return "NOT ENOUGH MAN-HOURS LEFT TODAY";
+            }
+            if (!action.CanAfford) {
+                return "THE COMMUNE LACKS THE SUPPLIES";
+            }
+            return null;
         }
 
         // ---- Polled display refresh ----
@@ -332,9 +371,9 @@ namespace RevManager {
             int dayOverall = (Manager.Week.Value - 1) * Manager.DaysPerWeek + Manager.Day.Value;
             int dayTotal = Manager.TotalWeeks * Manager.DaysPerWeek;
             m_DayLabel.text = $"{dayOverall:00}/{dayTotal:00}";
-            // Unreserved hours: what's still plannable. Costs settle on completion,
-            // so raw ActionPointsLeft wouldn't move when you queue — confusing.
-            m_ApLabel.text = $"{Manager.UnreservedHours}h";
+            // Unreserved man-hours: what's still plannable. Costs settle on
+            // completion, so raw ActionPointsLeft wouldn't move when you queue.
+            m_ApLabel.text = $"{Manager.UnreservedHours}mh";
 
             float support = Manager.People.Value;
             m_SupportValue.text = $"{support:000}/{m_SupportBarCap:000}";
@@ -363,16 +402,30 @@ namespace RevManager {
                 SetFill(rowBinding.Fill, progress);
             }
 
-            // Center panel. Locked/completed-one-shot actions are hidden
-            // entirely (Du's call) — the list grows as tiers unlock.
+            // Center panel. Tier-locked and finished one-shots are hidden (the
+            // tree reveals itself); prereq-locked rows show greyed so the
+            // player knows something is there to unlock.
+            // Rows stay CLICKABLE while blocked, so the player can select one
+            // and read the reason in the detail card; the class just greys it.
             foreach ((Button button, ActionData action) in m_ActionButtons) {
                 bool visible = Manager.IsVisible(action);
                 button.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
-                button.SetEnabled(visible && Manager.Phase == GamePhase.Weekday && action.CanAfford);
+                bool blocked = Manager.Phase != GamePhase.Weekday
+                    || !Manager.PrerequisitesMet(action) || !action.CanAfford;
+                button.EnableInClassList("action-row--blocked", blocked);
             }
             bool canQueue = Manager.CanQueue(m_Selected);
             m_AddFirstButton.SetEnabled(canQueue);
             m_AddLastButton.SetEnabled(canQueue);
+
+            // Detail card feedback: say WHY the buttons are dead, and flush
+            // the specific cost lines red that the commune can't cover.
+            string blockReason = BlockReason(m_Selected);
+            m_DetailStatus.text = blockReason ?? "";
+            m_DetailStatus.style.display = blockReason != null ? DisplayStyle.Flex : DisplayStyle.None;
+            foreach ((Label line, VariableCost cost) in m_SelectedCostLines) {
+                line.EnableInClassList("detail-line--missing", !cost.CanAfford);
+            }
 
             // Right panel.
             RefreshQueue();
@@ -419,7 +472,7 @@ namespace RevManager {
 
                     var col = new VisualElement();
                     col.AddToClassList("queue-row__col");
-                    var name = new Label($"{action.DisplayName}  ({action.TimeCost}h)");
+                    var name = new Label($"{action.DisplayName}  ({action.TimeCost}mh)");
                     name.AddToClassList("queue-row__name");
                     var bar = new VisualElement();
                     bar.AddToClassList("fill-bar");
@@ -477,8 +530,8 @@ namespace RevManager {
         /// toggles the body; if the news carries an UrgentAction it ALSO pulls
         /// that action into the detail card, ready for Add First (which
         /// preempts whatever's running).
-        /// Inline styles on urgent/body are placeholders until Du styles the
-        /// classes (news-entry--actionable, news-entry__body) in the uss.
+        /// Inline styles on urgent/body are placeholders until the classes
+        /// (news-entry--actionable, news-entry__body) get styled in the uss.
         /// </summary>
         private void OnJournalUpdated(JournalEntry entry) {
             // The container wears the newsprint strip (.news-entry) so the

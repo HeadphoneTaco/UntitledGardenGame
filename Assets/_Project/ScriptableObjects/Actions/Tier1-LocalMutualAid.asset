@@ -30,3 +30,8 @@ MonoBehaviour:
     Delta: 12
   - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
     Delta: 12
+  Tier: 1
+  UnlocksTier: 0
+  Prerequisites: []
+  MinSupporters: 0
+  Repeatable: 1

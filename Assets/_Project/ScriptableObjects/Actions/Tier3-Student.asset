@@ -34,3 +34,9 @@ MonoBehaviour:
     Delta: 5
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
     Delta: -10
+  Tier: 3
+  UnlocksTier: 0
+  Prerequisites:
+  - {fileID: 11400000, guid: a5ab186a1f1974f4f999c71ab6b7508f, type: 2}
+  MinSupporters: 0
+  Repeatable: 1
