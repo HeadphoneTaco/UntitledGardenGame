@@ -7,9 +7,9 @@ namespace RevManager {
     /// action points per day), Fight drains the Machine bar.
     /// </summary>
     public enum ActionType {
-        Care,
-        Grow,
-        Fight,
+        Community,
+        Organize,
+        Resist,
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ namespace RevManager {
         public Sprite Icon;
 
         [Header("Gameplay")]
-        public ActionType Type = ActionType.Care;
+        public ActionType Type = ActionType.Community;
 
         [Tooltip("Action points this takes out of the day.")]
         [Min(1)] public int TimeCost = 1;

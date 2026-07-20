@@ -41,35 +41,35 @@ namespace RevManager.EditorTools {
             GameVariableFloat health = EnsureRangeVar("Health", 0, 40, 20);
 
             // ---- Care ----
-            Action("Tend the Farms", "The mountains feed those who work them.", ActionType.Care, 1,
+            Action("Tend the Farms", "The mountains feed those who work them.", ActionType.Community, 1,
                 Costs(), Effects((food, 8)));
-            Action("Haul Clean Water", "The river is far and the state pipes pass the commune by.", ActionType.Care, 1,
+            Action("Haul Clean Water", "The river is far and the state pipes pass the commune by.", ActionType.Community, 1,
                 Costs(), Effects((water, 8)));
-            Action("Community Kitchen", "Nobody organizes on an empty stomach.", ActionType.Care, 1,
+            Action("Community Kitchen", "Nobody organizes on an empty stomach.", ActionType.Community, 1,
                 Costs((food, 5), (water, 2)), Effects((s_Community, 7)));
-            Action("Run the Clinic", "Care that the system never provided.", ActionType.Care, 1,
+            Action("Run the Clinic", "Care that the system never provided.", ActionType.Community, 1,
                 Costs((water, 3)), Effects((health, 8), (s_Community, 3)));
-            Action("Build Together", "Housing raised by many hands.", ActionType.Care, 2,
+            Action("Build Together", "Housing raised by many hands.", ActionType.Community, 2,
                 Costs((food, 4)), Effects((s_Community, 12)));
 
             // ---- Grow ----
-            Action("Door to Door", "Listen first. Then ask.", ActionType.Grow, 1,
+            Action("Door to Door", "Listen first. Then ask.", ActionType.Organize, 1,
                 Costs((food, 2)), Effects((s_People, 2)));
-            Action("Print the Message", "Posters go up faster than they tear them down.", ActionType.Grow, 1,
+            Action("Print the Message", "Posters go up faster than they tear them down.", ActionType.Organize, 1,
                 Costs(), Effects((s_People, 1), (s_Community, 2)));
-            Action("Art Festival", "Joy is recruitment.", ActionType.Grow, 2,
+            Action("Art Festival", "Joy is recruitment.", ActionType.Organize, 2,
                 Costs((food, 5), (water, 3)), Effects((s_People, 4), (s_Community, 6)));
-            Action("Live Stream", "Visibility brings friends, and attention.", ActionType.Grow, 1,
+            Action("Live Stream", "Visibility brings friends, and attention.", ActionType.Organize, 1,
                 Costs(), Effects((s_People, 3), (s_Community, -2)));
 
             // ---- Fight ----
-            Action("Tear Down Propaganda", "Their story, removed from the walls.", ActionType.Fight, 1,
+            Action("Tear Down Propaganda", "Their story, removed from the walls.", ActionType.Resist, 1,
                 Costs(), Effects((s_Machine, -3)));
-            Action("Work Slowdown", "Everything done exactly by the book, and no faster.", ActionType.Fight, 1,
+            Action("Work Slowdown", "Everything done exactly by the book, and no faster.", ActionType.Resist, 1,
                 Costs((s_Community, 3)), Effects((s_Machine, -5)));
-            Action("Sabotage the Depot", "A machine is only as strong as its weakest coupling.", ActionType.Fight, 2,
+            Action("Sabotage the Depot", "A machine is only as strong as its weakest coupling.", ActionType.Resist, 2,
                 Costs((s_Community, 4)), Effects((s_Machine, -9)));
-            Action("Draft Policies", "Write the world you want. Make them read it.", ActionType.Fight, 2,
+            Action("Draft Policies", "Write the world you want. Make them read it.", ActionType.Resist, 2,
                 Costs(), Effects((s_Machine, -2), (s_Community, 5)));
 
             // ---- News (placeholder copy; real material is Dulce's) ----
