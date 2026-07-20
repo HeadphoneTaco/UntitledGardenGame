@@ -26,3 +26,8 @@ MonoBehaviour:
     Delta: 8
   - Variable: {fileID: 11400000, guid: a165150c1987c9644adf1f9e26fe4ba1, type: 2}
     Delta: 5
+  Tier: 1
+  UnlocksTier: 0
+  Prerequisites: []
+  MinSupporters: 0
+  Repeatable: 1

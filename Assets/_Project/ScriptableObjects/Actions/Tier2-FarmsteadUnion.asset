@@ -28,3 +28,9 @@ MonoBehaviour:
   - Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
     Amount: 5
   Effects: []
+  Tier: 2
+  UnlocksTier: 0
+  Prerequisites:
+  - {fileID: 11400000, guid: 063567a1f855fdb48ba90c841d295745, type: 2}
+  MinSupporters: 0
+  Repeatable: 0

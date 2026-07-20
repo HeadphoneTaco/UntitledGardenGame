@@ -29,7 +29,7 @@ namespace RevManager {
         [Header("Gameplay")]
         public ActionType Type = ActionType.Community;
 
-        [Header("Unlocking (Noah/Du's tier tech tree)")]
+        [Header("Unlocking (tier tech tree)")]
         [Tooltip("Hidden until the commune reaches this tier. Tier 1 = available from the start.")]
         [Range(1, 4)] public int Tier = 1;
 

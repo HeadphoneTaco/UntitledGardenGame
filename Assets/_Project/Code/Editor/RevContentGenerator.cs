@@ -13,7 +13,7 @@ namespace RevManager.EditorTools {
     /// hand-edit everything it makes. Numbers are first-guess balance;
     /// tune freely in the Inspector.
     ///
-    /// News bodies are PLACEHOLDERS for tone/shape. Dulce owns the real copy.
+    /// News bodies are PLACEHOLDERS for tone/shape. Final copy comes from the narrative pass.
     /// </summary>
     public static class RevContentGenerator {
         private const string Root = "Assets/_Project/ScriptableObjects";
@@ -72,7 +72,7 @@ namespace RevManager.EditorTools {
             Action("Draft Policies", "Write the world you want. Make them read it.", ActionType.Resist, 2,
                 Costs(), Effects((s_Machine, -2), (s_Community, 5)));
 
-            // ---- News (placeholder copy; real material is Dulce's) ----
+            // ---- News (placeholder copy; final copy comes from the narrative pass) ----
             News("Rations seized at the northern checkpoint", NewsTone.Crisis, 1, 1f,
                 Effects((food, -5)));
             News("A well runs dry", NewsTone.Important, 1, 1f,
@@ -187,7 +187,7 @@ namespace RevManager.EditorTools {
             }
             var news = ScriptableObject.CreateInstance<NewsEventData>();
             news.Headline = headline;
-            news.Body = "(Placeholder copy for tone and shape. Real material: Dulce.)";
+            news.Body = "(Placeholder copy for tone and shape. Final copy pending.)";
             news.Tone = tone;
             news.EarliestWeek = earliestWeek;
             news.Weight = weight;
