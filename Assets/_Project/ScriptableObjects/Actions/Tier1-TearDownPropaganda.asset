@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
-  m_Name: Tier1-Tear Down Propaganda
+  m_Name: Tier1-TearDownPropaganda
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
   DisplayName: Tear Down Propaganda
   Description: Every small disruption of the imperialist narrative saves minds from

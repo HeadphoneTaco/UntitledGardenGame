@@ -16,7 +16,7 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: fee80b71fce050b43b41c736d2954d7d, type: 3}
   m_AssetRefs:
-  - Name: tier1-local mutual aid
+  - Name: tier1-localmutualaid
     Guid: 02db84495ce3cca489baf632dfefbb2a
     Asset: {fileID: 11400000, guid: 02db84495ce3cca489baf632dfefbb2a, type: 2}
   - Name: tier1-buildgarden
@@ -40,13 +40,13 @@ MonoBehaviour:
   - Name: tier1-buildwell
     Guid: 433732907481d43409368e2dc7bd3942
     Asset: {fileID: 11400000, guid: 433732907481d43409368e2dc7bd3942, type: 2}
-  - Name: tier1-tear down propaganda
+  - Name: tier1-teardownpropaganda
     Guid: 485c8a28dc695c5489fb57d3bc623022
     Asset: {fileID: 11400000, guid: 485c8a28dc695c5489fb57d3bc623022, type: 2}
   - Name: tier2-paramilitaryequipment
     Guid: 53e8a501bc3ef0a4bb30a2325a101307
     Asset: {fileID: 11400000, guid: 53e8a501bc3ef0a4bb30a2325a101307, type: 2}
-  - Name: tier2-farmstead union
+  - Name: tier2-farmsteadunion
     Guid: 56a1bd374924c4a748a68652a8832ce2
     Asset: {fileID: 11400000, guid: 56a1bd374924c4a748a68652a8832ce2, type: 2}
   - Name: tier3-mobilemed
@@ -73,19 +73,19 @@ MonoBehaviour:
   - Name: tier3-strike
     Guid: a95e170e8170a4434980669c59681cb9
     Asset: {fileID: 11400000, guid: a95e170e8170a4434980669c59681cb9, type: 2}
-  - Name: tier2-national mutual aid
+  - Name: tier2-nationalmutualaid
     Guid: aba006ccfc38043e081375c755b5a99c
     Asset: {fileID: 11400000, guid: aba006ccfc38043e081375c755b5a99c, type: 2}
-  - Name: tier2-organize protests
+  - Name: tier2-organizeprotests
     Guid: bc700f608d5ba9545a5d8bfa3655ce65
     Asset: {fileID: 11400000, guid: bc700f608d5ba9545a5d8bfa3655ce65, type: 2}
   - Name: tier1-stealmedicine
     Guid: c193e608405fa4cb99e660e7e4cdc19a
     Asset: {fileID: 11400000, guid: c193e608405fa4cb99e660e7e4cdc19a, type: 2}
-  - Name: tier1-recruit displaced farmers
+  - Name: tier1-recruitdisplacedfarmers
     Guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1
     Asset: {fileID: 11400000, guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1, type: 2}
-  - Name: tier2-build community hospital
+  - Name: tier2-buildcommunityhospital
     Guid: cb7c62d5b0e19fc439e53480ff45bfbe
     Asset: {fileID: 11400000, guid: cb7c62d5b0e19fc439e53480ff45bfbe, type: 2}
   - Name: tier1-writezines
@@ -94,7 +94,7 @@ MonoBehaviour:
   - Name: tier2-holddebates
     Guid: dc8b6b0005ce46743b55bd7609d8dbbf
     Asset: {fileID: 11400000, guid: dc8b6b0005ce46743b55bd7609d8dbbf, type: 2}
-  - Name: tier3-sabotage weapons factories
+  - Name: tier3-sabotageweaponsfactories
     Guid: e35b0458c49c64aee86c224f8fb02c72
     Asset: {fileID: 11400000, guid: e35b0458c49c64aee86c224f8fb02c72, type: 2}
   - Name: tier1-clothingpottery
