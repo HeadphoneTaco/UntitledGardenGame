@@ -92,6 +92,7 @@ namespace RevManager {
 
         private void OnEnable() {
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+            root.Query<Button>().ForEach(RegisterButtonAudio);
 
             m_DayLabel = root.Q<Label>("day-label");
             m_ApLabel = root.Q<Label>("ap-label");
@@ -137,6 +138,7 @@ namespace RevManager {
             if (RevGameManager.Exists) {
                 RevGameManager.Instance.JournalUpdated -= OnJournalUpdated;
                 RevGameManager.Instance.GameEnded -= OnGameEnded;
+                RevGameManager.Instance.ActionCompleted -= OnActionCompleted;
             }
             m_Built = false;
         }
@@ -225,6 +227,7 @@ namespace RevManager {
 
             Manager.JournalUpdated += OnJournalUpdated;
             Manager.GameEnded += OnGameEnded;
+            Manager.ActionCompleted += OnActionCompleted;
 
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
             var groups = new Dictionary<ActionType, VisualElement> {
@@ -240,6 +243,7 @@ namespace RevManager {
                     }
                     ActionData captured = action;
                     var button = new Button(() => SelectAction(captured));
+                    RegisterButtonAudio(button);
                     button.AddToClassList("action-row");
 
                     var icon = new VisualElement();
@@ -449,9 +453,26 @@ namespace RevManager {
 
         // ---- Events ----
 
-        private void OnAddToQueueClicked(bool first) {
-            if (m_Selected) {
-                Manager?.TryEnqueue(m_Selected, first);
+        private void OnAddToQueueClicked(bool first)
+        {
+            if (m_Selected == null || Manager == null)
+            {
+                AudioManager.Instance?.PlayError();
+                return;
+            }
+
+            bool addedSuccessfully = Manager.TryEnqueue(
+                m_Selected,
+                first
+            );
+
+            if (addedSuccessfully)
+            {
+                AudioManager.Instance?.PlayAddToQueue();
+            }
+            else
+            {
+                AudioManager.Instance?.PlayError();
             }
         }
 
@@ -484,6 +505,9 @@ namespace RevManager {
             // The container wears the newsprint strip (.news-entry) so the
             // paper stretches around the body when it expands; headline and
             // body inherit its color/font.
+            
+            if (entry.Source != null) AudioManager.Instance?.PlayNews();
+            
             var container = new VisualElement();
             container.AddToClassList("news-entry");
             container.AddToClassList($"news-entry--{entry.Tone.ToString().ToLowerInvariant()}");
@@ -534,5 +558,39 @@ namespace RevManager {
             m_EndingBody.text = ending ? ending.Body : "No ending matched. Check the EndingBucket has a fallback with open conditions.";
             m_EndingOverlay.AddToClassList("ending-overlay--visible");
         }
+        
+        private void OnActionCompleted(ActionData action)
+        {
+            AudioManager.Instance?.PlayCompleteTask();
+        }
+        
+        // audio sfx section?
+    
+        private static void RegisterButtonAudio(Button button)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.RegisterCallback<PointerEnterEvent>(_ =>
+            {
+                AudioManager.Instance?.PlayHover();
+            });
+
+            bool isQueueButton =
+                button.name == "add-first-button" ||
+                button.name == "add-last-button";
+
+            if (!isQueueButton)
+            {
+                button.RegisterCallback<ClickEvent>(_ =>
+                {
+                    AudioManager.Instance?.PlayClick();
+                });
+            }
+        }
+        
     }
+    
 }

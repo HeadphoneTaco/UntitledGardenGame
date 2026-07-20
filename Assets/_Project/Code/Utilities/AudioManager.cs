@@ -109,12 +109,17 @@ namespace RevManager
 
         public void PlayHover()
         {
-            PlayRandomSfx(hoverClips);
+            PlayRandomSfx(hoverClips, 0.92f, 1.08f);
         }
 
         public void PlayAddToQueue()
         {
-            PlayRandomSfx(addQueueClips);
+            PlayRandomSfx(addQueueClips, 0.94f, 1.06f);
+        }
+
+        public void PlayNews()
+        {
+            PlayRandomSfx(newsClips, 0.90f, 1.10f);
         }
 
         public void PlayError()
@@ -127,24 +132,43 @@ namespace RevManager
             PlaySfx(completeTaskClip);
         }
 
-        public void PlayNews()
+        private void PlaySfx(
+            AudioClip clip,
+            float minimumPitch = 1f,
+            float maximumPitch = 1f)
         {
-            PlayRandomSfx(newsClips);
-        }
-
-        private void PlaySfx(AudioClip clip)
-        {
-            if (clip != null && sfxSource != null)
+            if (clip == null || sfxSource == null)
             {
-                sfxSource.PlayOneShot(clip);
+                return;
             }
+
+            sfxSource.pitch = Random.Range(
+                minimumPitch,
+                maximumPitch
+            );
+
+            sfxSource.PlayOneShot(clip);
         }
 
-        private void PlayRandomSfx(AudioClip[] clips)
+        private void PlayRandomSfx(
+            AudioClip[] clips,
+            float minimumPitch = 1f,
+            float maximumPitch = 1f)
         {
-            if (clips == null || clips.Length == 0) return;
-            AudioClip selectedClip = clips[Random.Range(0, clips.Length)];
-            PlaySfx(selectedClip);
+            if (clips == null || clips.Length == 0)
+            {
+                return;
+            }
+
+            AudioClip selectedClip = clips[
+                Random.Range(0, clips.Length)
+            ];
+
+            PlaySfx(
+                selectedClip,
+                minimumPitch,
+                maximumPitch
+            );
         }
     }
 }
