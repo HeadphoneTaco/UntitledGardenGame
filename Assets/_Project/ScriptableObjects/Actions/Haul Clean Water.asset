@@ -17,7 +17,9 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Type: 0
   TimeCost: 1
-  Costs: []
+  Costs:
+  - Variable: {fileID: 0}
+    Amount: 0
   Effects:
   - Variable: {fileID: 11400000, guid: 2e349caeaf6939344b15689cdfd09d56, type: 2}
     Delta: 8
