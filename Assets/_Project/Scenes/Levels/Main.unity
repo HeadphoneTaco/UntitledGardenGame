@@ -332,8 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb628c74e9177e34a91f8c2c35a3de7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.RevGameScreenController
-  m_DrainResources: {fileID: 11400000, guid: ec5ef4cfb77f5374db4aeaf3f8bc17b9, type: 2}
-  m_Inventory: {fileID: 11400000, guid: afec8c5a2a071804687002c98756a9ea, type: 2}
+  m_Resources: {fileID: 11400000, guid: afec8c5a2a071804687002c98756a9ea, type: 2}
   m_RestOption: {fileID: 0}
   m_LocalOption: {fileID: 0}
   m_BigOption: {fileID: 0}
@@ -403,7 +402,8 @@ MonoBehaviour:
   m_BaseRetaliation: 3
   m_RetaliationPerWeek: 11
   m_MachineRecoveryPerWeek: 7
-  m_NewsChancePerDay: 0.5
+  m_SecondsPerHour: 15
+  m_DrainingResources: {fileID: 0}
   m_GameFlow: {fileID: 1896299347}
   m_Actions: {fileID: 11400000, guid: 618ef6802361fc04c90881e0e62494b4, type: 2}
   m_News: {fileID: 11400000, guid: a266e2d035984ff46935ae3bd55bf16f, type: 2}

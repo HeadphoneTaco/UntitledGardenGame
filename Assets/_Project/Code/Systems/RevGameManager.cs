@@ -15,6 +15,21 @@ namespace RevManager {
     }
 
     /// <summary>
+    /// One item on the belt. Each entry keeps its own remaining hours so a
+    /// preempted action pauses with its progress intact and resumes when it
+    /// reaches the front again.
+    /// </summary>
+    public class QueuedAction {
+        public ActionData Action;
+        public float HoursRemaining;
+
+        /// <summary>0..1 done. Frozen while the entry isn't at the front.</summary>
+        public float Progress => Action && Action.TimeCost > 0
+            ? 1f - Mathf.Clamp01(HoursRemaining / Action.TimeCost)
+            : 0f;
+    }
+
+    /// <summary>
     /// Orchestrates the run: 4 weeks of 5 weekday turns, a weekend choice each
     /// Friday, machine retaliation, and the ending evaluation.
     ///
@@ -83,8 +98,14 @@ namespace RevManager {
         private readonly List<JournalEntry> m_Journal = new List<JournalEntry>();
         private readonly HashSet<NewsEventData> m_FiredNews = new HashSet<NewsEventData>();
         private readonly List<ActionData> m_TodaysActions = new List<ActionData>();
-        private readonly List<ActionData> m_Queue = new List<ActionData>();
-        private float m_ActiveHoursRemaining;
+        private readonly List<QueuedAction> m_Queue = new List<QueuedAction>();
+
+        // One guaranteed news event per day, BREAKING at a random hour while
+        // the belt runs (so urgent headlines can interrupt live plans). If the
+        // day ends before that hour is reached, it fires at day end instead.
+        private float m_HoursIntoDay;
+        private float m_NewsHourToday;
+        private bool m_NewsFiredToday;
 
         public event Action<JournalEntry> JournalUpdated;
         public event Action<WeekendOptionData, bool> ProtestResolved;
@@ -93,16 +114,14 @@ namespace RevManager {
         public GamePhase Phase { get; private set; } = GamePhase.Weekday;
         public IReadOnlyList<JournalEntry> Journal => m_Journal;
         public IReadOnlyList<ActionData> TodaysActions => m_TodaysActions;
-        public IReadOnlyList<ActionData> Queue => m_Queue;
+        public IReadOnlyList<QueuedAction> Queue => m_Queue;
         public EndingData Ending { get; private set; }
 
         /// <summary>Bumped on every queue mutation so the UI can rebuild only when needed.</summary>
         public int QueueVersion { get; private set; }
 
         /// <summary>0..1 progress of the item at the front of the queue.</summary>
-        public float ActiveProgress => m_Queue.Count > 0 && m_Queue[0].TimeCost > 0
-            ? 1f - Mathf.Clamp01(m_ActiveHoursRemaining / m_Queue[0].TimeCost)
-            : 0f;
+        public float ActiveProgress => m_Queue.Count > 0 ? m_Queue[0].Progress : 0f;
 
         public GameVariableFloatRange Community => m_Community;
         public GameVariableFloatRange Machine => m_Machine;
@@ -153,8 +172,11 @@ namespace RevManager {
         /// <summary>How many points the commune gets today. Growth literally buys time.</summary>
         public int DailyActionPoints => m_BaseActionPoints + Mathf.FloorToInt(m_People.Value / m_PeoplePerBonusPoint);
 
-        /// <summary>Hours already promised to the queue. Adds are gated on what's left after this.</summary>
-        public int QueuedHours => m_Queue.Sum(a => a.TimeCost);
+        /// <summary>
+        /// Hours already promised to the queue. Full TimeCost per entry even if
+        /// partly done — AP is paid in full at completion regardless of pauses.
+        /// </summary>
+        public int QueuedHours => m_Queue.Sum(e => e.Action.TimeCost);
 
         /// <summary>Hours neither spent nor queued — the number the player can still plan with.</summary>
         public int UnreservedHours => m_ActionPointsLeft.Value - QueuedHours;
@@ -165,25 +187,22 @@ namespace RevManager {
         }
 
         /// <summary>
-        /// Adds an action to the queue. "First" slots in right behind the item
-        /// already in progress (never preempts it mid-run).
+        /// Adds an action to the queue. "First" PREEMPTS: it goes straight to
+        /// the front and the running action pauses where it stands, resuming
+        /// with its progress intact when it's back on top. Urgency jumps the line.
         /// </summary>
         public bool TryEnqueue(ActionData action, bool first) {
             if (!CanQueue(action)) {
                 return false;
             }
 
-            if (first && m_Queue.Count > 0) {
-                m_Queue.Insert(1, action);
-            } else if (first) {
-                m_Queue.Insert(0, action);
+            var entry = new QueuedAction { Action = action, HoursRemaining = action.TimeCost };
+            if (first) {
+                m_Queue.Insert(0, entry);
             } else {
-                m_Queue.Add(action);
+                m_Queue.Add(entry);
             }
 
-            if (m_Queue.Count == 1) {
-                m_ActiveHoursRemaining = m_Queue[0].TimeCost;
-            }
             QueueVersion++;
             return true;
         }
@@ -199,14 +218,11 @@ namespace RevManager {
         /// The expected action guards against a stale index from the UI.
         /// </summary>
         public bool TryCancelQueued(int index, ActionData expected) {
-            if (index < 0 || index >= m_Queue.Count || m_Queue[index] != expected) {
+            if (index < 0 || index >= m_Queue.Count || m_Queue[index].Action != expected) {
                 return false;
             }
 
             m_Queue.RemoveAt(index);
-            if (index == 0 && m_Queue.Count > 0) {
-                m_ActiveHoursRemaining = m_Queue[0].TimeCost;
-            }
             QueueVersion++;
             return true;
         }
@@ -233,12 +249,23 @@ namespace RevManager {
                 return;
             }
 
-            m_ActiveHoursRemaining -= hours;
-            while (m_ActiveHoursRemaining <= 0f && m_Queue.Count > 0 && Phase == GamePhase.Weekday) {
+            // Breaking news hits mid-shift, not after everyone's gone home.
+            m_HoursIntoDay += hours;
+            if (!m_NewsFiredToday && m_HoursIntoDay >= m_NewsHourToday) {
+                m_NewsFiredToday = true;
+                FireNews();
+                if (Phase != GamePhase.Weekday) {
+                    return; // News effects collapsed the community.
+                }
+            }
+
+            m_Queue[0].HoursRemaining -= hours;
+            while (m_Queue.Count > 0 && m_Queue[0].HoursRemaining <= 0f && Phase == GamePhase.Weekday) {
+                float overshoot = m_Queue[0].HoursRemaining; // <= 0
                 CompleteFront();
                 if (m_Queue.Count > 0) {
                     // Carry the overshoot so back-to-back items keep smooth timing.
-                    m_ActiveHoursRemaining += m_Queue[0].TimeCost;
+                    m_Queue[0].HoursRemaining += overshoot;
                 }
             }
         }
@@ -257,7 +284,7 @@ namespace RevManager {
         }
 
         private void CompleteFront() {
-            ActionData action = m_Queue[0];
+            ActionData action = m_Queue[0].Action;
             m_Queue.RemoveAt(0);
             QueueVersion++;
 
@@ -276,14 +303,19 @@ namespace RevManager {
         /// <summary>
         /// Ends the day. Fires automatically when the queue drains with 0 hours
         /// left; the End Day button can also call it early (queue must be idle).
-        /// Every day ends with a news event — the world moves whether you do or not.
+        /// Each day gets exactly one news event — usually breaking mid-day, but
+        /// backstopped here. The world moves whether you do or not.
         /// </summary>
         public void EndDay() {
             if (Phase != GamePhase.Weekday || m_Queue.Count > 0) {
                 return;
             }
 
-            FireNews();
+            // Guarantee holds even if the day ended before the breaking hour.
+            if (!m_NewsFiredToday) {
+                m_NewsFiredToday = true;
+                FireNews();
+            }
 
             if (m_Day.Value >= m_DaysPerWeek) {
                 SetPhase(GamePhase.Weekend);
@@ -298,12 +330,18 @@ namespace RevManager {
             m_TodaysActions.Clear();
             ClearQueue();
             m_ActionPointsLeft.Value = DailyActionPoints;
+
+            // Roll today's breaking-news hour: somewhere in the middle half of
+            // the day, so it lands while plans are in motion.
+            m_HoursIntoDay = 0f;
+            m_NewsFiredToday = false;
+            m_NewsHourToday = Random.Range(0.25f, 0.75f) * DailyActionPoints;
+
             RaiseIfSet(m_OnDayStarted);
         }
 
         private void ClearQueue() {
             m_Queue.Clear();
-            m_ActiveHoursRemaining = 0f;
             QueueVersion++;
         }
 

@@ -13,8 +13,13 @@ the Inspector, not editing code.
   settle when an action FINISHES — cancel is free, but a drained resource can
   make a queued action fall through (journal notes it). Food/Water drain per
   in-game hour while the clock runs. When the queue empties with 0 hours left,
-  the day ends itself and fires a guaranteed news event. After day 5, the
-  weekend unlocks.
+  the day ends itself. One guaranteed news event per day, breaking at a random
+  hour mid-day while the belt runs (fallback: fires at day end if the day was
+  cut short). After day 5, the weekend unlocks.
+- Urgency jumps the line: Add First preempts the running action, which pauses
+  with its progress kept and resumes when it's back at the front. News events
+  with an UrgentAction get clickable headlines that pull that action into the
+  detail card.
 - Weekend: choose one option (rest / small action / big mobilization). Success
   requires the Community bar to be above that option's threshold. Tired hungry
   people fail big protests. That rule IS the theme.
@@ -49,6 +54,7 @@ the Inspector, not editing code.
 | Resources (food/water/...) | ResourceData + GameVariableFloatRange | |
 | Actions (care/grow/fight)  | ActionData          | Type, Costs, Effects |
 | Breaking news / journal    | NewsEventData       | Tone (journal color), EarliestWeek, Weight |
+| Urgent news response       | NewsEventData       | UrgentAction (clickable headline) |
 | Weekend protest choice     | WeekendOptionData   | MinCommunityProgress (fail threshold), RetaliationMultiplier |
 | Multiple endings ladder    | EndingData          | MaxMachineProgress, MinCommunityProgress, Priority |
 | VCR collage screen         | WeekendOptionData.CollageFrames | |

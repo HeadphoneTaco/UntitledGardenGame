@@ -392,9 +392,10 @@ namespace RevManager {
                 m_QueueList.Clear();
                 m_ActiveQueueFill = null;
 
-                IReadOnlyList<ActionData> queue = Manager.Queue;
+                IReadOnlyList<QueuedAction> queue = Manager.Queue;
                 for (int i = 0; i < queue.Count; i++) {
-                    ActionData action = queue[i];
+                    QueuedAction entry = queue[i];
+                    ActionData action = entry.Action;
                     int index = i;
 
                     var row = new VisualElement();
@@ -416,7 +417,8 @@ namespace RevManager {
                     bar.AddToClassList("fill-bar");
                     var fill = new VisualElement();
                     fill.AddToClassList("fill-bar__fill");
-                    fill.style.width = Length.Percent(100f); // Full = untouched; front row drains below.
+                    // Paused (preempted) entries keep their partial bar; fresh ones show full.
+                    fill.style.width = Length.Percent((1f - entry.Progress) * 100f);
                     bar.Add(fill);
                     col.Add(name);
                     col.Add(bar);
@@ -462,12 +464,61 @@ namespace RevManager {
             Manager?.StartRun();
         }
 
+        /// <summary>
+        /// One journal entry = headline + collapsed body. Clicking a headline
+        /// toggles the body; if the news carries an UrgentAction it ALSO pulls
+        /// that action into the detail card, ready for Add First (which
+        /// preempts whatever's running).
+        /// Inline styles on urgent/body are placeholders until Du styles the
+        /// classes (news-entry--actionable, news-entry__body) in the uss.
+        /// </summary>
         private void OnJournalUpdated(JournalEntry entry) {
+            // The container wears the newsprint strip (.news-entry) so the
+            // paper stretches around the body when it expands; headline and
+            // body inherit its color/font.
+            var container = new VisualElement();
+            container.AddToClassList("news-entry");
+            container.AddToClassList($"news-entry--{entry.Tone.ToString().ToLowerInvariant()}");
+
             var label = new Label($"W{entry.Week}D{entry.Day}  {entry.Headline}");
-            label.AddToClassList("news-entry");
-            label.AddToClassList($"news-entry--{entry.Tone.ToString().ToLowerInvariant()}");
-            m_JournalScroll.Add(label);
-            m_JournalScroll.schedule.Execute(() => m_JournalScroll.ScrollTo(label));
+            label.AddToClassList("news-entry__headline");
+            container.Add(label);
+
+            Label body = null;
+            string bodyText = entry.Source ? entry.Source.Body : null;
+            if (!string.IsNullOrEmpty(bodyText)) {
+                body = new Label(bodyText);
+                body.AddToClassList("news-entry__body");
+                body.style.display = DisplayStyle.None;
+                body.style.whiteSpace = WhiteSpace.Normal;
+                body.style.opacity = 0.85f;
+                body.style.marginTop = 4;
+                container.Add(body);
+            }
+
+            ActionData urgent = entry.Source ? entry.Source.UrgentAction : null;
+            if (urgent) {
+                container.AddToClassList("news-entry--actionable");
+                label.style.unityFontStyleAndWeight = FontStyle.Bold;
+                container.tooltip = $"Click to plan: {urgent.DisplayName}";
+            }
+
+            if (urgent || body != null) {
+                bool expanded = false;
+                Label capturedBody = body;
+                container.RegisterCallback<ClickEvent>(_ => {
+                    if (capturedBody != null) {
+                        expanded = !expanded;
+                        capturedBody.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
+                    }
+                    if (urgent) {
+                        SelectAction(urgent);
+                    }
+                });
+            }
+
+            m_JournalScroll.Add(container);
+            m_JournalScroll.schedule.Execute(() => m_JournalScroll.ScrollTo(container));
         }
 
         private void OnGameEnded(EndingData ending) {

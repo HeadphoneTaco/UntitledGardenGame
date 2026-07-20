@@ -19,6 +19,7 @@ MonoBehaviour:
   EarliestWeek: 2
   Weight: 1
   OneTimeOnly: 1
+  UrgentAction: {fileID: 11400000, guid: f970601ec4d02d44990e9b4f1ccf8fcb, type: 2}
   EffectsOnFire:
   - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
     Delta: -4

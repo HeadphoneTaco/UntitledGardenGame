@@ -35,6 +35,10 @@ namespace RevManager {
         [Tooltip("If true, this event can only fire once per run.")]
         public bool OneTimeOnly = true;
 
+        [Header("Player response")]
+        [Tooltip("Optional. Clicking this headline in the journal selects this action in the detail card, ready to Add First (which preempts whatever's running). Lets urgent news jump the queue.")]
+        public ActionData UrgentAction;
+
         [Header("Impact")]
         [Tooltip("Applied the moment the event hits the journal.")]
         public VariableEffect[] EffectsOnFire;
