@@ -259,7 +259,7 @@ namespace RevManager {
                     groups[action.Type].Add(button);
                     m_ActionButtons.Add((button, action));
 
-                    if (!m_Selected) {
+                    if (!m_Selected && Manager.IsVisible(action)) {
                         SelectAction(action);
                     }
                 }
@@ -291,6 +291,11 @@ namespace RevManager {
             }
 
             AddDetailLine(m_DetailCosts, $"{action.TimeCost} HOURS");
+            if (action.MinSupporters > 0f) {
+                // A requirement, not a cost: nothing is spent, but it gives
+                // tier actions a visible goal to push toward.
+                AddDetailLine(m_DetailCosts, $"NEEDS {action.MinSupporters:0} SUPPORTERS");
+            }
             if (action.Costs != null) {
                 foreach (VariableCost cost in action.Costs) {
                     if (cost.Variable) {
@@ -358,9 +363,12 @@ namespace RevManager {
                 SetFill(rowBinding.Fill, progress);
             }
 
-            // Center panel.
+            // Center panel. Locked/completed-one-shot actions are hidden
+            // entirely (Du's call) — the list grows as tiers unlock.
             foreach ((Button button, ActionData action) in m_ActionButtons) {
-                button.SetEnabled(Manager.Phase == GamePhase.Weekday && action.CanAfford);
+                bool visible = Manager.IsVisible(action);
+                button.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                button.SetEnabled(visible && Manager.Phase == GamePhase.Weekday && action.CanAfford);
             }
             bool canQueue = Manager.CanQueue(m_Selected);
             m_AddFirstButton.SetEnabled(canQueue);
