@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
+  m_Name: Tier3-MutualAidShip
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
+  DisplayName: Receive Mutual Aid Shipment
+  Description: Our agitation has given our cause enough global visibility that communities
+    from outside of the country have offered aid. We need to coordinate a group to
+    go and receive the supplies and smuggle them past guarded ports of entry.
+  Icon: {fileID: 21300000, guid: f1b5f950174da401e99cbf4ed6476ea5, type: 3}
+  Type: 1
+  TimeCost: 4
+  Costs:
+  - Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
+    Amount: 15
+  Effects:
+  - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
+    Delta: 15
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Delta: 12
+  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
+    Delta: 12
+  - Variable: {fileID: 11400000, guid: f30e94cd194bc7a458413084c547bb7b, type: 2}
+    Delta: 15
+  - Variable: {fileID: 11400000, guid: 6d19330645b9e524bb7c863a5c8878b2, type: 2}
+    Delta: 10

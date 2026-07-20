@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
+  m_Name: Tier3-InternationalMutualAid
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
+  DisplayName: International Mutual Aid
+  Description: Cuba is being crushed by sanctions and Pinochet is spreading terror
+    in Chile. Our international comrades need the strength of a united front. Any
+    surplus we have can help prop up resistance globally.
+  Icon: {fileID: 21300000, guid: f1b5f950174da401e99cbf4ed6476ea5, type: 3}
+  Type: 0
+  TimeCost: 5
+  Costs:
+  - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
+    Amount: 25
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Amount: 20
+  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
+    Amount: 25
+  - Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
+    Amount: 15
+  - Variable: {fileID: 11400000, guid: f30e94cd194bc7a458413084c547bb7b, type: 2}
+    Amount: 20
+  Effects:
+  - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
+    Delta: 15
+  - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
+    Delta: 5
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: -5

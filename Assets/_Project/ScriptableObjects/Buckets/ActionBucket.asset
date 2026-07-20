@@ -16,43 +16,88 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: fee80b71fce050b43b41c736d2954d7d, type: 3}
   m_AssetRefs:
-  - Name: build together
+  - Name: tier1-local mutual aid
     Guid: 02db84495ce3cca489baf632dfefbb2a
     Asset: {fileID: 11400000, guid: 02db84495ce3cca489baf632dfefbb2a, type: 2}
-  - Name: door to door
+  - Name: tier1-buildgarden
     Guid: 063567a1f855fdb48ba90c841d295745
     Asset: {fileID: 11400000, guid: 063567a1f855fdb48ba90c841d295745, type: 2}
-  - Name: sabotage the depot
+  - Name: tier3-internationalmutualaid
+    Guid: 0e7c231bd854a499793c909c4b0b80bd
+    Asset: {fileID: 11400000, guid: 0e7c231bd854a499793c909c4b0b80bd, type: 2}
+  - Name: tier2-artfestival
     Guid: 10f349d8f0ebbda468bb11655e8b7549
     Asset: {fileID: 11400000, guid: 10f349d8f0ebbda468bb11655e8b7549, type: 2}
-  - Name: draft policies
+  - Name: tier3-establishregionalcommunes
+    Guid: 3a36ed598b3b64234aa4b229a4679761
+    Asset: {fileID: 11400000, guid: 3a36ed598b3b64234aa4b229a4679761, type: 2}
+  - Name: tier2-wellbuildinginitiative
+    Guid: 3bd3dc86ce1c94b0abaf83928a5f82fa
+    Asset: {fileID: 11400000, guid: 3bd3dc86ce1c94b0abaf83928a5f82fa, type: 2}
+  - Name: tier3-mutualaidship
+    Guid: 40fba52726a444110a4cf001fcb1af9e
+    Asset: {fileID: 11400000, guid: 40fba52726a444110a4cf001fcb1af9e, type: 2}
+  - Name: tier1-buildwell
     Guid: 433732907481d43409368e2dc7bd3942
     Asset: {fileID: 11400000, guid: 433732907481d43409368e2dc7bd3942, type: 2}
-  - Name: tear down propaganda
+  - Name: tier1-tear down propaganda
     Guid: 485c8a28dc695c5489fb57d3bc623022
     Asset: {fileID: 11400000, guid: 485c8a28dc695c5489fb57d3bc623022, type: 2}
-  - Name: run the clinic
+  - Name: tier2-paramilitaryequipment
     Guid: 53e8a501bc3ef0a4bb30a2325a101307
     Asset: {fileID: 11400000, guid: 53e8a501bc3ef0a4bb30a2325a101307, type: 2}
-  - Name: haul clean water
+  - Name: tier2-farmstead union
+    Guid: 56a1bd374924c4a748a68652a8832ce2
+    Asset: {fileID: 11400000, guid: 56a1bd374924c4a748a68652a8832ce2, type: 2}
+  - Name: tier3-mobilemed
+    Guid: 6f71cc562c1784d69b683dae2f82b60c
+    Asset: {fileID: 11400000, guid: 6f71cc562c1784d69b683dae2f82b60c, type: 2}
+  - Name: tier3-trainmilitia
+    Guid: 82a8698ce2d434db5900f6595a4788c3
+    Asset: {fileID: 11400000, guid: 82a8698ce2d434db5900f6595a4788c3, type: 2}
+  - Name: tier4-revolution
+    Guid: 88f0aecec15be4fc1bec4213a5a886f8
+    Asset: {fileID: 11400000, guid: 88f0aecec15be4fc1bec4213a5a886f8, type: 2}
+  - Name: tier3-seizefuel
+    Guid: 965eba9b87204451bb2047aeec01bcb1
+    Asset: {fileID: 11400000, guid: 965eba9b87204451bb2047aeec01bcb1, type: 2}
+  - Name: tier3-student
+    Guid: 9f9555936029a4e9782b658715e19bcb
+    Asset: {fileID: 11400000, guid: 9f9555936029a4e9782b658715e19bcb, type: 2}
+  - Name: tier2-musicfestival
+    Guid: a5ab186a1f1974f4f999c71ab6b7508f
+    Asset: {fileID: 11400000, guid: a5ab186a1f1974f4f999c71ab6b7508f, type: 2}
+  - Name: tier2-writemanifesto
     Guid: a6a77c739b9bf4a408b8c739e72cd093
     Asset: {fileID: 11400000, guid: a6a77c739b9bf4a408b8c739e72cd093, type: 2}
-  - Name: print the message
+  - Name: tier3-strike
+    Guid: a95e170e8170a4434980669c59681cb9
+    Asset: {fileID: 11400000, guid: a95e170e8170a4434980669c59681cb9, type: 2}
+  - Name: tier2-national mutual aid
+    Guid: aba006ccfc38043e081375c755b5a99c
+    Asset: {fileID: 11400000, guid: aba006ccfc38043e081375c755b5a99c, type: 2}
+  - Name: tier2-organize protests
     Guid: bc700f608d5ba9545a5d8bfa3655ce65
     Asset: {fileID: 11400000, guid: bc700f608d5ba9545a5d8bfa3655ce65, type: 2}
-  - Name: tend the farms
+  - Name: tier1-stealmedicine
+    Guid: c193e608405fa4cb99e660e7e4cdc19a
+    Asset: {fileID: 11400000, guid: c193e608405fa4cb99e660e7e4cdc19a, type: 2}
+  - Name: tier1-recruit displaced farmers
     Guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1
     Asset: {fileID: 11400000, guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1, type: 2}
-  - Name: live stream
+  - Name: tier2-build community hospital
     Guid: cb7c62d5b0e19fc439e53480ff45bfbe
     Asset: {fileID: 11400000, guid: cb7c62d5b0e19fc439e53480ff45bfbe, type: 2}
-  - Name: art festival
+  - Name: tier1-writezines
     Guid: d94897a7136ab9e4eb7b1686c3891e5f
     Asset: {fileID: 11400000, guid: d94897a7136ab9e4eb7b1686c3891e5f, type: 2}
-  - Name: work slowdown
+  - Name: tier2-holddebates
     Guid: dc8b6b0005ce46743b55bd7609d8dbbf
     Asset: {fileID: 11400000, guid: dc8b6b0005ce46743b55bd7609d8dbbf, type: 2}
-  - Name: community kitchen
+  - Name: tier3-sabotage weapons factories
+    Guid: e35b0458c49c64aee86c224f8fb02c72
+    Asset: {fileID: 11400000, guid: e35b0458c49c64aee86c224f8fb02c72, type: 2}
+  - Name: tier1-clothingpottery
     Guid: f970601ec4d02d44990e9b4f1ccf8fcb
     Asset: {fileID: 11400000, guid: f970601ec4d02d44990e9b4f1ccf8fcb, type: 2}
   m_ManualUpdate: 0

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
+  m_Name: _Tier1-StartNews-Nafta
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
+  Headline: NAFTA privatizes indigenous farmlands
+  Body: "IRA imposes sweeping land reforms threatening to displace millions from
+    communal edijos.\n\nA few of our neighbours have banded together to protect their
+    communal land from government take over. Emiliano Zapata fought for the freedom
+    of these lands during the revolution and now his legacy is being sold off to
+    capitalist pigs. Our people are forced to flee to the cities, with nowhere to
+    turn for survival except the factories owned by those same blood-drinking cockroaches.
+    We must carry on the legacy of Zapata, bring together people in support of our
+    cause, and stand against this pillaging of our rights and dignity.\n\n\u201CThe
+    neo-liberal dream of a Mexican countryside without peasants or indigenous peoples
+    is nothing but a nightmare and a vain illusion. Mexico cannot exist without Mexican
+    peasants and indigenous peoples. Without corn, there is no country.\u201D"
+  Image: {fileID: 21300000, guid: 0f673f8fdd72744d4a5d48b8ad1ae7ba, type: 3}
+  Tone: 1
+  EarliestWeek: 1
+  Weight: 1
+  OneTimeOnly: 1
+  EffectsOnFire:
+  - Variable: {fileID: 11400000, guid: 1131069fc2040e942bb132db8727f221, type: 2}
+    Delta: 3
+  EffectsIfIgnored: []
