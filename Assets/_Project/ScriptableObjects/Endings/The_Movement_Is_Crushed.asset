@@ -17,7 +17,9 @@ MonoBehaviour:
     someone keeps a poster folded in a drawer.
   Image: {fileID: 0}
   IsVictory: 0
-  MaxMachineProgress: 0.99
+  MaxMachineProgress: 1
   MinCommunityProgress: 0
-  Priority: 0
+  MinCommunityLead: -1
+  MaxCommunityLead: 1
+  Priority: 1
   IsEarlyCollapse: 1

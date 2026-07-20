@@ -102,11 +102,20 @@ namespace RevManager {
         }
 
         private EndingData PickEnding(bool earlyCollapse) {
-            if (!m_Endings) {
+            return m_Endings
+                ? SelectEnding(m_Endings.Items, m_Machine.Progress, m_Community.Progress, earlyCollapse)
+                : null;
+        }
+
+        /// <summary>
+        /// The single source of truth for ending selection. Static so the
+        /// ending coverage map editor window runs the exact same ladder the
+        /// game does — if this changes, the map changes with it.
+        /// </summary>
+        public static EndingData SelectEnding(EndingData[] all, float machineProgress, float communityProgress, bool earlyCollapse) {
+            if (all == null) {
                 return null;
             }
-
-            EndingData[] all = m_Endings.Items;
 
             if (earlyCollapse) {
                 EndingData collapse = all.FirstOrDefault(e => e && e.IsEarlyCollapse);
@@ -117,7 +126,7 @@ namespace RevManager {
 
             return all.Where(e => e && !e.IsEarlyCollapse)
                 .OrderByDescending(e => e.Priority)
-                .FirstOrDefault(e => e.Matches(m_Machine.Progress, m_Community.Progress));
+                .FirstOrDefault(e => e.Matches(machineProgress, communityProgress));
         }
     }
 }

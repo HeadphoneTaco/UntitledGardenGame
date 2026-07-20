@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 710d204b34a7af6438d72f7503be4f83, type: 3}
-  m_Name: EndingFallback
+  m_Name: The_Machine_Prevails
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.EndingData
-  Title: Fallback ending
-  Body: This is the fallback ending
+  Title: The Machine Prevails
+  Body: (placeholder) The commune fought, but the machine was stronger when the dust
+    settled. Revolution denied.
   Image: {fileID: 0}
   IsVictory: 0
-  MaxMachineProgress: 0.99
-  MinCommunityProgress: 0.01
+  MaxMachineProgress: 1
+  MinCommunityProgress: 0
+  MinCommunityLead: -1
+  MaxCommunityLead: 1
   Priority: 0
   IsEarlyCollapse: 0

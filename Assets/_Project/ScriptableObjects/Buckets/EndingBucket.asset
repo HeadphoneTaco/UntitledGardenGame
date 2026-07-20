@@ -19,15 +19,15 @@ MonoBehaviour:
   - Name: an_occupation
     Guid: 0ec344c242ca14047bb137eefe44ffca
     Asset: {fileID: 11400000, guid: 0ec344c242ca14047bb137eefe44ffca, type: 2}
-  - Name: endingfallback
+  - Name: the_machine_prevails
     Guid: 1901bf1a43c97e54093d6213ed7db17b
     Asset: {fileID: 11400000, guid: 1901bf1a43c97e54093d6213ed7db17b, type: 2}
-  - Name: endingearly
-    Guid: 4d03bedb6ffa6e248aae01074e0a712c
-    Asset: {fileID: 11400000, guid: 4d03bedb6ffa6e248aae01074e0a712c, type: 2}
   - Name: a_symbolic_protest
     Guid: 523dea33e51b6684f8c97b950d4a12e9
     Asset: {fileID: 11400000, guid: 523dea33e51b6684f8c97b950d4a12e9, type: 2}
+  - Name: stalemate
+    Guid: c5697ad0e85a40d299075a1c4c4dcbf5
+    Asset: {fileID: 11400000, guid: c5697ad0e85a40d299075a1c4c4dcbf5, type: 2}
   - Name: revolution
     Guid: ccc354121bd5824449e91db2b07f72c9
     Asset: {fileID: 11400000, guid: ccc354121bd5824449e91db2b07f72c9, type: 2}
