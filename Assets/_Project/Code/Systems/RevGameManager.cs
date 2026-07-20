@@ -111,6 +111,7 @@ namespace RevManager {
         public event Action<JournalEntry> JournalUpdated;
         public event Action<WeekendOptionData, bool> ProtestResolved;
         public event Action<EndingData> GameEnded;
+        public event Action<ActionData> ActionCompleted;
 
         public GamePhase Phase { get; private set; } = GamePhase.Weekday;
         public IReadOnlyList<JournalEntry> Journal => m_Journal;
@@ -356,6 +357,7 @@ namespace RevManager {
             action.Execute();
             m_TodaysActions.Add(action);
             m_CompletedThisRun.Add(action);
+            ActionCompleted?.Invoke(action);
 
             // Tier actions push the whole tree open. New actions appear in the
             // list on the next UI poll; the journal announces the shift.
