@@ -16,7 +16,7 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: 995743248f71aaa46aef88308e08c01f, type: 3}
   m_AssetRefs:
-  - Name: a nurse defects to the clinic
+  - Name: _tier1-startnews-nafta
     Guid: 202010db4fda7b4479c600b07fef7095
     Asset: {fileID: 11400000, guid: 202010db4fda7b4479c600b07fef7095, type: 2}
   - Name: rations seized at the northern checkpoint

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
+  m_Name: Tier3-TrainMilitia
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
+  DisplayName: Train Militia Members
+  Description: The reality is that changing the system peacefully will never happen
+    quickly enough before our culture is ripped from the earth by its roots. By assembling
+    a contingent of armed guerilla fighters we can create the leverage we need to
+    break capital's grip on our throats by force.
+  Icon: {fileID: 21300000, guid: 36fefbfd71e5a4033b5cfe9d995c2b40, type: 3}
+  Type: 1
+  TimeCost: 12
+  Costs:
+  - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
+    Amount: 10
+  - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
+    Amount: 25
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Amount: 25
+  - Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
+    Amount: 35
+  - Variable: {fileID: 11400000, guid: a165150c1987c9644adf1f9e26fe4ba1, type: 2}
+    Amount: 15
+  Effects:
+  - Variable: {fileID: 11400000, guid: 5042e14660489744db6857c780bf8060, type: 2}
+    Delta: 50
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: 35

@@ -228,9 +228,9 @@ namespace RevManager {
 
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
             var groups = new Dictionary<ActionType, VisualElement> {
-                { ActionType.Care, root.Q<VisualElement>("care-group") },
-                { ActionType.Grow, root.Q<VisualElement>("grow-group") },
-                { ActionType.Fight, root.Q<VisualElement>("fight-group") },
+                { ActionType.Community, root.Q<VisualElement>("care-group") },
+                { ActionType.Organize, root.Q<VisualElement>("grow-group") },
+                { ActionType.Resist, root.Q<VisualElement>("fight-group") },
             };
 
             if (Manager.Actions) {

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
+  m_Name: Tier2-Farmstead Union
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
+  DisplayName: Farmstead Union(Unifinished)
+  Description: Rural and Indigenous communities everywhere are standing up to the
+    theft of their land, but they won't be able to resist the violent power of the
+    bourgeoisie without coming together. By coordinating the securing of communal
+    lands from appropriation we can beat them back.
+  Icon: {fileID: 21300000, guid: f1b5f950174da401e99cbf4ed6476ea5, type: 3}
+  Type: 0
+  TimeCost: 6
+  Costs:
+  - Variable: {fileID: 11400000, guid: f83212fc33639894d9f78d811ff3c2a0, type: 2}
+    Amount: 5
+  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
+    Amount: 7
+  - Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
+    Amount: 5
+  Effects: []

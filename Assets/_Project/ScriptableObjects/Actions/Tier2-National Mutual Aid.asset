@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
+  m_Name: Tier2-National Mutual Aid
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
+  DisplayName: National Mutual Aid
+  Description: By further organizing our supporters we can provide care packages
+    to people all around the country and ease people's reliance on the system.
+  Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
+  Type: 0
+  TimeCost: 5
+  Costs:
+  - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
+    Amount: 9
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Amount: 8
+  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
+    Amount: 10
+  Effects:
+  - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
+    Delta: 15
+  - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
+    Delta: 10
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: -15
