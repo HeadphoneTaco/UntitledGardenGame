@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 710d204b34a7af6438d72f7503be4f83, type: 3}
-  m_Name: A Symbolic Protest
+  m_Name: A_Symbolic_Protest
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.EndingData
   Title: A Symbolic Protest
   Body: The march happens. The photos are taken. Nothing changes, this time.
   Image: {fileID: 0}
-  MaxMachineProgress: 1
-  MinCommunityProgress: 0
-  Priority: 0
+  IsVictory: 1
+  MaxMachineProgress: 0.99
+  MinCommunityProgress: 0.01
+  Priority: 1
   IsEarlyCollapse: 0

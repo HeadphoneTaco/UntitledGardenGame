@@ -32,6 +32,23 @@ namespace RevManager
 
         private int _lastAmbienceIndex = -1;
 
+        // Volume access for the options screen. Master volume lives on
+        // AudioListener there; these cover the three sources.
+        public float MusicVolume {
+            get => musicSource ? musicSource.volume : 1f;
+            set { if (musicSource) musicSource.volume = value; }
+        }
+
+        public float AmbienceVolume {
+            get => ambienceSource ? ambienceSource.volume : 1f;
+            set { if (ambienceSource) ambienceSource.volume = value; }
+        }
+
+        public float SfxVolume {
+            get => sfxSource ? sfxSource.volume : 1f;
+            set { if (sfxSource) sfxSource.volume = value; }
+        }
+
         private void Awake()
         {
             if (Instance != null && Instance != this)

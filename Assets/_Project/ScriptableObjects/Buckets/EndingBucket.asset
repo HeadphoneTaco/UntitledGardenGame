@@ -16,7 +16,7 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: 40b05511359ff354b8c40c21c154535f, type: 3}
   m_AssetRefs:
-  - Name: an occupation
+  - Name: an_occupation
     Guid: 0ec344c242ca14047bb137eefe44ffca
     Asset: {fileID: 11400000, guid: 0ec344c242ca14047bb137eefe44ffca, type: 2}
   - Name: endingfallback
@@ -25,19 +25,19 @@ MonoBehaviour:
   - Name: endingearly
     Guid: 4d03bedb6ffa6e248aae01074e0a712c
     Asset: {fileID: 11400000, guid: 4d03bedb6ffa6e248aae01074e0a712c, type: 2}
-  - Name: a symbolic protest
+  - Name: a_symbolic_protest
     Guid: 523dea33e51b6684f8c97b950d4a12e9
     Asset: {fileID: 11400000, guid: 523dea33e51b6684f8c97b950d4a12e9, type: 2}
   - Name: revolution
     Guid: ccc354121bd5824449e91db2b07f72c9
     Asset: {fileID: 11400000, guid: ccc354121bd5824449e91db2b07f72c9, type: 2}
-  - Name: mass uprising
+  - Name: mass_uprising
     Guid: e0b3c287f29276140bbb9ee3f14098f5
     Asset: {fileID: 11400000, guid: e0b3c287f29276140bbb9ee3f14098f5, type: 2}
-  - Name: a municipality liberated
+  - Name: a_municipality_liberated
     Guid: eebd84b215491f24b8ba11cafb5fbeba
     Asset: {fileID: 11400000, guid: eebd84b215491f24b8ba11cafb5fbeba, type: 2}
-  - Name: the movement is crushed
+  - Name: the_movement_is_crushed
     Guid: f22e81240180b59489e6e102c3a70f7c
     Asset: {fileID: 11400000, guid: f22e81240180b59489e6e102c3a70f7c, type: 2}
   m_ManualUpdate: 0

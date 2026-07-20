@@ -1,0 +1,217 @@
+/* Meta screens layered over the game screen: title, pause, options,
+   credits, and the win/lose end screens. MenuScreensController toggles
+   .meta-screen--visible; everything else here is presentation.
+
+   Backgrounds are the full-art frames in Art/Utilities (titles and
+   taglines are baked into the art). The reference mockups place the
+   end-screen buttons centered under the tagline; the title art leaves
+   the lower-right clear for the menu column. Tune freely in UI Builder. */
+
+.meta-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.meta-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+.meta-screen--visible {
+    display: flex;
+}
+
+/* ---- Shared button style (matches the mockup's red blocks) ---- */
+
+.menu-button {
+    height: 46px;
+    min-width: 340px;
+    margin: 5px 0;
+    padding: 0 24px;
+    background-color: rgb(190, 30, 45);
+    color: rgb(240, 235, 225);
+    border-width: 2px;
+    border-color: rgb(90, 10, 18);
+    border-radius: 0;
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+}
+
+.menu-button:hover {
+    background-color: rgb(215, 45, 60);
+}
+
+.menu-button:disabled {
+    opacity: 0.4;
+}
+
+/* ---- Title ---- */
+
+.meta-screen--title {
+    background-image: url("../Art/Utilities/revmanHomeScreen.png");
+    -unity-background-scale-mode: scale-and-crop;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-right: 6%;
+    padding-bottom: 8%;
+}
+
+.meta-buttons {
+    align-items: stretch;
+}
+
+/* Title menu reads from across the room; bump it up. */
+.meta-screen--title .menu-button {
+    height: 62px;
+    min-width: 440px;
+    font-size: 21px;
+    letter-spacing: 4px;
+}
+
+/* ---- Pause ---- */
+
+.meta-screen--pause {
+    background-color: rgba(5, 4, 3, 0.78);
+    align-items: center;
+    justify-content: center;
+}
+
+.pause-card {
+    width: 430px;
+    padding: 26px 36px 30px 36px;
+    background-color: rgba(22, 16, 13, 0.95);
+    border-width: 3px;
+    border-color: rgb(190, 30, 45);
+    align-items: stretch;
+}
+
+.pause-card__logo {
+    height: 170px;
+    background-image: url("../Art/Utilities/revmanLogo.png");
+    -unity-background-scale-mode: scale-to-fit;
+    margin-bottom: 14px;
+}
+
+/* Dev-only ending shortcuts on the pause card; hidden outside the
+   editor / development builds by the controller. */
+.debug-strip {
+    margin-top: 16px;
+    border-top-width: 1px;
+    border-top-color: rgba(240, 235, 225, 0.3);
+    padding-top: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.debug-strip__title {
+    width: 100%;
+    color: rgba(240, 235, 225, 0.6);
+    font-size: 11px;
+    -unity-text-align: middle-center;
+    margin-bottom: 4px;
+}
+
+.debug-button {
+    height: 26px;
+    margin: 2px;
+    padding: 0 10px;
+    font-size: 11px;
+    background-color: rgb(60, 50, 45);
+    color: rgb(230, 225, 215);
+    border-width: 1px;
+    border-color: rgb(120, 110, 100);
+}
+
+/* ---- Options ---- */
+
+.meta-screen--options {
+    background-color: rgba(5, 4, 3, 0.78);
+    align-items: center;
+    justify-content: center;
+}
+
+.options-card {
+    width: 470px;
+    padding: 26px 36px 30px 36px;
+    background-color: rgba(22, 16, 13, 0.95);
+    border-width: 3px;
+    border-color: rgb(190, 30, 45);
+    align-items: stretch;
+}
+
+.options-card__title {
+    color: rgb(240, 235, 225);
+    font-size: 22px;
+    -unity-font-style: bold;
+    letter-spacing: 4px;
+    -unity-text-align: upper-center;
+    margin-bottom: 16px;
+}
+
+.options-slider {
+    margin: 7px 0;
+}
+
+.options-slider > .unity-base-field__label {
+    color: rgb(240, 235, 225);
+    min-width: 110px;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+.options-card .menu-button {
+    margin-top: 18px;
+}
+
+/* ---- Credits ---- */
+
+.meta-screen--credits {
+    background-image: url("../Art/Utilities/revmanCredits.png");
+    -unity-background-scale-mode: scale-and-crop;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 4%;
+}
+
+/* ---- Win / Lose end screens ---- */
+
+.meta-screen--win {
+    background-image: url("../Art/Utilities/revmanYOUWIN.png");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.meta-screen--lose {
+    background-image: url("../Art/Utilities/revmanYOULOSE.png");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+/* Shared end-screen content column: sits centered, pushed below the
+   baked-in tagline. */
+.end-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 56%;
+    align-items: center;
+}
+
+/* The specific ladder ending (title + body from the EndingData asset),
+   quiet and small so the art keeps top billing. */
+.end-detail {
+    max-width: 700px;
+    margin-bottom: 14px;
+    color: rgb(230, 225, 215);
+    font-size: 13px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    opacity: 0.85;
+}

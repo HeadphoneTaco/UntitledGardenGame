@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/_Project/UI/RevGameScreen.uss?fileID=7433441132597879392&amp;guid=bda3f7d95567bb7419984fdd067d43ad&amp;type=3#RevGameScreen"/>
+    <Style src="MenuScreens.uss"/>
     <ui:VisualElement name="root" class="screen">
         <ui:VisualElement name="top-bar" class="top-bar">
             <ui:VisualElement name="support-stat" class="topstat">
@@ -108,6 +109,61 @@
                 <ui:Label name="ending-title" text="Ending Title" class="ending-card__title"/>
                 <ui:Label name="ending-body" text="Ending body text." class="ending-card__body"/>
                 <ui:Button name="restart-button" text="FIGHT AGAIN" class="ending-card__restart"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="meta-layer" class="meta-layer" picking-mode="Ignore">
+            <ui:VisualElement name="title-screen" class="meta-screen meta-screen--title">
+                <ui:VisualElement class="meta-buttons">
+                    <ui:Button name="title-start-button" text="START THE REVOLUTION" class="menu-button"/>
+                    <ui:Button name="title-options-button" text="OPTIONS" class="menu-button"/>
+                    <ui:Button name="title-credits-button" text="CREDITS" class="menu-button"/>
+                    <ui:Button name="title-quit-button" text="QUIT" class="menu-button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="pause-screen" class="meta-screen meta-screen--pause">
+                <ui:VisualElement class="pause-card">
+                    <ui:VisualElement class="pause-card__logo"/>
+                    <ui:Button name="pause-resume-button" text="RESUME" class="menu-button"/>
+                    <ui:Button name="pause-options-button" text="OPTIONS" class="menu-button"/>
+                    <ui:Button name="pause-title-button" text="RETURN TO TITLE" class="menu-button"/>
+                    <ui:Button name="pause-quit-button" text="QUIT" class="menu-button"/>
+                    <ui:VisualElement name="debug-end-strip" class="debug-strip">
+                        <ui:Label text="dev: force ending (community / machine)" class="debug-strip__title"/>
+                        <ui:Button name="debug-end-win-high" text="C:90 M:0" class="debug-button"/>
+                        <ui:Button name="debug-end-win-low" text="C:15 M:5" class="debug-button"/>
+                        <ui:Button name="debug-end-lose" text="C:40 M:90" class="debug-button"/>
+                        <ui:Button name="debug-end-collapse" text="C:0 (COLLAPSE)" class="debug-button"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="options-screen" class="meta-screen meta-screen--options">
+                <ui:VisualElement class="options-card">
+                    <ui:Label text="OPTIONS" class="options-card__title"/>
+                    <ui:Slider name="volume-master" label="MASTER" low-value="0" high-value="1" value="1" class="options-slider"/>
+                    <ui:Slider name="volume-music" label="MUSIC" low-value="0" high-value="1" value="1" class="options-slider"/>
+                    <ui:Slider name="volume-ambience" label="AMBIENCE" low-value="0" high-value="1" value="1" class="options-slider"/>
+                    <ui:Slider name="volume-sfx" label="SFX" low-value="0" high-value="1" value="1" class="options-slider"/>
+                    <ui:Button name="options-back-button" text="BACK" class="menu-button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="credits-screen" class="meta-screen meta-screen--credits">
+                <ui:Button name="credits-back-button" text="BACK" class="menu-button"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="win-screen" class="meta-screen meta-screen--win">
+                <ui:VisualElement class="end-content">
+                    <ui:Label name="win-ending-label" text="" class="end-detail"/>
+                    <ui:Button name="win-restart-button" text="START ANOTHER REVOLUTION" class="menu-button"/>
+                    <ui:Button name="win-title-button" text="RETURN TO TITLE" class="menu-button"/>
+                    <ui:Button name="win-credits-button" text="VIEW CREDITS" class="menu-button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="lose-screen" class="meta-screen meta-screen--lose">
+                <ui:VisualElement class="end-content">
+                    <ui:Label name="lose-ending-label" text="" class="end-detail"/>
+                    <ui:Button name="lose-restart-button" text="START ANOTHER REVOLUTION" class="menu-button"/>
+                    <ui:Button name="lose-title-button" text="RETURN TO TITLE" class="menu-button"/>
+                    <ui:Button name="lose-credits-button" text="VIEW CREDITS" class="menu-button"/>
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

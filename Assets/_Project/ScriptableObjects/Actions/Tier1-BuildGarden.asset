@@ -17,6 +17,11 @@ MonoBehaviour:
     produce our own food.
   Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
   Type: 0
+  Tier: 1
+  UnlocksTier: 0
+  Prerequisites: []
+  MinSupporters: 0
+  Repeatable: 0
   TimeCost: 4
   Costs:
   - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
@@ -26,8 +31,3 @@ MonoBehaviour:
   - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
     Amount: 10
   Effects: []
-  Tier: 1
-  UnlocksTier: 0
-  Prerequisites: []
-  MinSupporters: 0
-  Repeatable: 0

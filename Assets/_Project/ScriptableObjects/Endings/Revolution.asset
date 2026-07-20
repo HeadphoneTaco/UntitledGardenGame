@@ -16,6 +16,7 @@ MonoBehaviour:
   Body: The machine grinds to a halt, out of fuel, out of fear to spend. There is
     always more battle to fight. Today, you choose the battlefield.
   Image: {fileID: 0}
+  IsVictory: 1
   MaxMachineProgress: 0.02
   MinCommunityProgress: 0.35
   Priority: 50

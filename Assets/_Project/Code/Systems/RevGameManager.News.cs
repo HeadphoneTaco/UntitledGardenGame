@@ -1,4 +1,5 @@
 using System.Linq;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace RevManager {
@@ -65,6 +66,39 @@ namespace RevManager {
             Ending = PickEnding(earlyCollapse);
             RaiseIfSet(m_OnGameEnded);
             GameEnded?.Invoke(Ending);
+        }
+
+        /// <summary>
+        /// Test hook (dev builds; the buttons live on the pause screen):
+        /// force both bars to the given 0..1 progress and end the run through
+        /// the REAL ending-selection path, so it exercises the same ladder
+        /// logic as a played-out run. Community 0 collapses via the genuine
+        /// Changed-watcher route.
+        /// </summary>
+        public void DebugForceEnd(float communityProgress, float machineProgress) {
+            if (Phase == GamePhase.Finished) {
+                return;
+            }
+            SetBarProgress(m_Machine, machineProgress);
+            SetBarProgress(m_Community, communityProgress); // 0 finishes right here via OnCommunityChanged
+            if (Phase != GamePhase.Finished) {
+                FinishRun(false);
+            }
+        }
+
+        /// <summary>
+        /// The package hides MaxValue, so scale Value by the current
+        /// Value/Progress ratio instead. A bar sitting at 0 gets slammed to
+        /// its max first (the setter clamps) so the ratio exists.
+        /// </summary>
+        private static void SetBarProgress(CoreUtils.GameVariables.GameVariableFloatRange bar, float progress) {
+            progress = Mathf.Clamp01(progress);
+            if (bar.Progress <= 0.0001f) {
+                bar.Value = 999999f;
+            }
+            if (bar.Progress > 0.0001f) {
+                bar.Value = bar.Value / bar.Progress * progress;
+            }
         }
 
         private EndingData PickEnding(bool earlyCollapse) {

@@ -10,10 +10,19 @@ namespace RevManager {
     /// </summary>
     public partial class RevGameScreenController {
         private void OnRestartClicked() {
-            m_JournalScroll.Clear();
-            m_ShownQueueVersion = -1;
-            m_EndingOverlay.RemoveFromClassList("ending-overlay--visible");
+            ResetRunUi();
             Manager?.StartRun();
+        }
+
+        /// <summary>
+        /// Clears per-run UI (journal, queue cache, ending overlay) so a
+        /// restart starts visually clean. Called by the old overlay's restart
+        /// button and by the meta screens' Start/Start Another Revolution.
+        /// </summary>
+        public void ResetRunUi() {
+            m_JournalScroll?.Clear();
+            m_ShownQueueVersion = -1;
+            m_EndingOverlay?.RemoveFromClassList("ending-overlay--visible");
         }
 
         /// <summary>
@@ -79,7 +88,12 @@ namespace RevManager {
         private void OnGameEnded(EndingData ending) {
             m_EndingTitle.text = ending ? ending.Title : "It's Over";
             m_EndingBody.text = ending ? ending.Body : "No ending matched. Check the EndingBucket has a fallback with open conditions.";
-            m_EndingOverlay.AddToClassList("ending-overlay--visible");
+
+            // The full-art win/lose screens supersede this text card; it only
+            // shows as a fallback when the meta screens controller is absent.
+            if (!GetComponent<MenuScreensController>()) {
+                m_EndingOverlay.AddToClassList("ending-overlay--visible");
+            }
         }
 
         private void OnActionCompleted(ActionData action)

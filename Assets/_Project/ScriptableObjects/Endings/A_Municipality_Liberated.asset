@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 710d204b34a7af6438d72f7503be4f83, type: 3}
-  m_Name: Mass Uprising
+  m_Name: A_Municipality_Liberated
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.EndingData
-  Title: Mass Uprising
-  Body: The streets fill and a bill is signed with shaking hands. The next fight
-    is already forming.
+  Title: A Municipality Liberated
+  Body: The town runs itself now. The machine pretends it never wanted it.
   Image: {fileID: 0}
-  MaxMachineProgress: 0.2
-  MinCommunityProgress: 0.3
-  Priority: 40
+  IsVictory: 1
+  MaxMachineProgress: 0.4
+  MinCommunityProgress: 0.25
+  Priority: 30
   IsEarlyCollapse: 0

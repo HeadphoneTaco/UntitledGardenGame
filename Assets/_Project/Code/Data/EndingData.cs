@@ -15,6 +15,9 @@ namespace RevManager {
         [Tooltip("Scavenged + credited, like all art.")]
         public Sprite Image;
 
+        [Tooltip("Ticked = the end screen uses the win art for this ending; otherwise the lose art.")]
+        public bool IsVictory;
+
         [Header("Conditions (checked against the bars at game end)")]
         [Tooltip("Machine bar (0 to 1) must be AT OR BELOW this. Lower = requires more damage done.")]
         [Range(0f, 1f)] public float MaxMachineProgress = 1f;

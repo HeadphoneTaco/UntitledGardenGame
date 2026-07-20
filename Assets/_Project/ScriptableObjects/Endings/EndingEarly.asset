@@ -15,7 +15,8 @@ MonoBehaviour:
   Title: Early ending
   Body: The game ended early somehow
   Image: {fileID: 0}
-  MaxMachineProgress: 1
-  MinCommunityProgress: 0
+  IsVictory: 0
+  MaxMachineProgress: 0.99
+  MinCommunityProgress: 0.01
   Priority: 0
-  IsEarlyCollapse: 1
+  IsEarlyCollapse: 0

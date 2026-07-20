@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 710d204b34a7af6438d72f7503be4f83, type: 3}
-  m_Name: The Movement Is Crushed
+  m_Name: An_Occupation
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.EndingData
-  Title: The Movement Is Crushed
-  Body: The commune could not hold. People drift away hungry and afraid. Somewhere,
-    someone keeps a poster folded in a drawer.
+  Title: An Occupation
+  Body: A territory held, a space carved out where the rules are yours. It is small.
+    It is real.
   Image: {fileID: 0}
-  MaxMachineProgress: 1
-  MinCommunityProgress: 0
-  Priority: 0
-  IsEarlyCollapse: 1
+  IsVictory: 1
+  MaxMachineProgress: 0.4
+  MinCommunityProgress: 0.2
+  Priority: 20
+  IsEarlyCollapse: 0
