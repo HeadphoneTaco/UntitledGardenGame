@@ -17,9 +17,9 @@ MonoBehaviour:
     It is real.
   Image: {fileID: 0}
   IsVictory: 1
-  MaxMachineProgress: 0.4
-  MinCommunityProgress: 0.2
-  MinCommunityLead: 0.1
+  MaxMachineProgress: 1
+  MinCommunityProgress: 0.38
+  MinCommunityLead: 0
   MaxCommunityLead: 1
-  Priority: 20
+  Priority: 30
   IsEarlyCollapse: 0

@@ -19,7 +19,7 @@ MonoBehaviour:
   IsVictory: 0
   MaxMachineProgress: 1
   MinCommunityProgress: 0
-  MinCommunityLead: 0
-  MaxCommunityLead: 0
+  MinCommunityLead: -0.09
+  MaxCommunityLead: 0.1
   Priority: 10
   IsEarlyCollapse: 0

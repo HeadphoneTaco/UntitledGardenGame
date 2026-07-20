@@ -15,10 +15,10 @@ MonoBehaviour:
   Title: A Symbolic Protest
   Body: The march happens. The photos are taken. Nothing changes, this time.
   Image: {fileID: 0}
-  IsVictory: 0
+  IsVictory: 1
   MaxMachineProgress: 1
   MinCommunityProgress: 0.01
-  MinCommunityLead: 0.1
+  MinCommunityLead: 0
   MaxCommunityLead: 1
-  Priority: 5
+  Priority: 20
   IsEarlyCollapse: 0

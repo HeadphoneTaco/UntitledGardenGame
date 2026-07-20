@@ -16,9 +16,9 @@ MonoBehaviour:
   Body: The town runs itself now. The machine pretends it never wanted it.
   Image: {fileID: 0}
   IsVictory: 1
-  MaxMachineProgress: 0.697
-  MinCommunityProgress: 0.25
-  MinCommunityLead: 0.1
+  MaxMachineProgress: 1
+  MinCommunityProgress: 0.57
+  MinCommunityLead: -0.01
   MaxCommunityLead: 1
-  Priority: 30
+  Priority: 40
   IsEarlyCollapse: 0

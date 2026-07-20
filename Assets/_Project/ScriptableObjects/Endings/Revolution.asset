@@ -17,9 +17,9 @@ MonoBehaviour:
     always more battle to fight. Today, you choose the battlefield.
   Image: {fileID: 0}
   IsVictory: 1
-  MaxMachineProgress: 0.05
-  MinCommunityProgress: 0.6
-  MinCommunityLead: 0.1
+  MaxMachineProgress: 1
+  MinCommunityProgress: 0.92
+  MinCommunityLead: -0
   MaxCommunityLead: 1
-  Priority: 50
+  Priority: 60
   IsEarlyCollapse: 0

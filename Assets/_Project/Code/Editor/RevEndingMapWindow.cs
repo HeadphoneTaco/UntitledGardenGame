@@ -18,7 +18,7 @@ namespace RevManager {
     /// legend lists every ending with its conditions and how much of the
     /// space it actually claims; 0.0% means it can never be reached.
     /// </summary>
-    public class RevEndingMapWindow : EditorWindow {
+    public partial class RevEndingMapWindow : EditorWindow {
         private const int k_Samples = 96;
         private const float k_Sidebar = 300f;
 
@@ -29,6 +29,12 @@ namespace RevManager {
         private readonly Dictionary<EndingData, int> m_CellCounts = new Dictionary<EndingData, int>();
         private int m_GapCells;
         private Vector2 m_SidebarScroll;
+
+        // Raw-region highlight: an ending's conditions define a full stencil
+        // shape; priority stacks the stencils. This overlays the WHOLE shape
+        // for one ending so shadowed area is visible while tuning.
+        private EndingData m_Highlight;
+        private Texture2D m_Overlay;
 
         // Inspected point (map click), progress space 0..1.
         private float m_PickMachine = 0.5f;
@@ -43,8 +49,13 @@ namespace RevManager {
         }
 
         private void OnEnable() {
-            wantsMouseMove = false;
+            wantsMouseMove = true; // Hover feedback on the drag handles.
+            Undo.undoRedoPerformed += Refresh;
             Refresh();
+        }
+
+        private void OnDisable() {
+            Undo.undoRedoPerformed -= Refresh;
         }
 
         // ---- Data ----
@@ -66,7 +77,37 @@ namespace RevManager {
             }
 
             BuildMapTexture();
+            if (m_Highlight && !m_Endings.Contains(m_Highlight)) {
+                m_Highlight = null;
+            }
+            BuildOverlayTexture();
             PickAt(m_PickMachine, m_PickCommunity);
+            Repaint();
+        }
+
+        private void BuildOverlayTexture() {
+            if (m_Overlay == null) {
+                m_Overlay = new Texture2D(k_Samples, k_Samples, TextureFormat.RGBA32, false) {
+                    filterMode = FilterMode.Point,
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+            }
+            Color on = new Color(1f, 1f, 1f, 0.4f);
+            Color off = Color.clear;
+            for (int y = 0; y < k_Samples; y++) {
+                float community = y / (float)(k_Samples - 1);
+                for (int x = 0; x < k_Samples; x++) {
+                    float machine = x / (float)(k_Samples - 1);
+                    bool lit = m_Highlight && m_Highlight.Matches(machine, community);
+                    m_Overlay.SetPixel(x, y, lit ? on : off);
+                }
+            }
+            m_Overlay.Apply();
+        }
+
+        private void SetHighlight(EndingData ending) {
+            m_Highlight = m_Highlight == ending ? null : ending;
+            BuildOverlayTexture();
             Repaint();
         }
 
@@ -112,6 +153,9 @@ namespace RevManager {
         // ---- GUI ----
 
         private void OnGUI() {
+            if (Event.current.type == EventType.MouseMove) {
+                Repaint(); // Keeps handle hover states tracking the mouse.
+            }
             DrawToolbar();
 
             Rect content = new Rect(8, 28, position.width - k_Sidebar - 24, position.height - 60);
@@ -138,6 +182,12 @@ namespace RevManager {
                 Refresh();
             }
             m_Bucket = (EndingBucket)EditorGUILayout.ObjectField(m_Bucket, typeof(EndingBucket), false, GUILayout.Width(160));
+            if (m_Highlight) {
+                GUILayout.Label($"stencil: {m_Highlight.Title}", EditorStyles.toolbarButton);
+                if (GUILayout.Button("clear", EditorStyles.toolbarButton, GUILayout.Width(44))) {
+                    SetHighlight(m_Highlight);
+                }
+            }
             GUILayout.FlexibleSpace();
             if (m_GapCells > 0) {
                 float pct = m_GapCells * 100f / (k_Samples * k_Samples);
@@ -154,6 +204,10 @@ namespace RevManager {
             }
             EditorGUI.DrawRect(new Rect(rect.x - 1, rect.y - 1, rect.width + 2, rect.height + 2), Color.black);
             GUI.DrawTexture(rect, m_Map, ScaleMode.StretchToFill);
+            if (m_Highlight && m_Overlay) {
+                GUI.DrawTexture(rect, m_Overlay, ScaleMode.StretchToFill);
+            }
+            DrawConditionHandles(rect);
 
             // Crosshair on the inspected point.
             float px = rect.x + m_PickMachine * rect.width;
@@ -174,6 +228,9 @@ namespace RevManager {
 
         private void HandleMapMouse(Rect rect) {
             Event e = Event.current;
+            if (HandleConditionDrag(rect, e)) {
+                return; // A condition edge claimed the mouse.
+            }
             if ((e.type != EventType.MouseDown && e.type != EventType.MouseDrag) || !rect.Contains(e.mousePosition)) {
                 return;
             }
@@ -182,83 +239,5 @@ namespace RevManager {
             Repaint();
         }
 
-        private void DrawInspector() {
-            EditorGUILayout.LabelField("Inspected end state", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField($"MACHINE {m_PickMachine * 100f:0}%   COMMUNITY {m_PickCommunity * 100f:0}%");
-
-            if (!m_Picked) {
-                EditorGUILayout.HelpBox("No ending matches here. A run ending on these bars shows the missing-ending fallback text. Widen a condition or add a fallback ending with open conditions at priority 0.", MessageType.Error);
-                return;
-            }
-
-            EditorGUILayout.BeginHorizontal();
-            DrawSwatch(m_Colors.GetValueOrDefault(m_Picked, Color.gray));
-            EditorGUILayout.LabelField($"{m_Picked.Title}  [{(m_Picked.IsVictory ? "WIN art" : "LOSE art")}]", EditorStyles.boldLabel);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.LabelField(Conditions(m_Picked), EditorStyles.miniLabel);
-            EditorGUILayout.LabelField(m_Picked.Body, WrappedStyle());
-            if (GUILayout.Button("Select asset", GUILayout.Width(90))) {
-                Selection.activeObject = m_Picked;
-                EditorGUIUtility.PingObject(m_Picked);
-            }
-        }
-
-        private void DrawLegend() {
-            EditorGUILayout.LabelField("All endings (ladder order: highest priority first)", EditorStyles.boldLabel);
-            int total = k_Samples * k_Samples;
-
-            foreach (EndingData ending in m_Endings.OrderByDescending(e => e.Priority)) {
-                EditorGUILayout.BeginHorizontal();
-                DrawSwatch(m_Colors.GetValueOrDefault(ending, Color.gray));
-
-                float pct = m_CellCounts.GetValueOrDefault(ending) * 100f / total;
-                string tag = ending.IsEarlyCollapse ? "COLLAPSE" : ending.IsVictory ? "WIN" : "LOSE";
-                string reach = !ending.IsEarlyCollapse && pct <= 0f ? "  ⚠ never reached" : $"  {pct:0.0}%";
-                EditorGUILayout.LabelField($"{ending.Title}  [{tag}]{reach}", GUILayout.MinWidth(120));
-                if (GUILayout.Button("→", GUILayout.Width(24))) {
-                    Selection.activeObject = ending;
-                    EditorGUIUtility.PingObject(ending);
-                }
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.LabelField("     " + Conditions(ending), EditorStyles.miniLabel);
-            }
-
-            if (!m_Endings.Any(e => e.IsEarlyCollapse)) {
-                EditorGUILayout.HelpBox("No early-collapse ending: a mid-run community wipe falls through to the normal ladder.", MessageType.Warning);
-            }
-            if (m_GapCells > 0) {
-                EditorGUILayout.BeginHorizontal();
-                DrawSwatch(s_GapColor);
-                EditorGUILayout.LabelField("UNCOVERED — no ending matches", EditorStyles.miniLabel);
-                EditorGUILayout.EndHorizontal();
-            }
-        }
-
-        private static string Conditions(EndingData e) {
-            if (e.IsEarlyCollapse) {
-                return "fires when community collapses to 0 mid-run";
-            }
-            string lead = "";
-            if (e.MinCommunityLead > -1f || e.MaxCommunityLead < 1f) {
-                lead = e.MaxCommunityLead < 1f
-                    ? $"  lead {e.MinCommunityLead * 100f:+0;-0}..{e.MaxCommunityLead * 100f:+0;-0}"
-                    : $"  lead ≥ {e.MinCommunityLead * 100f:+0;-0}";
-            }
-            return $"machine ≤ {e.MaxMachineProgress * 100f:0}%  community ≥ {e.MinCommunityProgress * 100f:0}%{lead}  (priority {e.Priority})";
-        }
-
-        private static void DrawSwatch(Color color) {
-            Rect r = GUILayoutUtility.GetRect(16, 16, GUILayout.Width(16));
-            EditorGUI.DrawRect(new Rect(r.x, r.y + 1, 14, 14), color);
-        }
-
-        private static GUIStyle WrappedStyle() {
-            return new GUIStyle(EditorStyles.label) { wordWrap = true, richText = false };
-        }
-
-        private static GUIStyle ErrorStyle() {
-            return new GUIStyle(EditorStyles.boldLabel) { normal = { textColor = new Color(1f, 0.4f, 0.4f) } };
-        }
     }
 }
