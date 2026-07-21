@@ -37,7 +37,11 @@ namespace RevManager {
             if (action.Costs != null) {
                 foreach (VariableCost cost in action.Costs) {
                     if (cost.Variable) {
-                        Label line = AddDetailLine(m_DetailCosts, $"x{cost.Amount:0} {cost.Variable.Name.ToUpperInvariant()}");
+                        Label line = AddResourceDetailLine(
+                            m_DetailCosts,
+                            $"x{cost.Amount:0}",
+                            cost.Variable
+                        );
                         m_SelectedCostLines.Add((line, cost));
                     }
                 }
@@ -46,7 +50,11 @@ namespace RevManager {
             if (action.Effects != null) {
                 foreach (VariableEffect effect in action.Effects) {
                     if (effect.Variable) {
-                        AddDetailLine(m_DetailGains, $"{effect.Delta:+0;-0} {effect.Variable.Name.ToUpperInvariant()}");
+                        AddResourceDetailLine(
+                            m_DetailGains,
+                            $"{effect.Delta:+0;-0}",
+                            effect.Variable
+                        );
                     }
                 }
             }
@@ -57,6 +65,43 @@ namespace RevManager {
             line.AddToClassList("detail-line");
             container.Add(line);
             return line;
+        }
+        
+        private Label AddResourceDetailLine(
+            VisualElement container,
+            string amountText,
+            GameVariableFloat variable)
+        {
+            ResourceData resource = m_Resources
+                ? m_Resources.Items.FirstOrDefault(
+                    item => item && item.Variable == variable)
+                : null;
+
+            var row = new VisualElement();
+            row.AddToClassList("detail-resource-line");
+
+            if (resource && resource.Icon)
+            {
+                var icon = new VisualElement();
+                icon.AddToClassList("detail-resource-line__icon");
+                icon.style.backgroundImage = new StyleBackground(resource.Icon);
+                row.Add(icon);
+            }
+
+            string resourceName = resource
+                ? resource.DisplayName
+                : variable.Name;
+
+            var label = new Label(
+                $"{amountText} {resourceName.ToUpperInvariant()}"
+            );
+
+            label.AddToClassList("detail-line");
+
+            row.Add(label);
+            container.Add(row);
+
+            return label;
         }
 
         /// <summary>

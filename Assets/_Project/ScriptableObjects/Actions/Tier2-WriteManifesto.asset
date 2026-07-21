@@ -23,18 +23,16 @@ MonoBehaviour:
     with the dispossessed nationwide.'
   Icon: {fileID: 21300000, guid: 6cf1ddba61b874e718d6efbba8db9b38, type: 3}
   Type: 1
-  TimeCost: 10
-  Costs:
-  - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
-    Amount: 20
-  - Variable: {fileID: 11400000, guid: 0a18dfa44e06bb7468b8ac94c2b9aa29, type: 2}
-    Amount: 15
-  Effects:
-  - Variable: {fileID: 11400000, guid: f83212fc33639894d9f78d811ff3c2a0, type: 2}
-    Delta: 8
   Tier: 1
   UnlocksTier: 2
   Prerequisites:
   - {fileID: 11400000, guid: d94897a7136ab9e4eb7b1686c3891e5f, type: 2}
   MinSupporters: 15
   Repeatable: 0
+  TimeCost: 10
+  Costs:
+  - Variable: {fileID: 11400000, guid: 0a18dfa44e06bb7468b8ac94c2b9aa29, type: 2}
+    Amount: 15
+  Effects:
+  - Variable: {fileID: 11400000, guid: f83212fc33639894d9f78d811ff3c2a0, type: 2}
+    Delta: 8

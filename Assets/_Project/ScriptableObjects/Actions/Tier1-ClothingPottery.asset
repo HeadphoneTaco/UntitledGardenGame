@@ -29,4 +29,6 @@ MonoBehaviour:
     Amount: 4
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
     Amount: 3
-  Effects: []
+  Effects:
+  - Variable: {fileID: 11400000, guid: 8cdfec3eb0ea07146884b6a0cb8ee4e1, type: 2}
+    Delta: 5

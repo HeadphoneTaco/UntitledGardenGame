@@ -626,3 +626,20 @@
     color: rgb(240, 235, 225);
     border-width: 0;
 }
+
+.detail-resource-line {
+    flex-direction: row;
+    align-items: center;
+    min-height: 18px;
+    margin: 0;
+}
+
+.detail-resource-line__icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    margin-right: 5px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}

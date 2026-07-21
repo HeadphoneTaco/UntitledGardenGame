@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
   m_Name: Tier1-BuildGarden
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: Build Garden(Unfinished)
+  DisplayName: Build Garden
   Description: To properly establish a commune and support ourselves we'll need to
     produce our own food.
   Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
   Type: 0
   Tier: 1
-  UnlocksTier: 0
+  UnlocksTier: 2
   Prerequisites: []
   MinSupporters: 0
   Repeatable: 0
@@ -30,4 +30,6 @@ MonoBehaviour:
     Amount: 3
   - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
     Amount: 10
-  Effects: []
+  Effects:
+  - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
+    Delta: 6

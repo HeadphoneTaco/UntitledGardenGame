@@ -22,6 +22,14 @@ MonoBehaviour:
     mobilize to wherever direct action is most needed.'
   Icon: {fileID: 21300000, guid: f1b5f950174da401e99cbf4ed6476ea5, type: 3}
   Type: 1
+  Tier: 2
+  UnlocksTier: 3
+  Prerequisites:
+  - {fileID: 11400000, guid: 56a1bd374924c4a748a68652a8832ce2, type: 2}
+  - {fileID: 11400000, guid: 3bd3dc86ce1c94b0abaf83928a5f82fa, type: 2}
+  - {fileID: 11400000, guid: a6a77c739b9bf4a408b8c739e72cd093, type: 2}
+  MinSupporters: 40
+  Repeatable: 0
   TimeCost: 15
   Costs:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
@@ -47,10 +55,3 @@ MonoBehaviour:
     Delta: 20
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
     Delta: -25
-  Tier: 2
-  UnlocksTier: 3
-  Prerequisites:
-  - {fileID: 11400000, guid: 56a1bd374924c4a748a68652a8832ce2, type: 2}
-  - {fileID: 11400000, guid: 3bd3dc86ce1c94b0abaf83928a5f82fa, type: 2}
-  MinSupporters: 40
-  Repeatable: 0

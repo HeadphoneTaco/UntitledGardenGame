@@ -18,6 +18,12 @@ MonoBehaviour:
     mobile medical stations to mobilize to wherever the need is greatest.
   Icon: {fileID: 21300000, guid: 4f7c3183164e941c7bad3adcacc15b4f, type: 3}
   Type: 0
+  Tier: 3
+  UnlocksTier: 4
+  Prerequisites:
+  - {fileID: 11400000, guid: 3a36ed598b3b64234aa4b229a4679761, type: 2}
+  MinSupporters: 0
+  Repeatable: 0
   TimeCost: 10
   Costs:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
@@ -37,9 +43,3 @@ MonoBehaviour:
     Delta: 10
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
     Delta: -5
-  Tier: 3
-  UnlocksTier: 0
-  Prerequisites:
-  - {fileID: 11400000, guid: cb7c62d5b0e19fc439e53480ff45bfbe, type: 2}
-  MinSupporters: 0
-  Repeatable: 0

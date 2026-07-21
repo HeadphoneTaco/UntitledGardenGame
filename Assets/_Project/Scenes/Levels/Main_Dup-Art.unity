@@ -332,11 +332,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb628c74e9177e34a91f8c2c35a3de7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.RevGameScreenController
-  m_Resources: {fileID: 0}
-  m_RestOption: {fileID: 0}
-  m_LocalOption: {fileID: 0}
-  m_BigOption: {fileID: 0}
-  m_SupportBarCap: 100
+  m_Resources: {fileID: 11400000, guid: afec8c5a2a071804687002c98756a9ea, type: 2}
+  m_RestOption: {fileID: 11400000, guid: 1bba5e9e7a9f6c244be3d6139c8506c8, type: 2}
+  m_LocalOption: {fileID: 11400000, guid: fe526a3b9363e2b4688168bc8e3fb62d, type: 2}
+  m_BigOption: {fileID: 11400000, guid: 4765e89f5ca409447b4ec87c5bfc005f, type: 2}
+  m_SupportBarCap: 1000
 --- !u!114 &515014648
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,10 +19,15 @@ MonoBehaviour:
     break capital's grip on our throats by force.
   Icon: {fileID: 21300000, guid: 36fefbfd71e5a4033b5cfe9d995c2b40, type: 3}
   Type: 1
+  Tier: 3
+  UnlocksTier: 4
+  Prerequisites: []
+  MinSupporters: 45
+  Repeatable: 1
   TimeCost: 12
   Costs:
   - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
-    Amount: 10
+    Amount: 15
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
     Amount: 25
   - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
@@ -35,9 +40,4 @@ MonoBehaviour:
   - Variable: {fileID: 11400000, guid: 5042e14660489744db6857c780bf8060, type: 2}
     Delta: 50
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
-    Delta: 35
-  Tier: 3
-  UnlocksTier: 0
-  Prerequisites: []
-  MinSupporters: 0
-  Repeatable: 1
+    Delta: 45

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
   Headline: NAFTA privatizes indigenous farmlands
   Body: "IRA imposes sweeping land reforms threatening to displace millions from
-    communal edijos.\n\nA few of our neighbours have banded together to protect their
+    communal edijos. A few of our neighbours have banded together to protect their
     communal land from government take over. Emiliano Zapata fought for the freedom
     of these lands during the revolution and now his legacy is being sold off to
     capitalist pigs. Our people are forced to flee to the cities, with nowhere to
@@ -29,6 +29,7 @@ MonoBehaviour:
   EarliestWeek: 1
   Weight: 1
   OneTimeOnly: 1
+  UrgentAction: {fileID: 0}
   EffectsOnFire:
   - Variable: {fileID: 11400000, guid: 1131069fc2040e942bb132db8727f221, type: 2}
     Delta: 3

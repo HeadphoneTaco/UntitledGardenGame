@@ -17,14 +17,20 @@ MonoBehaviour:
     supporters, and put pressure on politicians.
   Icon: {fileID: 21300000, guid: 211938c39efa649c0b1e3b26282e1560, type: 3}
   Type: 2
+  Tier: 2
+  UnlocksTier: 0
+  Prerequisites:
+  - {fileID: 11400000, guid: a6a77c739b9bf4a408b8c739e72cd093, type: 2}
+  MinSupporters: 0
+  Repeatable: 1
   TimeCost: 6
   Costs:
   - Variable: {fileID: 11400000, guid: f83212fc33639894d9f78d811ff3c2a0, type: 2}
-    Amount: 0
+    Amount: 12
   - Variable: {fileID: 11400000, guid: 0a18dfa44e06bb7468b8ac94c2b9aa29, type: 2}
-    Amount: 0
+    Amount: 10
   - Variable: {fileID: 11400000, guid: 6d19330645b9e524bb7c863a5c8878b2, type: 2}
-    Amount: 0
+    Amount: 8
   Effects:
   - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
     Delta: 5
@@ -32,8 +38,3 @@ MonoBehaviour:
     Delta: 5
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
     Delta: -5
-  Tier: 2
-  UnlocksTier: 0
-  Prerequisites: []
-  MinSupporters: 0
-  Repeatable: 1
