@@ -643,3 +643,18 @@
     flex-shrink: 0;
     -unity-background-scale-mode: scale-to-fit;
 }
+
+.news-tv-timer-ring {
+    width: 90px;
+    height: 90px;
+    align-items: center;
+    justify-content: center;
+}
+
+.news-tv-timer-text {
+    color: rgb(190, 30, 45);
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}

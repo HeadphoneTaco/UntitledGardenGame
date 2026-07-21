@@ -14,32 +14,60 @@ namespace RevManager {
         /// Each day gets exactly one news event — usually breaking mid-day, but
         /// backstopped here. The world moves whether you do or not.
         /// </summary>
-        public void EndDay() {
-            if (Phase != GamePhase.Weekday || m_Queue.Count > 0) {
-                return;
-            }
-
-            // Guarantee holds even if the day ended before the breaking hour.
-            if (!m_NewsFiredToday) {
-                m_NewsFiredToday = true;
-                FireNews(NewsTone.Important);
-            }
-            
-            if (HasPendingCrisis)
+        public void EndDay()
+        {
+            if (Phase != GamePhase.Weekday || m_Queue.Count > 0)
             {
                 return;
             }
+
+            // Every completed day gets Important news.
+            FireNews(NewsTone.Important);
 
             if (m_Day.Value >= m_DaysPerWeek)
             {
-                FireNews(NewsTone.Crisis);
+                // Wait for the player to close the Important story
+                // before opening the weekly Crisis.
                 SetPhase(GamePhase.Weekend);
+                return;
             }
-            
-            else {
-                m_Day.Value += 1;
-                BeginDay();
+
+            m_Day.Value += 1;
+            BeginDay();
+        }
+        
+        public void OpenWeeklyCrisis()
+        {
+            if (Phase != GamePhase.Weekend || HasPendingCrisis)
+            {
+                return;
             }
+
+            FireNews(NewsTone.Crisis);
+        }
+
+        public void BeginNextWeek()
+        {
+            if (Phase != GamePhase.Weekend)
+            {
+                return;
+            }
+
+            if (m_Week.Value >= m_TotalWeeks)
+            {
+                // The final Crisis must be resolved before the ending.
+                if (!HasPendingCrisis)
+                {
+                    FinishRun(false);
+                }
+
+                return;
+            }
+
+            m_Week.Value += 1;
+            m_Day.Value = 1;
+            SetPhase(GamePhase.Weekday);
+            BeginDay();
         }
 
         private void BeginDay() {

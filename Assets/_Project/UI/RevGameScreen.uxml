@@ -121,7 +121,9 @@
                         class="news-tv-body"/>
 
                     <ui:VisualElement name="news-tv-crisis-area" class="news-tv-crisis-area">
-                        <ui:VisualElement name="news-tv-timer-ring" class="news-tv-timer-ring"/>
+                        <ui:VisualElement name="news-tv-timer-ring" class="news-tv-timer-ring">
+                            <ui:Label name="news-tv-timer-text" text="0 HOURS" class="news-tv-timer-text"/>
+                        </ui:VisualElement>
                         <ui:VisualElement name="news-tv-costs" class="news-tv-costs"/>
 
                         <ui:VisualElement class="news-tv-decisions">

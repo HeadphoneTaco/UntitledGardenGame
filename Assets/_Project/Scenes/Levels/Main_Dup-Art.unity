@@ -336,7 +336,16 @@ MonoBehaviour:
   m_RestOption: {fileID: 11400000, guid: 1bba5e9e7a9f6c244be3d6139c8506c8, type: 2}
   m_LocalOption: {fileID: 11400000, guid: fe526a3b9363e2b4688168bc8e3fb62d, type: 2}
   m_BigOption: {fileID: 11400000, guid: 4765e89f5ca409447b4ec87c5bfc005f, type: 2}
-  m_SupportBarCap: 1000
+  m_SupportBarCap: 500
+  m_NewsTvBackgrounds:
+  - {fileID: 2800000, guid: e123408733d294fe790bfd77bcd3c829, type: 3}
+  - {fileID: 2800000, guid: 139ba6ba813a742bba6c785a00fe8d63, type: 3}
+  - {fileID: 2800000, guid: 9c0b01a96cbda48a184d16e960fc8237, type: 3}
+  - {fileID: 2800000, guid: 34edecc12248647fd9f108b6a9afa3f4, type: 3}
+  - {fileID: 2800000, guid: 3651e215872044dedb2beae1c835249b, type: 3}
+  - {fileID: 2800000, guid: f4f25ccf2578f4cb9bdbba002b6ea43b, type: 3}
+  - {fileID: 2800000, guid: e58eb102eacf64514bbfb6ec513ad2e6, type: 3}
+  - {fileID: 2800000, guid: abcbf7f29978e4d6d9ef07dbf173e760, type: 3}
 --- !u!114 &515014648
 MonoBehaviour:
   m_ObjectHideFlags: 0

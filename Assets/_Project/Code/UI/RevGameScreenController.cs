@@ -45,6 +45,11 @@ namespace RevManager {
 
         [Header("Support bar cap (People has no max; bar fills toward this)")]
         [SerializeField, Min(1f)] private float m_SupportBarCap = 100f;
+        
+        [Header("News TV Backgrounds")]
+        [SerializeField] private Texture2D[] m_NewsTvBackgrounds;
+
+        private readonly Dictionary<NewsEventData, Texture2D> m_NewsTvBackgroundByStory = new();
 
         // Top bar
         private Label m_DayLabel;
@@ -103,6 +108,9 @@ namespace RevManager {
         private Button m_NewsTvContinue;
         private Button m_NewsTvIgnore;
         private Button m_NewsTvAttend;
+        private NewsEventData m_DisplayedNews;
+        private Label m_NewsTvTimerText;
+        private float m_NewsTvTimerProgress = 1f;
         
         private IVisualElementScheduledItem m_NewsTvAutoClose;
 
@@ -156,6 +164,9 @@ namespace RevManager {
             m_NewsTvBody = root.Q<Label>("news-tv-body");
             m_NewsTvCrisisArea = root.Q<VisualElement>("news-tv-crisis-area");
             m_NewsTvTimerRing = root.Q<VisualElement>("news-tv-timer-ring");
+            m_NewsTvTimerRing.generateVisualContent += DrawCrisisTimerRing;
+            
+            m_NewsTvTimerText = root.Q<Label>("news-tv-timer-text");
             m_NewsTvCosts = root.Q<VisualElement>("news-tv-costs");
             m_NewsTvClose = root.Q<Button>("news-tv-close");
             m_NewsTvContinue = root.Q<Button>("news-tv-continue");
@@ -177,11 +188,16 @@ namespace RevManager {
                 RevGameManager.Instance.GameEnded -= OnGameEnded;
                 RevGameManager.Instance.ActionCompleted -= OnActionCompleted;
                 RevGameManager.Instance.NewsFired -= OnNewsFired;
+                RevGameManager.Instance.CrisisResolved -= OnCrisisResolved;
                 
                 m_NewsTvClose.clicked -= CloseNewsTv;
                 m_NewsTvContinue.clicked -= CloseNewsTv;
                 m_NewsTvAttend.clicked -= AttendNewsTvCrisis;
                 m_NewsTvIgnore.clicked -= IgnoreNewsTvCrisis;
+                
+                if (m_NewsTvTimerRing != null) m_NewsTvTimerRing.generateVisualContent -= DrawCrisisTimerRing;
+                
+                
             }
             m_Built = false;
         }
@@ -260,6 +276,30 @@ namespace RevManager {
             m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday && Manager.Queue.Count == 0);
             foreach ((Button button, WeekendOptionData option) in m_WeekendButtons) {
                 button.SetEnabled(Manager.CanChoose(option));
+            }
+            
+            if (m_DisplayedNews &&
+                Manager.PendingCrisis == m_DisplayedNews)
+            {
+                float hoursRemaining = Manager.CrisisHoursRemaining;
+                float totalHours = Mathf.Max(1f, m_DisplayedNews.ResponseHours);
+
+                m_NewsTvTimerText.text =
+                    $"{Mathf.CeilToInt(hoursRemaining)} HOURS";
+
+                float newProgress =
+                    Mathf.Clamp01(hoursRemaining / totalHours);
+
+                if (!Mathf.Approximately(
+                        newProgress,
+                        m_NewsTvTimerProgress))
+                {
+                    m_NewsTvTimerProgress = newProgress;
+                    m_NewsTvTimerRing.MarkDirtyRepaint();
+                }
+
+                m_NewsTvAttend.SetEnabled(
+                    Manager.CanAttendPendingCrisis);
             }
 
         }

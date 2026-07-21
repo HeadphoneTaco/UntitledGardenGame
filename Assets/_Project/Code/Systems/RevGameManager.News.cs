@@ -35,7 +35,6 @@ namespace RevManager {
             m_FiredNews.Add(pick);
             if (pick.Tone == NewsTone.Important) pick.EffectsOnFire.ApplyAll();
             AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value, pick.Headline, pick.Tone, pick));
-            NewsFired?.Invoke(pick);
             
             if (pick.Tone == NewsTone.Crisis)
             {
@@ -43,6 +42,8 @@ namespace RevManager {
                 m_CrisisHoursRemaining = pick.ResponseHours;
                 CrisisStarted?.Invoke(pick);
             }
+            
+            NewsFired?.Invoke(pick);
             
         }
         

@@ -95,6 +95,7 @@ namespace RevManager {
             Manager.GameEnded += OnGameEnded;
             Manager.ActionCompleted += OnActionCompleted;
             Manager.NewsFired += OnNewsFired;
+            Manager.CrisisResolved += OnCrisisResolved;
             
             m_NewsTvClose.clicked += CloseNewsTv;
             m_NewsTvContinue.clicked += CloseNewsTv;
