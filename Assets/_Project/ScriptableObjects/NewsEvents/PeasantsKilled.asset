@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
+  m_Name: PeasantsKilled
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
+  Headline: 17 peasants killed in Guerrero
+  Body: Inconsistencies in initial investigations suggest state-police planted evidence
+    to evade prosecution.
+  Image: {fileID: 21300000, guid: 36fefbfd71e5a4033b5cfe9d995c2b40, type: 3}
+  Tone: 1
+  OneTimeOnly: 1
+  EffectsOnFire:
+  - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
+    Delta: 8
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: 15
+  AttendCosts: []
+  ResponseHours: 1
+  EffectsOnAttend: []
+  EffectsIfIgnored: []

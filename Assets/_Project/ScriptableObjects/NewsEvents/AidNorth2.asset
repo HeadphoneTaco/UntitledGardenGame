@@ -10,17 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
-  m_Name: Rations seized at the northern checkpoint
+  m_Name: AidNorth2
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
-  Headline: Rations seized at the northern checkpoint
-  Body: '(Placeholder copy for tone and shape. Real material: Dulce.)'
-  Image: {fileID: 0}
-  Tone: 2
-  EarliestWeek: 1
-  Weight: 1
+  Headline: Doctors Without Borders Sends Aid
+  Body: Rise in cartel violence cited as impetus for emergency international intervention.
+  Image: {fileID: 21300000, guid: 4f7c3183164e941c7bad3adcacc15b4f, type: 3}
+  Tone: 1
   OneTimeOnly: 1
-  UrgentAction: {fileID: 11400000, guid: c1d6336bd4b56c74c8ad4d3ae70bd5c1, type: 2}
   EffectsOnFire:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
-    Delta: -5
+    Delta: 20
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Delta: 12
+  - Variable: {fileID: 11400000, guid: f30e94cd194bc7a458413084c547bb7b, type: 2}
+    Delta: 15
+  AttendCosts: []
+  ResponseHours: 3
+  EffectsOnAttend: []
   EffectsIfIgnored: []

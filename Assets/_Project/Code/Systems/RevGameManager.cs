@@ -101,6 +101,7 @@ namespace RevManager {
 
         // Crisis currently waiting for an Attend or Ignore response.
         private NewsEventData m_PendingCrisis;
+        private float m_CrisisHoursRemaining;
         private readonly List<JournalEntry> m_Journal = new List<JournalEntry>();
         private readonly HashSet<NewsEventData> m_FiredNews = new HashSet<NewsEventData>();
         private readonly List<ActionData> m_TodaysActions = new List<ActionData>();
@@ -119,7 +120,7 @@ namespace RevManager {
         public event Action<EndingData> GameEnded;
         public event Action<ActionData> ActionCompleted;
         public event Action<NewsEventData> CrisisStarted;
-        public event Action<NewsEventData, bool, bool> CrisisResolved;
+        public event Action<NewsEventData, bool> CrisisResolved;
 
         public GamePhase Phase { get; private set; } = GamePhase.Weekday;
         
@@ -130,7 +131,7 @@ namespace RevManager {
         public IReadOnlyList<ActionData> TodaysActions => m_TodaysActions;
         public IReadOnlyList<QueuedAction> Queue => m_Queue;
         public EndingData Ending { get; private set; }
-        
+        public float CrisisHoursRemaining => m_CrisisHoursRemaining;
 
         /// <summary>Bumped on every queue mutation so the UI can rebuild only when needed.</summary>
         public int QueueVersion { get; private set; }
@@ -159,6 +160,7 @@ namespace RevManager {
         public void StartRun() {
             
             m_PendingCrisis = null;
+            m_CrisisHoursRemaining = 0f;
             m_Community.ResetValue();
             m_Machine.ResetValue();
             m_People.ResetValue();

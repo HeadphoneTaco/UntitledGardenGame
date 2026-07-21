@@ -141,6 +141,16 @@ namespace RevManager {
 
             float hours = Time.deltaTime / m_SecondsPerHour;
             DrainResources(hours);
+            
+            if (HasPendingCrisis)
+            {
+                m_CrisisHoursRemaining -= hours;
+
+                if (m_CrisisHoursRemaining <= 0f)
+                {
+                    IgnorePendingCrisis();
+                }
+            }
 
             // Drain (or a skipped action's fallout) can collapse the community
             // mid-tick, which changes Phase via the Changed callback.

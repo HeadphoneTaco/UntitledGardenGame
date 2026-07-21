@@ -16,43 +16,94 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: 995743248f71aaa46aef88308e08c01f, type: 3}
   m_AssetRefs:
+  - Name: springwater2
+    Guid: 02e5afd01bcf742e4b3e7d5b467045c0
+    Asset: {fileID: 11400000, guid: 02e5afd01bcf742e4b3e7d5b467045c0, type: 2}
+  - Name: flavourtext5
+    Guid: 13cb33fa1095648539c9c64256ebfbed
+    Asset: {fileID: 11400000, guid: 13cb33fa1095648539c9c64256ebfbed, type: 2}
   - Name: _tier1-startnews-nafta
     Guid: 202010db4fda7b4479c600b07fef7095
     Asset: {fileID: 11400000, guid: 202010db4fda7b4479c600b07fef7095, type: 2}
-  - Name: rations seized at the northern checkpoint
-    Guid: 24696ad71b4fa4848a1cfa8631f5fac8
-    Asset: {fileID: 11400000, guid: 24696ad71b4fa4848a1cfa8631f5fac8, type: 2}
-  - Name: police sweep the market district
-    Guid: 24d46a2f6d6e53e4b9b835fee990a650
-    Asset: {fileID: 11400000, guid: 24d46a2f6d6e53e4b9b835fee990a650, type: 2}
-  - Name: localflooding
+  - Name: flavourtext6
+    Guid: 2886d0f0ffb3e4fdb8a31766285fbdb4
+    Asset: {fileID: 11400000, guid: 2886d0f0ffb3e4fdb8a31766285fbdb4, type: 2}
+  - Name: farmingcosts
     Guid: 3e6e5f4fd0b2d0046bada59c55a38fd4
     Asset: {fileID: 11400000, guid: 3e6e5f4fd0b2d0046bada59c55a38fd4, type: 2}
-  - Name: is your fridge running
+  - Name: flavourtext3
+    Guid: 4ce94c362f8ae4b26b913239d08f8498
+    Asset: {fileID: 11400000, guid: 4ce94c362f8ae4b26b913239d08f8498, type: 2}
+  - Name: crisis_zapatistas
+    Guid: 4fdba8063567d4b52a6d3ba95ae4bed7
+    Asset: {fileID: 11400000, guid: 4fdba8063567d4b52a6d3ba95ae4bed7, type: 2}
+  - Name: flavourtext1
+    Guid: 516777977bf2a47c3805cf0c51627015
+    Asset: {fileID: 11400000, guid: 516777977bf2a47c3805cf0c51627015, type: 2}
+  - Name: winslegalbattle
     Guid: 58beb870bae7b154e806ddbbe33f00bd
     Asset: {fileID: 11400000, guid: 58beb870bae7b154e806ddbbe33f00bd, type: 2}
-  - Name: poweroutage
-    Guid: 78990160427bb7c4c84cce494feb64c7
-    Asset: {fileID: 11400000, guid: 78990160427bb7c4c84cce494feb64c7, type: 2}
-  - Name: hungrysquirrels
+  - Name: crisis_students
+    Guid: 5cde38e1d89ad42fb8511c6b2e2544e6
+    Asset: {fileID: 11400000, guid: 5cde38e1d89ad42fb8511c6b2e2544e6, type: 2}
+  - Name: flavourtext8
+    Guid: 60f2e2670d0db4a199c219b91adeb97c
+    Asset: {fileID: 11400000, guid: 60f2e2670d0db4a199c219b91adeb97c, type: 2}
+  - Name: flavourtext4
+    Guid: 6aba20786404140b78c295ad336b494d
+    Asset: {fileID: 11400000, guid: 6aba20786404140b78c295ad336b494d, type: 2}
+  - Name: peasantskilled2
+    Guid: 73c7a0ec83a1e4c8782b8d5c323910dd
+    Asset: {fileID: 11400000, guid: 73c7a0ec83a1e4c8782b8d5c323910dd, type: 2}
+  - Name: nafta
+    Guid: 784e828b00256453084c65275825fd09
+    Asset: {fileID: 11400000, guid: 784e828b00256453084c65275825fd09, type: 2}
+  - Name: violencecountryside
     Guid: 806cc27c32a778044b951fe98b0fdff9
     Asset: {fileID: 11400000, guid: 806cc27c32a778044b951fe98b0fdff9, type: 2}
-  - Name: state tv admits irregularities
-    Guid: 8defc348c8344e74ab0604a6c6cb63d5
-    Asset: {fileID: 11400000, guid: 8defc348c8344e74ab0604a6c6cb63d5, type: 2}
-  - Name: curfew declared
+  - Name: violencecountryside2
+    Guid: 8e843107d2a724bb4a5e7f2e8350ab01
+    Asset: {fileID: 11400000, guid: 8e843107d2a724bb4a5e7f2e8350ab01, type: 2}
+  - Name: winslegalbattle2
+    Guid: 8f2c104b95f8848f3834be28dace4d5d
+    Asset: {fileID: 11400000, guid: 8f2c104b95f8848f3834be28dace4d5d, type: 2}
+  - Name: violencecountryside3
+    Guid: 97afd818c6a9e49d292f9cef710f871d
+    Asset: {fileID: 11400000, guid: 97afd818c6a9e49d292f9cef710f871d, type: 2}
+  - Name: springwater1
     Guid: 99c7da37b7647c441bd702c31b7e2e8c
     Asset: {fileID: 11400000, guid: 99c7da37b7647c441bd702c31b7e2e8c, type: 2}
-  - Name: editorial calls the movement a nuisance
+  - Name: crisis_hurricane
+    Guid: 9ebed79c960a94f1d8695917304bf93a
+    Asset: {fileID: 11400000, guid: 9ebed79c960a94f1d8695917304bf93a, type: 2}
+  - Name: aidnorth
     Guid: ab2558878e32f8a45b892ad20a72403a
     Asset: {fileID: 11400000, guid: ab2558878e32f8a45b892ad20a72403a, type: 2}
-  - Name: a well runs dry
+  - Name: flavourtext10
+    Guid: b2ece4d03f4e74bc1a0ca63daa4fd4d9
+    Asset: {fileID: 11400000, guid: b2ece4d03f4e74bc1a0ca63daa4fd4d9, type: 2}
+  - Name: peasantskilled
     Guid: b451bd3511d21cb449ccc3b17b9679fb
     Asset: {fileID: 11400000, guid: b451bd3511d21cb449ccc3b17b9679fb, type: 2}
-  - Name: naturaldisaster
+  - Name: farmingcosts2
     Guid: c244f7f2158c8b8428321390aa59bf9a
     Asset: {fileID: 11400000, guid: c244f7f2158c8b8428321390aa59bf9a, type: 2}
-  - Name: neighbors ask about the kitchen
-    Guid: ee75a834a0d9c6642876db35d4fa2713
-    Asset: {fileID: 11400000, guid: ee75a834a0d9c6642876db35d4fa2713, type: 2}
+  - Name: farmingcosts1
+    Guid: d3b47c80b494646cdb7f0279953ca664
+    Asset: {fileID: 11400000, guid: d3b47c80b494646cdb7f0279953ca664, type: 2}
+  - Name: aidnorth2
+    Guid: d9cab1501ec2442c5b8022255ddde534
+    Asset: {fileID: 11400000, guid: d9cab1501ec2442c5b8022255ddde534, type: 2}
+  - Name: flavourtext2
+    Guid: e170f8e2d00b646d6a8dbe2e056e7c9c
+    Asset: {fileID: 11400000, guid: e170f8e2d00b646d6a8dbe2e056e7c9c, type: 2}
+  - Name: nafta1
+    Guid: e53d0ba8cf295479f8ef6f1e19918196
+    Asset: {fileID: 11400000, guid: e53d0ba8cf295479f8ef6f1e19918196, type: 2}
+  - Name: crisis_ranchers
+    Guid: ef1833707d1ab4df58c54938dbd9a75c
+    Asset: {fileID: 11400000, guid: ef1833707d1ab4df58c54938dbd9a75c, type: 2}
+  - Name: flavourtext7
+    Guid: fa0edbe7c8b694a52bc82b4fb01ed7ef
+    Asset: {fileID: 11400000, guid: fa0edbe7c8b694a52bc82b4fb01ed7ef, type: 2}
   m_ManualUpdate: 0

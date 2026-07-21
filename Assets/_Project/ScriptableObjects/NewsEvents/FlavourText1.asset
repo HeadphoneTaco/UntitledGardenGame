@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
-  m_Name: State TV admits irregularities
+  m_Name: FlavourText1
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
-  Headline: State TV admits 'irregularities'
-  Body: '(Placeholder copy for tone and shape. Real material: Dulce.)'
-  Image: {fileID: 0}
-  Tone: 1
-  EarliestWeek: 3
-  Weight: 1
+  Headline: 'Telephone Monopoly Sold '
+  Body: The government sells a controlling interest in Telmex to a consortium led
+    by Grupo Carso, transforming the state telephone monopoly into a privately controlled
+    empire.
+  Image: {fileID: 21300000, guid: 211938c39efa649c0b1e3b26282e1560, type: 3}
+  Tone: 0
   OneTimeOnly: 1
-  UrgentAction: {fileID: 11400000, guid: cb7c62d5b0e19fc439e53480ff45bfbe, type: 2}
   EffectsOnFire:
   - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
-    Delta: -2
+    Delta: 1
+  AttendCosts: []
+  ResponseHours: 3
+  EffectsOnAttend: []
   EffectsIfIgnored: []

@@ -35,6 +35,7 @@ namespace RevManager {
             if (pick.Tone == NewsTone.Crisis)
             {
                 m_PendingCrisis = pick;
+                m_CrisisHoursRemaining = pick.ResponseHours;
                 CrisisStarted?.Invoke(pick);
             }
             
@@ -57,6 +58,7 @@ namespace RevManager {
             crisis.AttendCosts.PayAll();
 
             m_PendingCrisis = null;
+            m_CrisisHoursRemaining = 0f;
 
             // There is no separate success or failure roll.
             crisis.EffectsOnAttend.ApplyAll();
@@ -68,7 +70,7 @@ namespace RevManager {
                 NewsTone.Important
             ));
 
-            CrisisResolved?.Invoke(crisis, true, true);
+            CrisisResolved?.Invoke(crisis, true);
             return true;
         }
         
@@ -81,6 +83,7 @@ namespace RevManager {
 
             NewsEventData crisis = m_PendingCrisis;
             m_PendingCrisis = null;
+            m_CrisisHoursRemaining = 0f;
 
             crisis.EffectsIfIgnored.ApplyAll();
 
@@ -91,7 +94,7 @@ namespace RevManager {
                 NewsTone.Crisis
             ));
 
-            CrisisResolved?.Invoke(crisis, false, false);
+            CrisisResolved?.Invoke(crisis, false);
             return true;
         }
         
