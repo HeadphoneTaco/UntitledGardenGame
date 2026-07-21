@@ -43,6 +43,9 @@ MonoBehaviour:
   - Name: tier1-teardownpropaganda
     Guid: 485c8a28dc695c5489fb57d3bc623022
     Asset: {fileID: 11400000, guid: 485c8a28dc695c5489fb57d3bc623022, type: 2}
+  - Name: tier0-producemedicine
+    Guid: 4b0cf8e23659c427eb3741c377842b31
+    Asset: {fileID: 11400000, guid: 4b0cf8e23659c427eb3741c377842b31, type: 2}
   - Name: tier2-paramilitaryequipment
     Guid: 53e8a501bc3ef0a4bb30a2325a101307
     Asset: {fileID: 11400000, guid: 53e8a501bc3ef0a4bb30a2325a101307, type: 2}
@@ -61,6 +64,9 @@ MonoBehaviour:
   - Name: tier4-revolution
     Guid: 88f0aecec15be4fc1bec4213a5a886f8
     Asset: {fileID: 11400000, guid: 88f0aecec15be4fc1bec4213a5a886f8, type: 2}
+  - Name: tier0-crafttools
+    Guid: 91c62cafc0fbf4936b604e60337642e0
+    Asset: {fileID: 11400000, guid: 91c62cafc0fbf4936b604e60337642e0, type: 2}
   - Name: tier3-seizefuel
     Guid: 965eba9b87204451bb2047aeec01bcb1
     Asset: {fileID: 11400000, guid: 965eba9b87204451bb2047aeec01bcb1, type: 2}

@@ -23,10 +23,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 063567a1f855fdb48ba90c841d295745, type: 2}
   MinSupporters: 0
   Repeatable: 1
-  TimeCost: 3
-  Costs:
-  - Variable: {fileID: 11400000, guid: a165150c1987c9644adf1f9e26fe4ba1, type: 2}
-    Amount: 2
+  TimeCost: 1
+  Costs: []
   Effects:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
     Delta: 5

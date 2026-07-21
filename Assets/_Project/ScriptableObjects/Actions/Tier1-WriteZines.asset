@@ -21,11 +21,11 @@ MonoBehaviour:
   UnlocksTier: 2
   Prerequisites: []
   MinSupporters: 0
-  Repeatable: 0
+  Repeatable: 1
   TimeCost: 4
   Costs: []
   Effects:
   - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
     Delta: 6
   - Variable: {fileID: 11400000, guid: 0a18dfa44e06bb7468b8ac94c2b9aa29, type: 2}
-    Delta: 4
+    Delta: 6

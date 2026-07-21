@@ -31,7 +31,7 @@ MonoBehaviour:
   - Variable: {fileID: 11400000, guid: f83212fc33639894d9f78d811ff3c2a0, type: 2}
     Amount: 8
   - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
-    Amount: 12
+    Amount: 30
   - Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
     Amount: 7
   Effects: []

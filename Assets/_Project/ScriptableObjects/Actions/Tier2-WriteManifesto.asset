@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
   m_Name: Tier2-WriteManifesto
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: WriteManifesto
+  DisplayName: Write Manifesto
   Description: 'The strength of our commune has created a bulwark against the encroaching
     corporate criminals. With a common understanding of our shared rights and values
     we may be able to mobilize support across the country.
