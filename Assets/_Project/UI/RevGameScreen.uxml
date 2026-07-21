@@ -194,7 +194,7 @@
             
             <ui:VisualElement
                 name="opening-news-screen"
-                class="meta-screen meta-screen--lose meta-screen--opening">
+                class="meta-screen meta-screen--opening">
 
                 <ui:VisualElement class="opening-news-copy">
 
