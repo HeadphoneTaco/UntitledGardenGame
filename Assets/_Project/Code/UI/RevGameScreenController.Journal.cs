@@ -20,7 +20,29 @@ namespace RevManager {
         /// restart starts visually clean. Called by the old overlay's restart
         /// button and by the meta screens' Start/Start Another Revolution.
         /// </summary>
-        public void ResetRunUi() {
+        public void ResetRunUi()
+        {
+            m_NewsTvAutoClose?.Pause();
+            m_NewsTvAutoClose = null;
+
+            m_DisplayedNews = null;
+            m_NewsTvTimerProgress = 1f;
+            m_NewsTvBackgroundByStory.Clear();
+
+            if (m_NewsTvOverlay != null)
+            {
+                m_NewsTvOverlay.style.display = DisplayStyle.None;
+            }
+
+            if (m_NewsTvBackground != null)
+            {
+                m_NewsTvBackground.style.backgroundImage =
+                    new StyleBackground(StyleKeyword.None);
+            }
+
+            m_NewsTvCosts?.Clear();
+            m_NewsTvTimerRing?.MarkDirtyRepaint();
+
             m_JournalScroll?.Clear();
             m_ShownQueueVersion = -1;
             m_EndingOverlay?.RemoveFromClassList("ending-overlay--visible");
@@ -101,6 +123,17 @@ namespace RevManager {
             }
 
             m_DisplayedNews = news;
+            
+            Texture2D containerArt =
+                news.Tone == NewsTone.Crisis
+                    ? m_NewsTvCrisisContainer
+                    : m_NewsTvImportantContainer;
+
+            if (containerArt)
+            {
+                m_NewsTvPaper.style.backgroundImage =
+                    new StyleBackground(containerArt);
+            }
             
             if (m_NewsTvBackgrounds != null &&
                 m_NewsTvBackgrounds.Length > 0)

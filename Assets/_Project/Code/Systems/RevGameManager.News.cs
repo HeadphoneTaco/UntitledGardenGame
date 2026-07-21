@@ -11,10 +11,10 @@ namespace RevManager {
     /// </summary>
     public partial class RevGameManager {
         /// <summary>Guaranteed one event per day end (per the design doc) — as long as something is eligible.</summary>
-        private void FireNews(NewsTone tone) 
+        private bool FireNews(NewsTone tone)
         {
             if (!m_News) {
-                return;
+                return false;
             }
 
             NewsEventData[] eligible = m_News.Items
@@ -29,7 +29,7 @@ namespace RevManager {
                 : null;
             
             if (!pick) {
-                return;
+                return false;
             }
 
             m_FiredNews.Add(pick);
@@ -44,6 +44,7 @@ namespace RevManager {
             }
             
             NewsFired?.Invoke(pick);
+            return true;
             
         }
         

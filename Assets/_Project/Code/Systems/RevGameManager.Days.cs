@@ -22,13 +22,17 @@ namespace RevManager {
             }
 
             // Every completed day gets Important news.
-            FireNews(NewsTone.Important);
+            bool importantOpened = FireNews(NewsTone.Important);
 
             if (m_Day.Value >= m_DaysPerWeek)
             {
-                // Wait for the player to close the Important story
-                // before opening the weekly Crisis.
                 SetPhase(GamePhase.Weekend);
+
+                if (!importantOpened)
+                {
+                    OpenWeeklyCrisis();
+                }
+
                 return;
             }
 
@@ -38,12 +42,9 @@ namespace RevManager {
         
         public void OpenWeeklyCrisis()
         {
-            if (Phase != GamePhase.Weekend || HasPendingCrisis)
-            {
-                return;
-            }
-
-            FireNews(NewsTone.Crisis);
+            if (Phase != GamePhase.Weekend || HasPendingCrisis) return;
+            if (!FireNews(NewsTone.Crisis)) BeginNextWeek();
+            
         }
 
         public void BeginNextWeek()
@@ -115,7 +116,7 @@ namespace RevManager {
             AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value,
                 $"{option.DisplayName}: {(success ? "the streets answered." : "it fell apart. People were too worn down.")}",
                 success ? NewsTone.Important : NewsTone.Crisis));
-
+            
             RaiseIfSet(m_OnProtestResolved);
             ProtestResolved?.Invoke(option, success);
 

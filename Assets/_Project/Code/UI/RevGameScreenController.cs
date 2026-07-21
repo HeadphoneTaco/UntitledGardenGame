@@ -48,6 +48,15 @@ namespace RevManager {
         
         [Header("News TV Backgrounds")]
         [SerializeField] private Texture2D[] m_NewsTvBackgrounds;
+        
+        [SerializeField] private Texture2D m_NewsTvFrameArt;
+        [SerializeField] private Texture2D m_NewsTvImportantContainer;
+        [SerializeField] private Texture2D m_NewsTvCrisisContainer;
+        [SerializeField] private Texture2D m_NewsTvAttendArt;
+        [SerializeField] private Texture2D m_NewsTvIgnoreArt;
+
+        private VisualElement m_NewsTvFrame;
+        private VisualElement m_NewsTvPaper;
 
         private readonly Dictionary<NewsEventData, Texture2D> m_NewsTvBackgroundByStory = new();
 
@@ -160,6 +169,13 @@ namespace RevManager {
             
             m_NewsTvOverlay = root.Q<VisualElement>("news-tv-overlay");
             m_NewsTvBackground = root.Q<VisualElement>("news-tv-background");
+            m_NewsTvFrame = root.Q<VisualElement>("news-tv-frame");
+            m_NewsTvPaper = root.Q<VisualElement>("news-tv-paper");
+
+            if (m_NewsTvFrameArt) m_NewsTvFrame.style.backgroundImage = new StyleBackground(m_NewsTvFrameArt);
+            if (m_NewsTvAttendArt) m_NewsTvAttend.style.backgroundImage = new StyleBackground(m_NewsTvAttendArt);
+            if (m_NewsTvIgnoreArt) m_NewsTvIgnore.style.backgroundImage = new StyleBackground(m_NewsTvIgnoreArt);
+            
             m_NewsTvHeadline = root.Q<Label>("news-tv-headline");
             m_NewsTvBody = root.Q<Label>("news-tv-body");
             m_NewsTvCrisisArea = root.Q<VisualElement>("news-tv-crisis-area");
