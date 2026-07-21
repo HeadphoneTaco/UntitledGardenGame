@@ -22,7 +22,7 @@ namespace RevManager {
             // Guarantee holds even if the day ended before the breaking hour.
             if (!m_NewsFiredToday) {
                 m_NewsFiredToday = true;
-                FireNews();
+                FireNews(NewsTone.Important);
             }
             
             if (HasPendingCrisis)
@@ -30,10 +30,13 @@ namespace RevManager {
                 return;
             }
 
-            if (m_Day.Value >= m_DaysPerWeek) {
+            if (m_Day.Value >= m_DaysPerWeek)
+            {
+                FireNews(NewsTone.Crisis);
                 SetPhase(GamePhase.Weekend);
-                RaiseIfSet(m_OnWeekendReached);
-            } else {
+            }
+            
+            else {
                 m_Day.Value += 1;
                 BeginDay();
             }

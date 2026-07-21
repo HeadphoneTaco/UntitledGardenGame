@@ -90,6 +90,21 @@ namespace RevManager {
 
         // Bottom
         private ScrollView m_JournalScroll;
+        
+        // News TV
+        private VisualElement m_NewsTvOverlay;
+        private VisualElement m_NewsTvBackground;
+        private Label m_NewsTvHeadline;
+        private Label m_NewsTvBody;
+        private VisualElement m_NewsTvCrisisArea;
+        private VisualElement m_NewsTvTimerRing;
+        private VisualElement m_NewsTvCosts;
+        private Button m_NewsTvClose;
+        private Button m_NewsTvContinue;
+        private Button m_NewsTvIgnore;
+        private Button m_NewsTvAttend;
+        
+        private IVisualElementScheduledItem m_NewsTvAutoClose;
 
         // Ending
         private VisualElement m_EndingOverlay;
@@ -134,6 +149,18 @@ namespace RevManager {
             BuildWeekendButton(root, "eow-big-button", m_BigOption);
 
             m_JournalScroll = root.Q<ScrollView>("journal-scroll");
+            
+            m_NewsTvOverlay = root.Q<VisualElement>("news-tv-overlay");
+            m_NewsTvBackground = root.Q<VisualElement>("news-tv-background");
+            m_NewsTvHeadline = root.Q<Label>("news-tv-headline");
+            m_NewsTvBody = root.Q<Label>("news-tv-body");
+            m_NewsTvCrisisArea = root.Q<VisualElement>("news-tv-crisis-area");
+            m_NewsTvTimerRing = root.Q<VisualElement>("news-tv-timer-ring");
+            m_NewsTvCosts = root.Q<VisualElement>("news-tv-costs");
+            m_NewsTvClose = root.Q<Button>("news-tv-close");
+            m_NewsTvContinue = root.Q<Button>("news-tv-continue");
+            m_NewsTvIgnore = root.Q<Button>("news-tv-ignore");
+            m_NewsTvAttend = root.Q<Button>("news-tv-attend");
 
             m_EndingOverlay = root.Q<VisualElement>("ending-overlay");
             m_EndingTitle = root.Q<Label>("ending-title");
@@ -149,6 +176,12 @@ namespace RevManager {
                 RevGameManager.Instance.JournalUpdated -= OnJournalUpdated;
                 RevGameManager.Instance.GameEnded -= OnGameEnded;
                 RevGameManager.Instance.ActionCompleted -= OnActionCompleted;
+                RevGameManager.Instance.NewsFired -= OnNewsFired;
+                
+                m_NewsTvClose.clicked -= CloseNewsTv;
+                m_NewsTvContinue.clicked -= CloseNewsTv;
+                m_NewsTvAttend.clicked -= AttendNewsTvCrisis;
+                m_NewsTvIgnore.clicked -= IgnoreNewsTvCrisis;
             }
             m_Built = false;
         }

@@ -25,7 +25,7 @@ MonoBehaviour:
   - Name: _tier1-startnews-nafta
     Guid: 202010db4fda7b4479c600b07fef7095
     Asset: {fileID: 11400000, guid: 202010db4fda7b4479c600b07fef7095, type: 2}
-  - Name: flavourtext6
+  - Name: flavourtext06
     Guid: 2886d0f0ffb3e4fdb8a31766285fbdb4
     Asset: {fileID: 11400000, guid: 2886d0f0ffb3e4fdb8a31766285fbdb4, type: 2}
   - Name: farmingcosts

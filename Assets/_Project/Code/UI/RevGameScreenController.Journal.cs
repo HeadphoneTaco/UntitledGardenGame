@@ -77,6 +77,48 @@ namespace RevManager {
             m_JournalScroll.Add(container);
             m_JournalScroll.schedule.Execute(() => m_JournalScroll.ScrollTo(container));
         }
+        
+        private void OnNewsFired(NewsEventData news)
+        {
+            if (!news || news.Tone == NewsTone.Flavor)
+            {
+                return;
+            }
+
+            bool isCrisis = news.Tone == NewsTone.Crisis;
+
+            m_NewsTvHeadline.text = news.Headline;
+            m_NewsTvBody.text = news.Body;
+
+            m_NewsTvCrisisArea.style.display =
+                isCrisis ? DisplayStyle.Flex : DisplayStyle.None;
+
+            m_NewsTvContinue.style.display =
+                isCrisis ? DisplayStyle.None : DisplayStyle.Flex;
+
+            m_NewsTvOverlay.style.display = DisplayStyle.Flex;
+        }
+        
+        private void CloseNewsTv()
+        {
+            m_NewsTvOverlay.style.display = DisplayStyle.None;
+        }
+        
+        private void AttendNewsTvCrisis()
+        {
+            Manager.AttendPendingCrisis();
+
+            if (!Manager.HasPendingCrisis)
+            {
+                CloseNewsTv();
+            }
+        }
+
+        private void IgnoreNewsTvCrisis()
+        {
+            Manager.IgnorePendingCrisis();
+            CloseNewsTv();
+        }
 
         private void OnGameEnded(EndingData ending) {
             m_EndingTitle.text = ending ? ending.Title : "It's Over";

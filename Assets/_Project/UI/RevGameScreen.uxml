@@ -104,6 +104,37 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="news-tv-overlay" class="news-tv-overlay" style="display: none;">
+            <ui:VisualElement name="news-tv-background" class="news-tv-background"/>
+            <ui:VisualElement class="news-tv-frame">
+                <ui:Button name="news-tv-close" text="X" class="news-tv-close"/>
+
+                <ui:Label
+                    name="news-tv-headline"
+                    text="NEWS HEADLINE"
+                    class="news-tv-headline"/>
+
+                <ui:VisualElement class="news-tv-paper">
+                    <ui:Label
+                        name="news-tv-body"
+                        text="News story."
+                        class="news-tv-body"/>
+
+                    <ui:VisualElement name="news-tv-crisis-area" class="news-tv-crisis-area">
+                        <ui:VisualElement name="news-tv-timer-ring" class="news-tv-timer-ring"/>
+                        <ui:VisualElement name="news-tv-costs" class="news-tv-costs"/>
+
+                        <ui:VisualElement class="news-tv-decisions">
+                            <ui:Button name="news-tv-ignore" text="IGNORE"/>
+                            <ui:Button name="news-tv-attend" text="ATTEND"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:Button name="news-tv-continue" text="CONTINUE" class="news-tv-continue"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
         <ui:VisualElement name="ending-overlay" class="ending-overlay">
             <ui:VisualElement class="ending-card">
                 <ui:Label name="ending-title" text="Ending Title" class="ending-card__title"/>

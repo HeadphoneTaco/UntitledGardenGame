@@ -121,6 +121,7 @@ namespace RevManager {
         public event Action<ActionData> ActionCompleted;
         public event Action<NewsEventData> CrisisStarted;
         public event Action<NewsEventData, bool> CrisisResolved;
+        public event Action<NewsEventData> NewsFired;
 
         public GamePhase Phase { get; private set; } = GamePhase.Weekday;
         

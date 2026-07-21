@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
-  m_Name: FlavourText6
+  m_Name: FlavourText06
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
-  Headline: Peso Devaluation = Economy Crisis
+  Headline: Peso Devaluation is Economy Crisis
   Body: The government devalues the peso in December, triggering capital flight,
     soaring interest rates and a financial crisis that devastates household incomes
   Image: {fileID: 21300000, guid: f1b5f950174da401e99cbf4ed6476ea5, type: 3}

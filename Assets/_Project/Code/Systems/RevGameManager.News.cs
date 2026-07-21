@@ -11,13 +11,17 @@ namespace RevManager {
     /// </summary>
     public partial class RevGameManager {
         /// <summary>Guaranteed one event per day end (per the design doc) — as long as something is eligible.</summary>
-        private void FireNews() {
+        private void FireNews(NewsTone tone) 
+        {
             if (!m_News) {
                 return;
             }
 
             NewsEventData[] eligible = m_News.Items
-                .Where(n => n && !(n.OneTimeOnly && m_FiredNews.Contains(n)))
+                .Where(n =>
+                    n &&
+                    n.Tone == tone &&
+                    !(n.OneTimeOnly && m_FiredNews.Contains(n)))
                 .ToArray();
 
             NewsEventData pick = eligible.Length > 0
@@ -31,6 +35,7 @@ namespace RevManager {
             m_FiredNews.Add(pick);
             if (pick.Tone == NewsTone.Important) pick.EffectsOnFire.ApplyAll();
             AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value, pick.Headline, pick.Tone, pick));
+            NewsFired?.Invoke(pick);
             
             if (pick.Tone == NewsTone.Crisis)
             {

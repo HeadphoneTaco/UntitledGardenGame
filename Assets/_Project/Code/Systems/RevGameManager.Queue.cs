@@ -160,7 +160,7 @@ namespace RevManager {
             m_HoursIntoDay += hours;
             if (!m_NewsFiredToday && m_HoursIntoDay >= m_NewsHourToday) {
                 m_NewsFiredToday = true;
-                FireNews();
+                FireNews(NewsTone.Flavor);
                 if (Phase != GamePhase.Weekday) return;
             }
 
