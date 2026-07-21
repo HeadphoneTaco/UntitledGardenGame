@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
   DisplayName: Seed
   Description: 
-  Icon: {fileID: 21300000, guid: 05f8eef95d66e4e6f9193dc846d857bf, type: 3}
+  Icon: {fileID: 21300000, guid: b2d74bd1bfbfd44d68528507d9095da7, type: 3}
   Tile: {fileID: 21300000, guid: c98a1398c223241498ef157f5a7ded38, type: 3}
   DrainLabel: 
+  DrainPerHour: 0
   Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}

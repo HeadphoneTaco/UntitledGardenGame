@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
   DisplayName: Water
   Description: 
-  Icon: {fileID: 21300000, guid: 033e2d68cb3ba41dea6c005c020aac21, type: 3}
+  Icon: {fileID: 21300000, guid: 187b67fe7f3224704a6d993fae7ea290, type: 3}
   Tile: {fileID: 21300000, guid: cce7f8369193f42c4a8f349190fde994, type: 3}
-  DrainLabel: 
+  DrainLabel: -1/hr
+  DrainPerHour: 1
   Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}

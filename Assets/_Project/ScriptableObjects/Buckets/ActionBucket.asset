@@ -106,4 +106,7 @@ MonoBehaviour:
   - Name: tier1-clothingpottery
     Guid: f970601ec4d02d44990e9b4f1ccf8fcb
     Asset: {fileID: 11400000, guid: f970601ec4d02d44990e9b4f1ccf8fcb, type: 2}
+  - Name: tier0-sowseeds
+    Guid: fd3bf7deaf5924d4ea6bb6dc00c8d1b1
+    Asset: {fileID: 11400000, guid: fd3bf7deaf5924d4ea6bb6dc00c8d1b1, type: 2}
   m_ManualUpdate: 0

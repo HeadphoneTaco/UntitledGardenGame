@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
   DisplayName: Ammunition
   Description: 
-  Icon: {fileID: 21300000, guid: 38e429872588f48f7aa44ad3436dbbde, type: 3}
+  Icon: {fileID: 21300000, guid: 36fefbfd71e5a4033b5cfe9d995c2b40, type: 3}
   Tile: {fileID: 21300000, guid: 295a86d639b484ef3bab47b2143310af, type: 3}
   DrainLabel: 
+  DrainPerHour: 0
   Variable: {fileID: 11400000, guid: 5042e14660489744db6857c780bf8060, type: 2}

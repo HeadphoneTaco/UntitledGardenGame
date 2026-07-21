@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
   DisplayName: Fuel
   Description: 
-  Icon: {fileID: 21300000, guid: 338c8d1cc9e15490b84d8ced098b8596, type: 3}
+  Icon: {fileID: 21300000, guid: bc075f90eed154318ae252795f4a4c4c, type: 3}
   Tile: {fileID: 21300000, guid: ebe45de858e0c4032b8e4a8b01fbbdf3, type: 3}
   DrainLabel: 
+  DrainPerHour: 0
   Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}

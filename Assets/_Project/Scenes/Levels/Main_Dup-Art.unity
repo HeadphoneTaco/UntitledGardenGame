@@ -407,7 +407,7 @@ MonoBehaviour:
   m_RetaliationPerWeek: 11
   m_MachineRecoveryPerWeek: 7
   m_SecondsPerHour: 1.5
-  m_DrainingResources: {fileID: 0}
+  m_DrainingResources: {fileID: 11400000, guid: afec8c5a2a071804687002c98756a9ea, type: 2}
   m_GameFlow: {fileID: 1896299347}
   m_Actions: {fileID: 11400000, guid: 618ef6802361fc04c90881e0e62494b4, type: 2}
   m_News: {fileID: 11400000, guid: a266e2d035984ff46935ae3bd55bf16f, type: 2}

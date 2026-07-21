@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
-  m_Name: Tier0-TendGarden
+  m_Name: Tier0-SowSeeds
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: Tend Garden
+  DisplayName: Sow Seeds
   Description: To properly establish a commune and support ourselves we'll need to
     produce our own food.
   Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
@@ -25,14 +25,10 @@ MonoBehaviour:
   Repeatable: 1
   TimeCost: 3
   Costs:
-  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
-    Amount: 3
   - Variable: {fileID: 11400000, guid: a165150c1987c9644adf1f9e26fe4ba1, type: 2}
     Amount: 2
-  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
-    Amount: 5
   Effects:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
-    Delta: 15
-  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
     Delta: 5
+  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
+    Delta: 20

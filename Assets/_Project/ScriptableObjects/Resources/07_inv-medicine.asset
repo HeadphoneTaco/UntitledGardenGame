@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
   DisplayName: Medicine
   Description: 
-  Icon: {fileID: 21300000, guid: 082130d88c55c47778c80a3091896e7e, type: 3}
+  Icon: {fileID: 21300000, guid: 289d4ab67f30c4dc3830a5a1179e76fd, type: 3}
   Tile: {fileID: 21300000, guid: e0e466e3429ec47d3ae416d025b74c44, type: 3}
   DrainLabel: 
+  DrainPerHour: 0
   Variable: {fileID: 11400000, guid: f30e94cd194bc7a458413084c547bb7b, type: 2}

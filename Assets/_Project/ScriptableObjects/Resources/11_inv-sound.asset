@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
   DisplayName: Sound Equipment
   Description: 
-  Icon: {fileID: 21300000, guid: 0f673f8fdd72744d4a5d48b8ad1ae7ba, type: 3}
+  Icon: {fileID: 21300000, guid: 211938c39efa649c0b1e3b26282e1560, type: 3}
   Tile: {fileID: 21300000, guid: 6c410165b6cbf4c2fb0f2ef2c0739572, type: 3}
   DrainLabel: 
+  DrainPerHour: 0
   Variable: {fileID: 11400000, guid: 6d19330645b9e524bb7c863a5c8878b2, type: 2}
