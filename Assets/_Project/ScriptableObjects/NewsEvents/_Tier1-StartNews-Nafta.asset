@@ -33,4 +33,6 @@ MonoBehaviour:
   EffectsOnFire:
   - Variable: {fileID: 11400000, guid: 1131069fc2040e942bb132db8727f221, type: 2}
     Delta: 3
+  - Variable: {fileID: 11400000, guid: 1131069fc2040e942bb132db8727f221, type: 2}
+    Delta: 3
   EffectsIfIgnored: []

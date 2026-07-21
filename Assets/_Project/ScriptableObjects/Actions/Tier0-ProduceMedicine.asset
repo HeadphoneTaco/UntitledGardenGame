@@ -12,25 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
   m_Name: Tier0-ProduceMedicine
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: Tend Garden
-  Description: To properly establish a commune and support ourselves we'll need to
-    produce our own food.
-  Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
+  DisplayName: Produce Medicine
+  Description: Train medics and use local plants to make tinctures and treatments.
+  Icon: {fileID: 21300000, guid: 289d4ab67f30c4dc3830a5a1179e76fd, type: 3}
   Type: 0
-  Tier: 1
+  Tier: 2
   UnlocksTier: 0
   Prerequisites:
-  - {fileID: 11400000, guid: 063567a1f855fdb48ba90c841d295745, type: 2}
+  - {fileID: 11400000, guid: cb7c62d5b0e19fc439e53480ff45bfbe, type: 2}
   MinSupporters: 0
   Repeatable: 1
-  TimeCost: 2
+  TimeCost: 3
   Costs:
   - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
     Amount: 4
-  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
-    Amount: 2
-  Effects:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
+    Amount: 5
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Amount: 8
+  Effects:
+  - Variable: {fileID: 11400000, guid: f30e94cd194bc7a458413084c547bb7b, type: 2}
     Delta: 15
-  - Variable: {fileID: 11400000, guid: 6953c9fdebfd7f448a618123aaf084de, type: 2}
-    Delta: 5

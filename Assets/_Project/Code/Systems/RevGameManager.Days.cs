@@ -24,6 +24,11 @@ namespace RevManager {
                 m_NewsFiredToday = true;
                 FireNews();
             }
+            
+            if (HasPendingCrisis)
+            {
+                return;
+            }
 
             if (m_Day.Value >= m_DaysPerWeek) {
                 SetPhase(GamePhase.Weekend);

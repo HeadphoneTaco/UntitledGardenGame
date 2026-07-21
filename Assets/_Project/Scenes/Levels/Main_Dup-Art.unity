@@ -401,8 +401,8 @@ MonoBehaviour:
   m_ActionPointsLeft: {fileID: 11400000, guid: 1350416cd78ed3542bbf7d3e90c9169c, type: 2}
   m_TotalWeeks: 4
   m_DaysPerWeek: 5
-  m_BaseActionPoints: 7
-  m_PeoplePerBonusPoint: 10
+  m_BaseActionPoints: 12
+  m_PeoplePerBonusPoint: 100
   m_BaseRetaliation: 3
   m_RetaliationPerWeek: 11
   m_MachineRecoveryPerWeek: 7

@@ -60,24 +60,17 @@ namespace RevManager {
                 container.Add(body);
             }
 
-            ActionData urgent = entry.Source ? entry.Source.UrgentAction : null;
-            if (urgent) {
-                container.AddToClassList("news-entry--actionable");
-                label.style.unityFontStyleAndWeight = FontStyle.Bold;
-                container.tooltip = $"Click to plan: {urgent.DisplayName}";
-            }
-
-            if (urgent || body != null) {
+            if (body != null)
+            {
                 bool expanded = false;
                 Label capturedBody = body;
-                container.RegisterCallback<ClickEvent>(_ => {
-                    if (capturedBody != null) {
-                        expanded = !expanded;
-                        capturedBody.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
-                    }
-                    if (urgent) {
-                        SelectAction(urgent);
-                    }
+
+                container.RegisterCallback<ClickEvent>(_ =>
+                {
+                    expanded = !expanded;
+
+                    capturedBody.style.display =
+                        expanded ? DisplayStyle.Flex : DisplayStyle.None;
                 });
             }
 

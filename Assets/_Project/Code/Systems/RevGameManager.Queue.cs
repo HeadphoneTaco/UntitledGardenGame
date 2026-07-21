@@ -124,8 +124,10 @@ namespace RevManager {
             return true;
         }
 
-        private void Update() {
-            if (Phase != GamePhase.Weekday) {
+        private void Update()
+        {
+            if (Phase != GamePhase.Weekday)
+            {
                 return;
             }
 
@@ -142,18 +144,14 @@ namespace RevManager {
 
             // Drain (or a skipped action's fallout) can collapse the community
             // mid-tick, which changes Phase via the Changed callback.
-            if (Phase != GamePhase.Weekday) {
-                return;
-            }
-
+            if (Phase != GamePhase.Weekday) return;
+            
             // Breaking news hits mid-shift, not after everyone's gone home.
             m_HoursIntoDay += hours;
             if (!m_NewsFiredToday && m_HoursIntoDay >= m_NewsHourToday) {
                 m_NewsFiredToday = true;
                 FireNews();
-                if (Phase != GamePhase.Weekday) {
-                    return; // News effects collapsed the community.
-                }
+                if (Phase != GamePhase.Weekday) return;
             }
 
             m_Queue[0].HoursRemaining -= hours;
