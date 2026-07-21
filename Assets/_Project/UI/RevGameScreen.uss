@@ -6,6 +6,10 @@
     flex-grow: 1;
     background-image: url("../Art/Sprites/RevMang 2.png");
     -unity-background-scale-mode: scale-and-crop;
+    /* Project font: everything inherits from here (meta screens included).
+       Reference the raw TTF — the _SDF assets in Fonts/Originals are
+       TextMeshPro-flavored and UI Toolkit renders them as nothing. */
+    -unity-font-definition: url("../Fonts/Originals/Lato-Black.ttf");
 }
 
 /* ============ TOP BAR ============ */
