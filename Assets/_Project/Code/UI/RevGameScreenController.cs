@@ -75,8 +75,12 @@ namespace RevManager {
         private class ResourceRow {
             public VisualElement Fill;
             public Label Value;
+            public Label Pending; // Net queued delta chip ("+10"/"-4").
             public ResourceData Resource;
             public float Max; // Derived from Value/Progress (package hides MaxValue); cached once valid.
+            public float LastValue; // NaN until first read; drives the gain/loss flash.
+            public float FlashUntil;
+            public bool FlashGain;
         }
 
         private readonly List<ResourceRow> m_ResourceRows = new List<ResourceRow>();
@@ -111,6 +115,8 @@ namespace RevManager {
         private readonly List<(VisualElement row, ActionData action)> m_QueueRowBindings = new List<(VisualElement, ActionData)>();
         // Scratch pool for the queue-risk forecast (see RefreshQueueRisk).
         private readonly Dictionary<GameVariableFloat, float> m_ProjectedPool = new Dictionary<GameVariableFloat, float>();
+        // Net queued delta per resource, rebuilt each poll for the pending chips.
+        private readonly Dictionary<GameVariableFloat, float> m_PendingDeltas = new Dictionary<GameVariableFloat, float>();
 
         // Bottom
         private ScrollView m_JournalScroll;
@@ -263,6 +269,26 @@ namespace RevManager {
             m_MachineValue.text = $"{Manager.Machine.Progress * 100f:000}/100";
             SetFill(m_MachineFill, Manager.Machine.Progress);
 
+            // Net queued delta per resource: costs subtract, gains add, so
+            // each stock can show what the current plan will do to it.
+            m_PendingDeltas.Clear();
+            foreach (QueuedAction entry in Manager.Queue) {
+                if (entry.Action.Costs != null) {
+                    foreach (VariableCost cost in entry.Action.Costs) {
+                        if (cost.Variable) {
+                            m_PendingDeltas[cost.Variable] = m_PendingDeltas.GetValueOrDefault(cost.Variable) - cost.Amount;
+                        }
+                    }
+                }
+                if (entry.Action.Effects != null) {
+                    foreach (VariableEffect effect in entry.Action.Effects) {
+                        if (effect.Variable) {
+                            m_PendingDeltas[effect.Variable] = m_PendingDeltas.GetValueOrDefault(effect.Variable) + effect.Delta;
+                        }
+                    }
+                }
+            }
+
             // Left panel resource bars.
             foreach (ResourceRow rowBinding in m_ResourceRows) {
                 float current = rowBinding.Resource.Variable.Value;
@@ -278,6 +304,26 @@ namespace RevManager {
                     ? $"{current:000}/{rowBinding.Max:000}"
                     : $"{current:000}";
                 SetFill(rowBinding.Fill, progress);
+
+                // Flash the number green/red for a moment when it moves
+                // (design ask: numbers shine on gain/loss).
+                if (float.IsNaN(rowBinding.LastValue)) {
+                    rowBinding.LastValue = current;
+                } else if (!Mathf.Approximately(current, rowBinding.LastValue)) {
+                    rowBinding.FlashGain = current > rowBinding.LastValue;
+                    rowBinding.FlashUntil = Time.unscaledTime + 1f;
+                    rowBinding.LastValue = current;
+                }
+                bool flashing = Time.unscaledTime < rowBinding.FlashUntil;
+                rowBinding.Value.EnableInClassList("drain-row__value--gain", flashing && rowBinding.FlashGain);
+                rowBinding.Value.EnableInClassList("drain-row__value--loss", flashing && !rowBinding.FlashGain);
+
+                // Pending chip: net effect of everything on the belt.
+                float pendingDelta = m_PendingDeltas.GetValueOrDefault(rowBinding.Resource.Variable);
+                bool hasPending = !Mathf.Approximately(pendingDelta, 0f);
+                rowBinding.Pending.text = hasPending ? $"{pendingDelta:+0;-0}" : "";
+                rowBinding.Pending.EnableInClassList("drain-row__pending--gain", pendingDelta > 0f);
+                rowBinding.Pending.EnableInClassList("drain-row__pending--loss", pendingDelta < 0f);
             }
 
             // Center panel. Tier-locked and finished one-shots are hidden (the

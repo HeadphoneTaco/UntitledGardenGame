@@ -492,6 +492,30 @@
     color: rgb(150, 25, 35);
 }
 
+/* Resource number feedback: brief shine when a stock actually moves,
+   and a small chip showing the net effect of the queued plan. */
+.drain-row__value--gain {
+    color: rgb(45, 130, 50);
+}
+
+.drain-row__value--loss {
+    color: rgb(190, 30, 45);
+}
+
+.drain-row__pending {
+    margin-left: 5px;
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.drain-row__pending--gain {
+    color: rgb(45, 130, 50);
+}
+
+.drain-row__pending--loss {
+    color: rgb(190, 30, 45);
+}
+
 .queue-row__cancel {
     width: 22px;
     height: 22px;

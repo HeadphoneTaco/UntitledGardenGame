@@ -50,6 +50,12 @@ namespace RevManager {
                 head.Add(name);
                 head.Add(value);
 
+                // Net effect of the current queue on this stock ("+10"/"-4"),
+                // so plans show their consequences at enqueue time.
+                var pending = new Label("");
+                pending.AddToClassList("drain-row__pending");
+                head.Add(pending);
+
                 var bar = new VisualElement();
                 bar.AddToClassList("fill-bar");
                 bar.AddToClassList("drain-row__bar");
@@ -70,7 +76,10 @@ namespace RevManager {
                 }
 
                 container.Add(row);
-                m_ResourceRows.Add(new ResourceRow { Fill = fill, Value = value, Resource = resource });
+                m_ResourceRows.Add(new ResourceRow {
+                    Fill = fill, Value = value, Pending = pending,
+                    Resource = resource, LastValue = float.NaN,
+                });
             }
         }
 
