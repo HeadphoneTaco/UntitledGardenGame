@@ -653,11 +653,14 @@
 
 .news-tv-timer-text {
     color: rgb(190, 30, 45);
-    font-size: 13px;
+    font-size: 11px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     white-space: normal;
-}.news-tv-overlay {
+    
+}
+
+.news-tv-overlay {
      position: absolute;
      left: 0;
      right: 0;
@@ -671,6 +674,7 @@
 .news-tv-stage {
     width: 840px;
     height: 840px;
+    scale: 1.08 1.08;
 }
 
 .news-tv-background {
@@ -720,7 +724,7 @@
     width: 410px;
     height: 38px;
     color: rgb(35, 30, 25);
-    font-size: 20px;
+    font-size: 17px;
     -unity-font-style: bold;
     white-space: normal;
 }
@@ -732,7 +736,7 @@
     width: 410px;
     height: 90px;
     color: rgb(35, 30, 25);
-    font-size: 15px;
+    font-size: 12px;
     white-space: normal;
 }
 

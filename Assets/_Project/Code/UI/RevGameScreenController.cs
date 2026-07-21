@@ -173,8 +173,6 @@ namespace RevManager {
             m_NewsTvPaper = root.Q<VisualElement>("news-tv-paper");
 
             if (m_NewsTvFrameArt) m_NewsTvFrame.style.backgroundImage = new StyleBackground(m_NewsTvFrameArt);
-            if (m_NewsTvAttendArt) m_NewsTvAttend.style.backgroundImage = new StyleBackground(m_NewsTvAttendArt);
-            if (m_NewsTvIgnoreArt) m_NewsTvIgnore.style.backgroundImage = new StyleBackground(m_NewsTvIgnoreArt);
             
             m_NewsTvHeadline = root.Q<Label>("news-tv-headline");
             m_NewsTvBody = root.Q<Label>("news-tv-body");
@@ -188,6 +186,8 @@ namespace RevManager {
             m_NewsTvContinue = root.Q<Button>("news-tv-continue");
             m_NewsTvIgnore = root.Q<Button>("news-tv-ignore");
             m_NewsTvAttend = root.Q<Button>("news-tv-attend");
+            if (m_NewsTvAttendArt) m_NewsTvAttend.style.backgroundImage = new StyleBackground(m_NewsTvAttendArt);
+            if (m_NewsTvIgnoreArt) m_NewsTvIgnore.style.backgroundImage = new StyleBackground(m_NewsTvIgnoreArt);
 
             m_EndingOverlay = root.Q<VisualElement>("ending-overlay");
             m_EndingTitle = root.Q<Label>("ending-title");
