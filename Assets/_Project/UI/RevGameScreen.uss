@@ -508,7 +508,7 @@
 
 .drain-row__pending {
     margin-left: 5px;
-    font-size: 10px;
+    font-size: 20px;
     -unity-font-style: bold;
 }
 

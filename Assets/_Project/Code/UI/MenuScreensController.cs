@@ -38,6 +38,22 @@ namespace RevManager {
         [SerializeField, Tooltip("Show the title screen when the scene loads. Turn off to boot straight into the game while iterating.")]
         private bool m_ShowTitleOnLaunch = true;
 
+        [System.Serializable]
+        private class FontChoice {
+            public string Label = "DEFAULT";
+            [Tooltip("Leave empty to use the stylesheet default (Lato-Black). Assign a Font asset (e.g. OpenDyslexic) to make it selectable.")]
+            public Font Font;
+        }
+
+        [Header("Font options (cycled by the options screen FONT button)")]
+        [SerializeField, Tooltip("First entry should be the default (empty Font). Add accessibility fonts here; no code changes needed. Choice persists via PlayerPrefs.")]
+        private FontChoice[] m_FontChoices = { new FontChoice() };
+
+        private const string k_FontPrefKey = "rev.fontChoice";
+        private int m_FontIndex;
+        private VisualElement m_DocumentRoot;
+        private Button m_FontButton;
+
         private VisualElement m_TitleScreen;
         private VisualElement m_PauseScreen;
         private VisualElement m_OptionsScreen;
@@ -65,6 +81,11 @@ namespace RevManager {
         private void OnEnable() {
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
             m_GameScreen = GetComponent<RevGameScreenController>();
+            // Font overrides must land on the .screen element itself: it
+            // carries the stylesheet's font rule, and a stylesheet rule on an
+            // element beats anything inherited from higher up. Inline style on
+            // the same element beats the stylesheet, and children inherit it.
+            m_DocumentRoot = root.Q<VisualElement>("root") ?? root;
 
             m_TitleScreen = root.Q<VisualElement>("title-screen");
             m_PauseScreen = root.Q<VisualElement>("pause-screen");
@@ -103,6 +124,13 @@ namespace RevManager {
             BindVolumeSliders(root);
             BindDebugEndButtons(root);
             HideQuitButtonsOnWeb(root);
+
+            // Font choice: cycled from the options screen, persisted, applied
+            // as an inline style on the document root so everything inherits.
+            m_FontButton = root.Q<Button>("options-font-button");
+            Bind(root, "options-font-button", CycleFontChoice);
+            m_FontIndex = Mathf.Clamp(PlayerPrefs.GetInt(k_FontPrefKey, 0), 0, Mathf.Max(0, m_FontChoices.Length - 1));
+            ApplyFontChoice();
         }
 
         private void Start() {
@@ -249,6 +277,33 @@ namespace RevManager {
                 detail.text = ending ? $"{ending.Title} — {ending.Body}" : "";
             }
             Show(won ? MetaScreen.Win : MetaScreen.Lose);
+        }
+
+        // ---- Font choice ----
+
+        private void CycleFontChoice() {
+            if (m_FontChoices == null || m_FontChoices.Length == 0) {
+                return;
+            }
+            m_FontIndex = (m_FontIndex + 1) % m_FontChoices.Length;
+            PlayerPrefs.SetInt(k_FontPrefKey, m_FontIndex);
+            ApplyFontChoice();
+        }
+
+        private void ApplyFontChoice() {
+            if (m_FontChoices == null || m_FontChoices.Length == 0 || m_DocumentRoot == null) {
+                return;
+            }
+            FontChoice choice = m_FontChoices[Mathf.Clamp(m_FontIndex, 0, m_FontChoices.Length - 1)];
+            if (choice.Font) {
+                m_DocumentRoot.style.unityFontDefinition = new StyleFontDefinition(FontDefinition.FromFont(choice.Font));
+            } else {
+                // Clear the inline override; the stylesheet default takes over.
+                m_DocumentRoot.style.unityFontDefinition = StyleKeyword.Null;
+            }
+            if (m_FontButton != null) {
+                m_FontButton.text = $"FONT: {choice.Label}";
+            }
         }
 
         // ---- Options / audio ----

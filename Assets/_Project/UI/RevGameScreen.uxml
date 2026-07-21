@@ -249,6 +249,7 @@
                     <ui:Slider name="volume-music" label="MUSIC" low-value="0" high-value="1" value="1" class="options-slider"/>
                     <ui:Slider name="volume-ambience" label="AMBIENCE" low-value="0" high-value="1" value="1" class="options-slider"/>
                     <ui:Slider name="volume-sfx" label="SFX" low-value="0" high-value="1" value="1" class="options-slider"/>
+                    <ui:Button name="options-font-button" text="FONT: DEFAULT" class="menu-button"/>
                     <ui:Button name="options-back-button" text="BACK" class="menu-button"/>
                 </ui:VisualElement>
             </ui:VisualElement>

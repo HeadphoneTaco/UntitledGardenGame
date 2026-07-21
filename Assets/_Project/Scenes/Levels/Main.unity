@@ -388,6 +388,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.MenuScreensController
   m_ShowTitleOnLaunch: 1
+  m_FontChoices:
+  - Label: DEFAULT
+    Font: {fileID: 12800000, guid: 2a75b3b8b069c0540aa61b83f84637a2, type: 3}
+  - Label: NEWSPRINT
+    Font: {fileID: 12800000, guid: 1564b5bc687b9f64a9c322108ff7cc84, type: 3}
+  - Label: DYSLEXIA FRIENDLY
+    Font: {fileID: 12800000, guid: a4c2062f602c25945869612c8921c4e5, type: 3}
 --- !u!1 &1252311420
 GameObject:
   m_ObjectHideFlags: 0
