@@ -16,34 +16,34 @@ MonoBehaviour:
   m_Sources:
   - {fileID: 102900000, guid: 1c15682fd76abb5478da347d6fce3eb2, type: 3}
   m_AssetRefs:
-  - Name: 10_inv-ammo
+  - Name: 11_inv-ammo
     Guid: 57a2b71a78db07048a19879eb7970240
     Asset: {fileID: 11400000, guid: 57a2b71a78db07048a19879eb7970240, type: 2}
-  - Name: 11_inv-sound
+  - Name: 08_inv-sound
     Guid: 609db7e1a0800714484e9d9ada10c384
     Asset: {fileID: 11400000, guid: 609db7e1a0800714484e9d9ada10c384, type: 2}
-  - Name: 07_inv-medicine
+  - Name: 06_inv-medicine
     Guid: 6301b55d2f588a841b10b1c9ac077fdf
     Asset: {fileID: 11400000, guid: 6301b55d2f588a841b10b1c9ac077fdf, type: 2}
-  - Name: 06_inv-comm
+  - Name: 09_inv-comm
     Guid: 6d08b6fc474832c4fa363a4c464761b1
     Asset: {fileID: 11400000, guid: 6d08b6fc474832c4fa363a4c464761b1, type: 2}
-  - Name: 01_inv-manta
+  - Name: 07_inv-manta
     Guid: 6d2cdf05197d407498804f723377f235
     Asset: {fileID: 11400000, guid: 6d2cdf05197d407498804f723377f235, type: 2}
-  - Name: 05_inv-seed
+  - Name: 03_inv-seed
     Guid: 744c52578cda9cc4ab177eeb495baed7
     Asset: {fileID: 11400000, guid: 744c52578cda9cc4ab177eeb495baed7, type: 2}
-  - Name: 03_inv-water
+  - Name: 01_inv-water
     Guid: a4b2b1bba781b88458cfe43d60b6636a
     Asset: {fileID: 11400000, guid: a4b2b1bba781b88458cfe43d60b6636a, type: 2}
-  - Name: 08_inv-fuel
+  - Name: 10_inv-fuel
     Guid: a86482e33d9d25848a588089d3a72566
     Asset: {fileID: 11400000, guid: a86482e33d9d25848a588089d3a72566, type: 2}
   - Name: 04_inv-tool
     Guid: b3a3167489233404e84f135274558f6d
     Asset: {fileID: 11400000, guid: b3a3167489233404e84f135274558f6d, type: 2}
-  - Name: 09_inv-craft
+  - Name: 05_inv-craft
     Guid: c44086e89a2fdd148badd30e18e39032
     Asset: {fileID: 11400000, guid: c44086e89a2fdd148badd30e18e39032, type: 2}
   - Name: 02_inv-food

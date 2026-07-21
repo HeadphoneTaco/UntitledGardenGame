@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,7 +19,10 @@ namespace RevManager {
                 return;
             }
 
-            foreach (ResourceData resource in m_Resources.Items) {
+            // The bucket keeps its refs in discovery order and its updater can
+            // reshuffle them, so sort here: the 01_..11_ filename prefixes are
+            // the single source of truth for panel order.
+            foreach (ResourceData resource in m_Resources.Items.OrderBy(r => r ? r.name : "")) {
                 if (!resource || !resource.Variable) {
                     continue;
                 }

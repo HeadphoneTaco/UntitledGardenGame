@@ -16,6 +16,6 @@ MonoBehaviour:
   Description: 
   Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
   Tile: {fileID: 21300000, guid: ce460d23677164c2b822d82358752d94, type: 3}
-  DrainLabel: -1/hr
-  DrainPerHour: 1
+  DrainLabel: 
+  DrainPerHour: 0
   Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}

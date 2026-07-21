@@ -480,6 +480,36 @@
     align-items: center;
 }
 
+/* Queued item that can't currently pay its costs: it only succeeds if an
+   earlier queue item produces the missing goods before it completes. */
+.queue-row--at-risk {
+    border-left-width: 4px;
+    border-left-color: rgb(190, 30, 45);
+    opacity: 0.75;
+}
+
+.queue-row--at-risk .queue-row__name {
+    color: rgb(150, 25, 35);
+}
+
+.queue-row__cancel {
+    width: 22px;
+    height: 22px;
+    margin-left: auto;
+    align-self: center;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    color: rgb(150, 25, 35);
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.queue-row__cancel:hover {
+    color: rgb(240, 235, 225);
+    background-color: rgb(190, 30, 45);
+}
+
 .queue-row__icon {
     width: 30px;
     height: 30px;

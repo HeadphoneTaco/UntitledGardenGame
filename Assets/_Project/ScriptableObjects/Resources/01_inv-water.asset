@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0928eb1e0c11ce4408cc4c16f73d7e2a, type: 3}
-  m_Name: 08_inv-fuel
+  m_Name: 01_inv-water
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
-  DisplayName: Fuel
+  DisplayName: Water
   Description: 
-  Icon: {fileID: 21300000, guid: bc075f90eed154318ae252795f4a4c4c, type: 3}
-  Tile: {fileID: 21300000, guid: ebe45de858e0c4032b8e4a8b01fbbdf3, type: 3}
+  Icon: {fileID: 21300000, guid: 187b67fe7f3224704a6d993fae7ea290, type: 3}
+  Tile: {fileID: 21300000, guid: cce7f8369193f42c4a8f349190fde994, type: 3}
   DrainLabel: 
   DrainPerHour: 0
-  Variable: {fileID: 11400000, guid: f877b99f2b9dfbf479b0b65fb147dbd2, type: 2}
+  Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}

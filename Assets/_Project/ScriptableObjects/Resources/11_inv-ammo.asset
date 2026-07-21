@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0928eb1e0c11ce4408cc4c16f73d7e2a, type: 3}
-  m_Name: 06_inv-comm
+  m_Name: 11_inv-ammo
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ResourceData
-  DisplayName: "Communiqu\xE9"
+  DisplayName: Ammunition
   Description: 
-  Icon: {fileID: 21300000, guid: 6cf1ddba61b874e718d6efbba8db9b38, type: 3}
-  Tile: {fileID: 21300000, guid: f114b9fdbccd845afa68137bf3a86054, type: 3}
+  Icon: {fileID: 21300000, guid: 36fefbfd71e5a4033b5cfe9d995c2b40, type: 3}
+  Tile: {fileID: 21300000, guid: 295a86d639b484ef3bab47b2143310af, type: 3}
   DrainLabel: 
   DrainPerHour: 0
-  Variable: {fileID: 11400000, guid: f83212fc33639894d9f78d811ff3c2a0, type: 2}
+  Variable: {fileID: 11400000, guid: 5042e14660489744db6857c780bf8060, type: 2}

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CoreUtils.GameVariables;
 using UnityEngine.UIElements;
 
 namespace RevManager {
@@ -19,6 +20,7 @@ namespace RevManager {
             if (Manager.QueueVersion != m_ShownQueueVersion) {
                 m_ShownQueueVersion = Manager.QueueVersion;
                 m_QueueList.Clear();
+                m_QueueRowBindings.Clear();
                 m_ActiveQueueFill = null;
 
                 IReadOnlyList<QueuedAction> queue = Manager.Queue;
@@ -27,10 +29,11 @@ namespace RevManager {
                     ActionData action = entry.Action;
                     int index = i;
 
+                    // Row click inspects (detail card); the ✕ cancels. Explicit
+                    // beats hover — runtime panels don't render tooltips anyway.
                     var row = new VisualElement();
                     row.AddToClassList("queue-row");
-                    row.tooltip = "Click to cancel";
-                    row.RegisterCallback<ClickEvent>(_ => OnQueueRowClicked(index, action));
+                    row.RegisterCallback<ClickEvent>(_ => SelectAction(action));
 
                     var icon = new VisualElement();
                     icon.AddToClassList("queue-row__icon");
@@ -52,9 +55,17 @@ namespace RevManager {
                     col.Add(name);
                     col.Add(bar);
 
+                    var cancel = new Button(() => OnQueueRowClicked(index, action)) { text = "✕" };
+                    cancel.AddToClassList("queue-row__cancel");
+                    RegisterButtonAudio(cancel);
+                    // Swallow the click so canceling doesn't also select.
+                    cancel.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
                     row.Add(icon);
                     row.Add(col);
+                    row.Add(cancel);
                     m_QueueList.Add(row);
+                    m_QueueRowBindings.Add((row, action));
 
                     if (i == 0) {
                         m_ActiveQueueFill = fill;
@@ -66,6 +77,90 @@ namespace RevManager {
             if (m_ActiveQueueFill != null) {
                 m_ActiveQueueFill.style.width = Length.Percent((1f - Manager.ActiveProgress) * 100f);
             }
+
+            RefreshQueueRisk();
+        }
+
+        /// <summary>
+        /// Costs settle at completion, so a queued item can be living on
+        /// credit: fine when an earlier item will produce the goods, fatal
+        /// when it won't. Walk the belt in order, banking each item's costs
+        /// and gains on paper AND projecting Food/Water drain to each item's
+        /// completion hour, then tint any row whose bill won't clear — a
+        /// forecast at enqueue time, not a thermometer at failure time.
+        /// Slightly pessimistic on purpose (drain is projected even past a
+        /// resource's floor): a warning that fires early beats one that
+        /// fires as the belt delivers the failure.
+        /// </summary>
+        private void RefreshQueueRisk() {
+            IReadOnlyList<QueuedAction> queue = Manager.Queue;
+            if (queue.Count != m_QueueRowBindings.Count) {
+                return; // Rebuild pending this poll; next poll is in 100ms.
+            }
+
+            m_ProjectedPool.Clear();
+            float projectedHours = Manager.ActionPointsLeft.Value;
+            float hoursFromNow = 0f; // When each item settles, from this instant.
+
+            for (int i = 0; i < queue.Count; i++) {
+                ActionData action = m_QueueRowBindings[i].action;
+                hoursFromNow += queue[i].HoursRemaining; // Front item keeps its partial progress.
+
+                bool funded = action.TimeCost <= projectedHours
+                    && ProjectedShortfall(action, hoursFromNow) == null;
+                m_QueueRowBindings[i].row.EnableInClassList("queue-row--at-risk", !funded);
+                if (!funded) {
+                    continue; // A failed item settles nothing (matches fall-through).
+                }
+
+                projectedHours -= action.TimeCost;
+                if (action.Costs != null) {
+                    foreach (VariableCost cost in action.Costs) {
+                        if (cost.Variable) {
+                            m_ProjectedPool[cost.Variable] = ProjectedSettlements(cost.Variable) - cost.Amount;
+                        }
+                    }
+                }
+                if (action.Effects != null) {
+                    foreach (VariableEffect effect in action.Effects) {
+                        if (effect.Variable) {
+                            m_ProjectedPool[effect.Variable] = ProjectedSettlements(effect.Variable) + effect.Delta;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>Current value plus banked queue settlements — drain excluded (it's applied per-completion-time in the afford check).</summary>
+        private float ProjectedSettlements(GameVariableFloat variable) {
+            return m_ProjectedPool.TryGetValue(variable, out float value) ? value : variable.Value;
+        }
+
+        /// <summary>Name of the first resource this action can't cover at its settlement time, or null if all clear.</summary>
+        private string ProjectedShortfall(ActionData action, float hoursFromNow) {
+            if (action.Costs == null) {
+                return null;
+            }
+            foreach (VariableCost cost in action.Costs) {
+                if (!cost.Variable) {
+                    continue;
+                }
+                float available = ProjectedSettlements(cost.Variable) - DrainRate(cost.Variable) * hoursFromNow;
+                if (available < cost.Amount) {
+                    return cost.Variable.name.ToUpperInvariant();
+                }
+            }
+            return null;
+        }
+
+        /// <summary>Drain per hour for the variable, from the resource list (0 for non-draining).</summary>
+        private float DrainRate(GameVariableFloat variable) {
+            foreach (ResourceRow row in m_ResourceRows) {
+                if (row.Resource && row.Resource.Variable == variable) {
+                    return row.Resource.DrainPerHour;
+                }
+            }
+            return 0f;
         }
 
         // ---- Events ----

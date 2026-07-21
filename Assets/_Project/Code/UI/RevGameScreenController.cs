@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CoreUtils.GameVariables;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
@@ -94,6 +95,10 @@ namespace RevManager {
         // Cost lines of the selected action, re-checked every poll so lines
         // turn red the moment a resource drains below the price.
         private readonly List<(Label line, VariableCost cost)> m_SelectedCostLines = new List<(Label, VariableCost)>();
+        // Man-hours / supporters lines of the selected action; flushed red in
+        // Refresh by the same live check as the resource cost lines.
+        private Label m_SelectedTimeLine;
+        private Label m_SelectedSupportersLine;
 
         // Right panel
         private ScrollView m_QueueList;
@@ -101,6 +106,11 @@ namespace RevManager {
         private readonly List<(Button button, WeekendOptionData option)> m_WeekendButtons = new List<(Button, WeekendOptionData)>();
         private int m_ShownQueueVersion = -1;
         private VisualElement m_ActiveQueueFill; // Front item's bar; drains every poll without a rebuild.
+        // Row/action pairs of the current queue display, re-checked every poll
+        // so rows tint red the moment their action becomes unaffordable.
+        private readonly List<(VisualElement row, ActionData action)> m_QueueRowBindings = new List<(VisualElement, ActionData)>();
+        // Scratch pool for the queue-risk forecast (see RefreshQueueRisk).
+        private readonly Dictionary<GameVariableFloat, float> m_ProjectedPool = new Dictionary<GameVariableFloat, float>();
 
         // Bottom
         private ScrollView m_JournalScroll;
@@ -278,8 +288,11 @@ namespace RevManager {
             foreach ((Button button, ActionData action) in m_ActionButtons) {
                 bool visible = Manager.IsVisible(action);
                 button.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                // One rule everywhere: a row greys whenever it can't join the
+                // queue right now — prereqs, supplies, or man-hours alike.
                 bool blocked = Manager.Phase != GamePhase.Weekday
-                    || !Manager.PrerequisitesMet(action) || !action.CanAfford;
+                    || !Manager.PrerequisitesMet(action) || !action.CanAfford
+                    || action.TimeCost > Manager.UnreservedHours;
                 button.EnableInClassList("action-row--blocked", blocked);
             }
             bool canQueue = Manager.CanQueue(m_Selected);
@@ -294,6 +307,12 @@ namespace RevManager {
             foreach ((Label line, VariableCost cost) in m_SelectedCostLines) {
                 line.EnableInClassList("detail-line--missing", !cost.CanAfford);
             }
+            // The non-resource requirements flush red by the same rule as
+            // supply costs, so the card never says one thing and shows another.
+            m_SelectedTimeLine?.EnableInClassList("detail-line--missing",
+                m_Selected && m_Selected.TimeCost > Manager.UnreservedHours);
+            m_SelectedSupportersLine?.EnableInClassList("detail-line--missing",
+                m_Selected && Manager.People.Value < m_Selected.MinSupporters);
 
             // Right panel.
             RefreshQueue();

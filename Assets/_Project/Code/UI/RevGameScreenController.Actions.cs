@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CoreUtils.GameVariables;
 using UnityEngine.UIElements;
@@ -24,15 +25,18 @@ namespace RevManager {
             m_DetailCosts.Clear();
             m_DetailGains.Clear();
             if (!action) {
+                m_SelectedTimeLine = null;
+                m_SelectedSupportersLine = null;
                 return;
             }
 
             m_SelectedCostLines.Clear();
-            AddDetailLine(m_DetailCosts, $"{action.TimeCost} MAN-HOURS");
+            m_SelectedTimeLine = AddDetailLine(m_DetailCosts, $"{action.TimeCost} MAN-HOURS");
+            m_SelectedSupportersLine = null;
             if (action.MinSupporters > 0f) {
                 // A requirement, not a cost: nothing is spent, but it gives
                 // tier actions a visible goal to push toward.
-                AddDetailLine(m_DetailCosts, $"NEEDS {action.MinSupporters:0} SUPPORTERS");
+                m_SelectedSupportersLine = AddDetailLine(m_DetailCosts, $"NEEDS {action.MinSupporters:0} SUPPORTERS");
             }
             if (action.Costs != null) {
                 foreach (VariableCost cost in action.Costs) {
@@ -108,30 +112,35 @@ namespace RevManager {
         /// Why the selected action can't be queued right now. Null = it can.
         /// Ordered by what the player should fix first.
         /// </summary>
+        /// <summary>
+        /// EVERY active blocker, priority order, one per line — so the text
+        /// always agrees with whichever cost lines are flushing red.
+        /// </summary>
         private string BlockReason(ActionData action) {
             if (!action || Manager.Phase != GamePhase.Weekday) {
                 return null;
             }
+
+            var reasons = new List<string>();
             if (!Manager.PrerequisitesMet(action)) {
-                return "REQUIRES: " + string.Join(", ",
-                    Manager.MissingPrerequisites(action).Select(p => p.DisplayName.ToUpperInvariant()));
+                reasons.Add("REQUIRES: " + string.Join(", ",
+                    Manager.MissingPrerequisites(action).Select(p => p.DisplayName.ToUpperInvariant())));
             }
             if (Manager.People.Value < action.MinSupporters) {
-                return $"NEEDS {action.MinSupporters:0} SUPPORTERS. {Manager.People.Value:0} ARE WITH US.";
+                reasons.Add($"NEEDS {action.MinSupporters:0} SUPPORTERS. {Manager.People.Value:0} ARE WITH US.");
             }
             if (!action.Repeatable && Manager.Queue.Any(e => e.Action == action)) {
-                return "ALREADY IN TODAY'S QUEUE";
+                reasons.Add("ALREADY IN TODAY'S QUEUE");
             }
             if (action.TimeCost > Manager.DailyActionPoints) {
-                return $"NEEDS {action.TimeCost} MAN-HOURS. THE COMMUNE MUSTERS {Manager.DailyActionPoints} A DAY. GROW.";
-            }
-            if (action.TimeCost > Manager.UnreservedHours) {
-                return "NOT ENOUGH MAN-HOURS LEFT TODAY";
+                reasons.Add($"NEEDS {action.TimeCost} MAN-HOURS. THE COMMUNE MUSTERS {Manager.DailyActionPoints} A DAY. GROW.");
+            } else if (action.TimeCost > Manager.UnreservedHours) {
+                reasons.Add("NOT ENOUGH MAN-HOURS LEFT TODAY");
             }
             if (!action.CanAfford) {
-                return "THE COMMUNE LACKS THE SUPPLIES";
+                reasons.Add("THE COMMUNE LACKS THE SUPPLIES");
             }
-            return null;
+            return reasons.Count == 0 ? null : string.Join("\n", reasons);
         }
     }
 }
