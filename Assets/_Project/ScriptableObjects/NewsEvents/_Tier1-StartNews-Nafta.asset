@@ -25,12 +25,14 @@ MonoBehaviour:
     is nothing but a nightmare and a vain illusion. Mexico cannot exist without Mexican
     peasants and indigenous peoples. Without corn, there is no country.\u201D"
   Image: {fileID: 21300000, guid: 0f673f8fdd72744d4a5d48b8ad1ae7ba, type: 3}
-  Tone: 1
-  EarliestWeek: 1
-  Weight: 1
+  Tone: 3
   OneTimeOnly: 1
-  UrgentAction: {fileID: 0}
   EffectsOnFire:
-  - Variable: {fileID: 11400000, guid: 1131069fc2040e942bb132db8727f221, type: 2}
-    Delta: 3
+  - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
+    Delta: 5
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: 5
+  AttendCosts: []
+  ResponseHours: 3
+  EffectsOnAttend: []
   EffectsIfIgnored: []

@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
-  m_Name: NaturalDisaster
+  m_Name: FlavourText4
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
-  Headline: Tornado Warning
-  Body: 'TAKE IMMEDIATE SHELTER IN CLOSEST UNDERGROUND STRUCTURE. WAIT IN PLACE UNTIL
-    SIRENS ARE NO LONGER AUDIBLE. '
-  Image: {fileID: 0}
-  Tone: 2
-  EarliestWeek: 2
-  Weight: 1
-  OneTimeOnly: 0
+  Headline: Ejido land to enter private markets
+  Body: Land held in common is an obstacle only to those who cannot profit from it.
+    They call it modernization when the fence goes up.
+  Image: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
+  Tone: 0
+  OneTimeOnly: 1
   EffectsOnFire:
   - Variable: {fileID: 11400000, guid: 590bf34787dfe4348b70cd0de5af7ebc, type: 2}
-    Delta: -8
-  - Variable: {fileID: 11400000, guid: 5e286db65864d7f41b0aa998543f767a, type: 2}
-    Delta: -7
+    Delta: -1
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: 1
+  AttendCosts: []
+  ResponseHours: 3
+  EffectsOnAttend: []
   EffectsIfIgnored: []

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
   m_Name: Tier3-EstablishRegionalCommunes
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: Establish Regional Communes (Unfinished)
+  DisplayName: Establish Regional Communes
   Description: 'With enough people banding together around our common cause we will
     be able to establish other communes around the country, reinforcing our hold
     on the land being clawed away.
@@ -30,7 +30,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a6a77c739b9bf4a408b8c739e72cd093, type: 2}
   MinSupporters: 40
   Repeatable: 0
-  TimeCost: 15
+  TimeCost: 10
   Costs:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
     Amount: 40

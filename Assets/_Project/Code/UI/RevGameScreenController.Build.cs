@@ -94,6 +94,14 @@ namespace RevManager {
             Manager.JournalUpdated += OnJournalUpdated;
             Manager.GameEnded += OnGameEnded;
             Manager.ActionCompleted += OnActionCompleted;
+            Manager.NewsFired += OnNewsFired;
+            Manager.CrisisResolved += OnCrisisResolved;
+            
+            m_NewsTvClose.clicked += CloseNewsTv;
+            m_NewsTvContinue.clicked += CloseNewsTv;
+            m_NewsTvAttend.clicked += AttendNewsTvCrisis;
+            m_NewsTvIgnore.clicked += IgnoreNewsTvCrisis;
+            
 
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
             var groups = new Dictionary<ActionType, VisualElement> {

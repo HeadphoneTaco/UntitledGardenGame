@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
-  m_Name: LocalFlooding
+  m_Name: Nafta
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
-  Headline: Swollen River
-  Body: A local neighborhood is in danger of flooding! Volunteers urgently needed
-    for flood mitigation and evactuation efforts.
-  Image: {fileID: 0}
+  Headline: NAFTA Promises New Age of Prosperity
+  Body: Deregulation set to bring an influx of jobs and open new markets
+  Image: {fileID: 21300000, guid: 211938c39efa649c0b1e3b26282e1560, type: 3}
   Tone: 1
-  EarliestWeek: 1
-  Weight: 1
-  OneTimeOnly: 0
+  OneTimeOnly: 1
   EffectsOnFire:
-  - Variable: {fileID: 11400000, guid: 5e286db65864d7f41b0aa998543f767a, type: 2}
-    Delta: 4
-  - Variable: {fileID: 11400000, guid: b73403ea76a609349a2c601cb00319a4, type: 2}
-    Delta: 2
+  - Variable: {fileID: 11400000, guid: 955e297ac4d034c42b1089e8f691b727, type: 2}
+    Delta: 20
+  AttendCosts: []
+  ResponseHours: 3
+  EffectsOnAttend: []
   EffectsIfIgnored: []

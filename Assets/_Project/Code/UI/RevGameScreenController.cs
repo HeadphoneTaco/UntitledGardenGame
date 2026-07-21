@@ -45,6 +45,20 @@ namespace RevManager {
 
         [Header("Support bar cap (People has no max; bar fills toward this)")]
         [SerializeField, Min(1f)] private float m_SupportBarCap = 100f;
+        
+        [Header("News TV Backgrounds")]
+        [SerializeField] private Texture2D[] m_NewsTvBackgrounds;
+        
+        [SerializeField] private Texture2D m_NewsTvFrameArt;
+        [SerializeField] private Texture2D m_NewsTvImportantContainer;
+        [SerializeField] private Texture2D m_NewsTvCrisisContainer;
+        [SerializeField] private Texture2D m_NewsTvAttendArt;
+        [SerializeField] private Texture2D m_NewsTvIgnoreArt;
+
+        private VisualElement m_NewsTvFrame;
+        private VisualElement m_NewsTvPaper;
+
+        private readonly Dictionary<NewsEventData, Texture2D> m_NewsTvBackgroundByStory = new();
 
         // Top bar
         private Label m_DayLabel;
@@ -90,6 +104,24 @@ namespace RevManager {
 
         // Bottom
         private ScrollView m_JournalScroll;
+        
+        // News TV
+        private VisualElement m_NewsTvOverlay;
+        private VisualElement m_NewsTvBackground;
+        private Label m_NewsTvHeadline;
+        private Label m_NewsTvBody;
+        private VisualElement m_NewsTvCrisisArea;
+        private VisualElement m_NewsTvTimerRing;
+        private VisualElement m_NewsTvCosts;
+        private Button m_NewsTvClose;
+        private Button m_NewsTvContinue;
+        private Button m_NewsTvIgnore;
+        private Button m_NewsTvAttend;
+        private NewsEventData m_DisplayedNews;
+        private Label m_NewsTvTimerText;
+        private float m_NewsTvTimerProgress = 1f;
+        
+        private IVisualElementScheduledItem m_NewsTvAutoClose;
 
         // Ending
         private VisualElement m_EndingOverlay;
@@ -111,8 +143,16 @@ namespace RevManager {
             m_SupportFill = root.Q<VisualElement>("support-fill");
             m_CommunityFill = root.Q<VisualElement>("community-fill");
             m_MachineFill = root.Q<VisualElement>("machine-fill");
+            ScrollView drainList = root.Q<ScrollView>("drain-list");
 
-            BuildResourceRows(root.Q<ScrollView>("drain-list"));
+            if (drainList != null)
+            {
+                BuildResourceRows(drainList);
+            }
+            else
+            {
+                Debug.LogError("Could not find the ScrollView named 'drain-list' in RevGameScreen.uxml.");
+            }
 
             m_DetailIcon = root.Q<VisualElement>("detail-icon");
             m_DetailName = root.Q<Label>("detail-name");
@@ -134,6 +174,28 @@ namespace RevManager {
             BuildWeekendButton(root, "eow-big-button", m_BigOption);
 
             m_JournalScroll = root.Q<ScrollView>("journal-scroll");
+            
+            m_NewsTvOverlay = root.Q<VisualElement>("news-tv-overlay");
+            m_NewsTvBackground = root.Q<VisualElement>("news-tv-background");
+            m_NewsTvFrame = root.Q<VisualElement>("news-tv-frame");
+            m_NewsTvPaper = root.Q<VisualElement>("news-tv-paper");
+
+            if (m_NewsTvFrameArt) m_NewsTvFrame.style.backgroundImage = new StyleBackground(m_NewsTvFrameArt);
+            
+            m_NewsTvHeadline = root.Q<Label>("news-tv-headline");
+            m_NewsTvBody = root.Q<Label>("news-tv-body");
+            m_NewsTvCrisisArea = root.Q<VisualElement>("news-tv-crisis-area");
+            m_NewsTvTimerRing = root.Q<VisualElement>("news-tv-timer-ring");
+            m_NewsTvTimerRing.generateVisualContent += DrawCrisisTimerRing;
+            
+            m_NewsTvTimerText = root.Q<Label>("news-tv-timer-text");
+            m_NewsTvCosts = root.Q<VisualElement>("news-tv-costs");
+            m_NewsTvClose = root.Q<Button>("news-tv-close");
+            m_NewsTvContinue = root.Q<Button>("news-tv-continue");
+            m_NewsTvIgnore = root.Q<Button>("news-tv-ignore");
+            m_NewsTvAttend = root.Q<Button>("news-tv-attend");
+            if (m_NewsTvAttendArt) m_NewsTvAttend.style.backgroundImage = new StyleBackground(m_NewsTvAttendArt);
+            if (m_NewsTvIgnoreArt) m_NewsTvIgnore.style.backgroundImage = new StyleBackground(m_NewsTvIgnoreArt);
 
             m_EndingOverlay = root.Q<VisualElement>("ending-overlay");
             m_EndingTitle = root.Q<Label>("ending-title");
@@ -149,6 +211,17 @@ namespace RevManager {
                 RevGameManager.Instance.JournalUpdated -= OnJournalUpdated;
                 RevGameManager.Instance.GameEnded -= OnGameEnded;
                 RevGameManager.Instance.ActionCompleted -= OnActionCompleted;
+                RevGameManager.Instance.NewsFired -= OnNewsFired;
+                RevGameManager.Instance.CrisisResolved -= OnCrisisResolved;
+                
+                m_NewsTvClose.clicked -= CloseNewsTv;
+                m_NewsTvContinue.clicked -= CloseNewsTv;
+                m_NewsTvAttend.clicked -= AttendNewsTvCrisis;
+                m_NewsTvIgnore.clicked -= IgnoreNewsTvCrisis;
+                
+                if (m_NewsTvTimerRing != null) m_NewsTvTimerRing.generateVisualContent -= DrawCrisisTimerRing;
+                
+                
             }
             m_Built = false;
         }
@@ -227,6 +300,30 @@ namespace RevManager {
             m_EndDayButton.SetEnabled(Manager.Phase == GamePhase.Weekday && Manager.Queue.Count == 0);
             foreach ((Button button, WeekendOptionData option) in m_WeekendButtons) {
                 button.SetEnabled(Manager.CanChoose(option));
+            }
+            
+            if (m_DisplayedNews &&
+                Manager.PendingCrisis == m_DisplayedNews)
+            {
+                float hoursRemaining = Manager.CrisisHoursRemaining;
+                float totalHours = Mathf.Max(1f, m_DisplayedNews.ResponseHours);
+
+                m_NewsTvTimerText.text =
+                    $"{Mathf.CeilToInt(hoursRemaining)} HOURS";
+
+                float newProgress =
+                    Mathf.Clamp01(hoursRemaining / totalHours);
+
+                if (!Mathf.Approximately(
+                        newProgress,
+                        m_NewsTvTimerProgress))
+                {
+                    m_NewsTvTimerProgress = newProgress;
+                    m_NewsTvTimerRing.MarkDirtyRepaint();
+                }
+
+                m_NewsTvAttend.SetEnabled(
+                    Manager.CanAttendPendingCrisis);
             }
 
         }

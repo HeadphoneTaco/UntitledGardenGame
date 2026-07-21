@@ -9,6 +9,7 @@ namespace RevManager {
         Flavor,
         Important,
         Crisis,
+        Opening,
     }
 
     /// <summary>
@@ -26,24 +27,26 @@ namespace RevManager {
         public NewsTone Tone = NewsTone.Flavor;
 
         [Header("Scheduling")]
-        [Tooltip("Won't appear before this week (1 to 4). Lets the news escalate as the machine gets desperate.")]
-        [Min(1)] public int EarliestWeek = 1;
-
-        [Tooltip("Relative chance of being picked versus other eligible events.")]
-        [Min(0f)] public float Weight = 1f;
-
         [Tooltip("If true, this event can only fire once per run.")]
         public bool OneTimeOnly = true;
 
-        [Header("Player response")]
-        [Tooltip("Optional. Clicking this headline in the journal selects this action in the detail card, ready to Add First (which preempts whatever's running). Lets urgent news jump the queue.")]
-        public ActionData UrgentAction;
-
         [Header("Impact")]
-        [Tooltip("Applied the moment the event hits the journal.")]
+        [Tooltip("Applied immediately when the news appears.")]
         public VariableEffect[] EffectsOnFire;
 
-        [Tooltip("Stretch goal from the doc: applied at week end if the player never engaged with this entry (missing news makes people leave).")]
+        [Header("Crisis Response")]
+        [Tooltip("Resources consumed when the player chooses Attend.")]
+        public VariableCost[] AttendCosts;
+        [Tooltip("How many in-game hours the player has to respond.")]
+        [Min(0.1f)]
+        public float ResponseHours = 3f;
+
+        [Tooltip("Applied after the player pays the cost and attends.")]
+        public VariableEffect[] EffectsOnAttend;
+        
+
+        [Tooltip("Applied when the player chooses Ignore.")]
         public VariableEffect[] EffectsIfIgnored;
+        
     }
 }

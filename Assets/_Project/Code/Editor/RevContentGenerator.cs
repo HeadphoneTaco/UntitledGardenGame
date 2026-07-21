@@ -71,35 +71,7 @@ namespace RevManager.EditorTools {
                 Costs((s_Community, 4)), Effects((s_Machine, -9)));
             Action("Draft Policies", "Write the world you want. Make them read it.", ActionType.Resist, 2,
                 Costs(), Effects((s_Machine, -2), (s_Community, 5)));
-
-            // ---- News (placeholder copy; final copy comes from the narrative pass) ----
-            News("Rations seized at the northern checkpoint", NewsTone.Crisis, 1, 1f,
-                Effects((food, -5)));
-            News("A well runs dry", NewsTone.Important, 1, 1f,
-                Effects((water, -5)));
-            News("Neighbors ask about the kitchen", NewsTone.Flavor, 1, 1.5f,
-                Effects((s_People, 1)));
-            News("Editorial calls the movement 'a nuisance'", NewsTone.Flavor, 1, 1.5f,
-                Effects());
-            News("Police sweep the market district", NewsTone.Important, 2, 1f,
-                Effects((s_Community, -4)));
-            News("A nurse defects to the clinic", NewsTone.Flavor, 2, 1f,
-                Effects((s_People, 1), (health, 3)));
-            News("Curfew declared", NewsTone.Crisis, 3, 1f,
-                Effects((s_Community, -6)));
-            News("State TV admits 'irregularities'", NewsTone.Important, 3, 1f,
-                Effects((s_Machine, -2)));
-
-            // ---- Urgent responses (news -> action links) ----
-            // Fills UrgentAction on existing news assets too, but ONLY when the
-            // field is empty — hand-set links are never touched. Clicking these
-            // headlines in-game selects the response, ready for Add First.
-            LinkUrgent("Rations seized at the northern checkpoint", "Tend the Farms");
-            LinkUrgent("A well runs dry", "Haul Clean Water");
-            LinkUrgent("Police sweep the market district", "Community Kitchen");
-            LinkUrgent("Curfew declared", "Work Slowdown");
-            LinkUrgent("State TV admits 'irregularities'", "Live Stream");
-
+            
             // ---- Endings (doc ladder; higher priority checked first) ----
             Ending("The Movement Is Crushed", "The commune could not hold. People drift away hungry and afraid. Somewhere, someone keeps a poster folded in a drawer.",
                 1f, 0f, 0, true);
@@ -178,32 +150,6 @@ namespace RevManager.EditorTools {
             action.Costs = costs;
             action.Effects = effects;
             AssetDatabase.CreateAsset(action, path);
-        }
-
-        private static void News(string headline, NewsTone tone, int earliestWeek, float weight, VariableEffect[] effects) {
-            string path = $"{Root}/NewsEvents/{headline.Replace("'", "")}.asset";
-            if (AssetDatabase.LoadAssetAtPath<NewsEventData>(path)) {
-                return;
-            }
-            var news = ScriptableObject.CreateInstance<NewsEventData>();
-            news.Headline = headline;
-            news.Body = "(Placeholder copy for tone and shape. Final copy pending.)";
-            news.Tone = tone;
-            news.EarliestWeek = earliestWeek;
-            news.Weight = weight;
-            news.EffectsOnFire = effects;
-            AssetDatabase.CreateAsset(news, path);
-        }
-
-        /// <summary>Sets news.UrgentAction if (and only if) it's currently empty.</summary>
-        private static void LinkUrgent(string headline, string actionName) {
-            var news = AssetDatabase.LoadAssetAtPath<NewsEventData>($"{Root}/NewsEvents/{headline.Replace("'", "")}.asset");
-            var action = AssetDatabase.LoadAssetAtPath<ActionData>($"{Root}/Actions/{actionName}.asset");
-            if (!news || !action || news.UrgentAction) {
-                return;
-            }
-            news.UrgentAction = action;
-            EditorUtility.SetDirty(news);
         }
 
         private static void Ending(string title, string body, float maxMachine, float minCommunity, int priority, bool earlyCollapse) {

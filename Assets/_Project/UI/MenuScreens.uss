@@ -215,3 +215,40 @@
     -unity-text-align: middle-center;
     opacity: 0.85;
 }
+
+/* ---- Opening news ---- */
+
+.meta-screen--opening {
+    align-items: center;
+    justify-content: center;
+}
+
+.opening-news-copy {
+    width: 850px;
+    align-items: center;
+    justify-content: center;
+}
+
+.opening-news-headline {
+    width: 850px;
+    color: white;
+    font-size: 36px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 28px;
+}
+
+.opening-news-body {
+    width: 760px;
+    color: white;
+    font-size: 18px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 40px;
+}
+
+.opening-news-continue {
+    width: 250px;
+    height: 45px;
+}

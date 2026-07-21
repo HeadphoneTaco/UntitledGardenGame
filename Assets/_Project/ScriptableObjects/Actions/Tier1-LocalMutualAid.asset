@@ -17,7 +17,12 @@ MonoBehaviour:
     We need to share what we have so that our people survive.
   Icon: {fileID: 21300000, guid: 22cd0ed0be6fe4126ad5b7864d361198, type: 3}
   Type: 0
-  TimeCost: 2
+  Tier: 1
+  UnlocksTier: 0
+  Prerequisites: []
+  MinSupporters: 0
+  Repeatable: 1
+  TimeCost: 3
   Costs:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
     Amount: 4
@@ -30,8 +35,3 @@ MonoBehaviour:
     Delta: 12
   - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
     Delta: 12
-  Tier: 1
-  UnlocksTier: 0
-  Prerequisites: []
-  MinSupporters: 0
-  Repeatable: 1

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0ab5d8d318a4e42b80d35e7dce2d6c, type: 3}
+  m_Name: SpringWater2
+  m_EditorClassIdentifier: Assembly-CSharp::RevManager.NewsEventData
+  Headline: "Spring Water Buyout: Nestl\xE9"
+  Body: "Some write these atrocities off as the \u201Ccost of progress\u201D but
+    those with eyes to see know these effects are all perfectly calculated by the
+    ruling class and all part of the plan."
+  Image: {fileID: 21300000, guid: 187b67fe7f3224704a6d993fae7ea290, type: 3}
+  Tone: 1
+  OneTimeOnly: 1
+  EffectsOnFire:
+  - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
+    Delta: -15
+  AttendCosts: []
+  ResponseHours: 3
+  EffectsOnAttend: []
+  EffectsIfIgnored: []

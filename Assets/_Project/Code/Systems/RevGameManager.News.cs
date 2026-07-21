@@ -11,40 +11,100 @@ namespace RevManager {
     /// </summary>
     public partial class RevGameManager {
         /// <summary>Guaranteed one event per day end (per the design doc) — as long as something is eligible.</summary>
-        private void FireNews() {
+        private bool FireNews(NewsTone tone)
+        {
             if (!m_News) {
-                return;
+                return false;
             }
 
             NewsEventData[] eligible = m_News.Items
-                .Where(n => n && n.EarliestWeek <= m_Week.Value && !(n.OneTimeOnly && m_FiredNews.Contains(n)))
+                .Where(n =>
+                    n &&
+                    n.Tone == tone &&
+                    !(n.OneTimeOnly && m_FiredNews.Contains(n)))
                 .ToArray();
 
-            NewsEventData pick = PickWeighted(eligible);
+            NewsEventData pick = eligible.Length > 0
+                ? eligible[Random.Range(0, eligible.Length)]
+                : null;
+            
             if (!pick) {
-                return;
+                return false;
             }
 
             m_FiredNews.Add(pick);
-            pick.EffectsOnFire.ApplyAll();
+            if (pick.Tone == NewsTone.Important) pick.EffectsOnFire.ApplyAll();
             AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value, pick.Headline, pick.Tone, pick));
+            
+            if (pick.Tone == NewsTone.Crisis)
+            {
+                m_PendingCrisis = pick;
+                m_CrisisHoursRemaining = pick.ResponseHours;
+                CrisisStarted?.Invoke(pick);
+            }
+            
+            NewsFired?.Invoke(pick);
+            return true;
+            
         }
-
-        private static NewsEventData PickWeighted(NewsEventData[] options) {
-            float total = options.Sum(o => o.Weight);
-            if (total <= 0f) {
-                return null;
+        
+        public bool CanAttendPendingCrisis =>
+            m_PendingCrisis &&
+            m_PendingCrisis.AttendCosts.CanAffordAll();
+        
+        public bool AttendPendingCrisis()
+        {
+            if (!CanAttendPendingCrisis)
+            {
+                return false;
             }
 
-            float roll = Random.value * total;
-            foreach (NewsEventData option in options) {
-                roll -= option.Weight;
-                if (roll <= 0f) {
-                    return option;
-                }
-            }
-            return options.LastOrDefault();
+            NewsEventData crisis = m_PendingCrisis;
+
+            // Attending always consumes the assigned resources.
+            crisis.AttendCosts.PayAll();
+
+            m_PendingCrisis = null;
+            m_CrisisHoursRemaining = 0f;
+
+            // There is no separate success or failure roll.
+            crisis.EffectsOnAttend.ApplyAll();
+
+            AddJournalEntry(new JournalEntry(
+                m_Week.Value,
+                m_Day.Value,
+                $"{crisis.Headline}: the community answered.",
+                NewsTone.Important
+            ));
+
+            CrisisResolved?.Invoke(crisis, true);
+            return true;
         }
+        
+        public bool IgnorePendingCrisis()
+        {
+            if (!m_PendingCrisis)
+            {
+                return false;
+            }
+
+            NewsEventData crisis = m_PendingCrisis;
+            m_PendingCrisis = null;
+            m_CrisisHoursRemaining = 0f;
+
+            crisis.EffectsIfIgnored.ApplyAll();
+
+            AddJournalEntry(new JournalEntry(
+                m_Week.Value,
+                m_Day.Value,
+                $"{crisis.Headline}: no one answered.",
+                NewsTone.Crisis
+            ));
+
+            CrisisResolved?.Invoke(crisis, false);
+            return true;
+        }
+        
 
         private void AddJournalEntry(JournalEntry entry) {
             m_Journal.Add(entry);
@@ -128,5 +188,8 @@ namespace RevManager {
                 .OrderByDescending(e => e.Priority)
                 .FirstOrDefault(e => e.Matches(machineProgress, communityProgress));
         }
+        
+       
+        
     }
 }

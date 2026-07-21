@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2076cc5598f82644db050558dd507eac, type: 3}
   m_Name: Tier1-ClothingPottery
   m_EditorClassIdentifier: Assembly-CSharp::RevManager.ActionData
-  DisplayName: Make Clothing and Pottery (Unfinished)
+  DisplayName: Make Clothing and Pottery
   Description: The land provides the material for our skilled hands to spin textiles
     and mold clay into bricks and pottery.
   Icon: {fileID: 21300000, guid: 18a75c87ca1b048148665bca2f6846ba, type: 3}
@@ -23,7 +23,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 063567a1f855fdb48ba90c841d295745, type: 2}
   MinSupporters: 0
   Repeatable: 1
-  TimeCost: 5
+  TimeCost: 4
   Costs:
   - Variable: {fileID: 11400000, guid: b3618b28ee6277e4b9f960ee5080dac4, type: 2}
     Amount: 4

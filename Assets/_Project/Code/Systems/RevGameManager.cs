@@ -92,6 +92,9 @@ namespace RevManager {
         [SerializeField] private NewsEventBucket m_News;
         [SerializeField] private WeekendOptionBucket m_WeekendOptions;
         [SerializeField] private EndingBucket m_Endings;
+        
+        [Header("Opening News")]
+        [SerializeField] private NewsEventData m_OpeningNews;
 
         [Header("Phase Events (optional GameEvent assets for UI / state machine)")]
         [SerializeField] private GameEvent m_OnDayStarted;
@@ -99,6 +102,9 @@ namespace RevManager {
         [SerializeField] private GameEvent m_OnProtestResolved;
         [SerializeField] private GameEvent m_OnGameEnded;
 
+        // Crisis currently waiting for an Attend or Ignore response.
+        private NewsEventData m_PendingCrisis;
+        private float m_CrisisHoursRemaining;
         private readonly List<JournalEntry> m_Journal = new List<JournalEntry>();
         private readonly HashSet<NewsEventData> m_FiredNews = new HashSet<NewsEventData>();
         private readonly List<ActionData> m_TodaysActions = new List<ActionData>();
@@ -116,12 +122,18 @@ namespace RevManager {
         public event Action<WeekendOptionData, bool> ProtestResolved;
         public event Action<EndingData> GameEnded;
         public event Action<ActionData> ActionCompleted;
-
+        public event Action<NewsEventData> CrisisStarted;
+        public event Action<NewsEventData, bool> CrisisResolved;
+        public event Action<NewsEventData> NewsFired;
         public GamePhase Phase { get; private set; } = GamePhase.Weekday;
+        public NewsEventData PendingCrisis => m_PendingCrisis;
+        public bool HasPendingCrisis => m_PendingCrisis != null;
         public IReadOnlyList<JournalEntry> Journal => m_Journal;
         public IReadOnlyList<ActionData> TodaysActions => m_TodaysActions;
         public IReadOnlyList<QueuedAction> Queue => m_Queue;
         public EndingData Ending { get; private set; }
+        public float CrisisHoursRemaining => m_CrisisHoursRemaining;
+        public NewsEventData OpeningNews => m_OpeningNews;
 
         /// <summary>Bumped on every queue mutation so the UI can rebuild only when needed.</summary>
         public int QueueVersion { get; private set; }
@@ -148,6 +160,9 @@ namespace RevManager {
         }
 
         public void StartRun() {
+            
+            m_PendingCrisis = null;
+            m_CrisisHoursRemaining = 0f;
             m_Community.ResetValue();
             m_Machine.ResetValue();
             m_People.ResetValue();
@@ -167,6 +182,23 @@ namespace RevManager {
             // Unsubscribe first so a restart never double-subscribes.
             m_Community.Changed -= OnCommunityChanged;
             m_Community.Changed += OnCommunityChanged;
+            
+            if (m_OpeningNews)
+            {
+                // Prevent this special opening story from firing randomly later.
+                m_FiredNews.Add(m_OpeningNews);
+
+                // Apply its starting effects before the first day's hours are calculated.
+                m_OpeningNews.EffectsOnFire.ApplyAll();
+
+                AddJournalEntry(new JournalEntry(
+                    m_Week.Value,
+                    m_Day.Value,
+                    m_OpeningNews.Headline,
+                    m_OpeningNews.Tone,
+                    m_OpeningNews
+                ));
+            }
 
             BeginDay();
         }

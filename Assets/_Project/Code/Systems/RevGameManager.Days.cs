@@ -14,24 +14,61 @@ namespace RevManager {
         /// Each day gets exactly one news event — usually breaking mid-day, but
         /// backstopped here. The world moves whether you do or not.
         /// </summary>
-        public void EndDay() {
-            if (Phase != GamePhase.Weekday || m_Queue.Count > 0) {
+        public void EndDay()
+        {
+            if (Phase != GamePhase.Weekday || m_Queue.Count > 0)
+            {
                 return;
             }
 
-            // Guarantee holds even if the day ended before the breaking hour.
-            if (!m_NewsFiredToday) {
-                m_NewsFiredToday = true;
-                FireNews();
+            // Every completed day gets Important news.
+            bool importantOpened = FireNews(NewsTone.Important);
+
+            if (m_Day.Value >= m_DaysPerWeek)
+            {
+                SetPhase(GamePhase.Weekend);
+
+                if (!importantOpened)
+                {
+                    OpenWeeklyCrisis();
+                }
+
+                return;
             }
 
-            if (m_Day.Value >= m_DaysPerWeek) {
-                SetPhase(GamePhase.Weekend);
-                RaiseIfSet(m_OnWeekendReached);
-            } else {
-                m_Day.Value += 1;
-                BeginDay();
+            m_Day.Value += 1;
+            BeginDay();
+        }
+        
+        public void OpenWeeklyCrisis()
+        {
+            if (Phase != GamePhase.Weekend || HasPendingCrisis) return;
+            if (!FireNews(NewsTone.Crisis)) BeginNextWeek();
+            
+        }
+
+        public void BeginNextWeek()
+        {
+            if (Phase != GamePhase.Weekend)
+            {
+                return;
             }
+
+            if (m_Week.Value >= m_TotalWeeks)
+            {
+                // The final Crisis must be resolved before the ending.
+                if (!HasPendingCrisis)
+                {
+                    FinishRun(false);
+                }
+
+                return;
+            }
+
+            m_Week.Value += 1;
+            m_Day.Value = 1;
+            SetPhase(GamePhase.Weekday);
+            BeginDay();
         }
 
         private void BeginDay() {
@@ -79,7 +116,7 @@ namespace RevManager {
             AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value,
                 $"{option.DisplayName}: {(success ? "the streets answered." : "it fell apart. People were too worn down.")}",
                 success ? NewsTone.Important : NewsTone.Crisis));
-
+            
             RaiseIfSet(m_OnProtestResolved);
             ProtestResolved?.Invoke(option, success);
 

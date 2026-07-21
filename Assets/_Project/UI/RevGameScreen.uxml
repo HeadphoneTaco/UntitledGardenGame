@@ -104,6 +104,85 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
+        
+        <ui:VisualElement
+    name="news-tv-overlay"
+    class="news-tv-overlay"
+    style="display: none;">
+
+    <ui:VisualElement class="news-tv-stage">
+
+        <ui:VisualElement
+            name="news-tv-background"
+            class="news-tv-background"/>
+
+        <ui:VisualElement
+            name="news-tv-frame"
+            class="news-tv-frame">
+
+            <ui:Button
+                name="news-tv-close"
+                text="X"
+                class="news-tv-close"/>
+
+            <ui:VisualElement
+                name="news-tv-paper"
+                class="news-tv-paper">
+
+                <ui:Label
+                    name="news-tv-headline"
+                    text="NEWS HEADLINE"
+                    class="news-tv-headline"/>
+
+                <ui:Label
+                    name="news-tv-body"
+                    text="News story."
+                    class="news-tv-body"/>
+
+                <ui:VisualElement
+                    name="news-tv-crisis-area"
+                    class="news-tv-crisis-area">
+
+                    <ui:VisualElement
+                        name="news-tv-timer-ring"
+                        class="news-tv-timer-ring">
+
+                        <ui:Label
+                            name="news-tv-timer-text"
+                            text="0 HOURS"
+                            class="news-tv-timer-text"/>
+
+                    </ui:VisualElement>
+
+                    <ui:VisualElement
+                        name="news-tv-costs"
+                        class="news-tv-costs"/>
+
+                    <ui:VisualElement class="news-tv-decisions">
+
+                        <ui:Button
+                            name="news-tv-ignore"
+                            text=""
+                            class="news-tv-decision"/>
+
+                        <ui:Button
+                            name="news-tv-attend"
+                            text=""
+                            class="news-tv-decision"/>
+
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:Button
+                    name="news-tv-continue"
+                    text="CONTINUE"
+                    class="news-tv-continue"/>
+
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:VisualElement>
+        
         <ui:VisualElement name="ending-overlay" class="ending-overlay">
             <ui:VisualElement class="ending-card">
                 <ui:Label name="ending-title" text="Ending Title" class="ending-card__title"/>
@@ -112,6 +191,33 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="meta-layer" class="meta-layer" picking-mode="Ignore">
+            
+            <ui:VisualElement
+                name="opening-news-screen"
+                class="meta-screen meta-screen--lose meta-screen--opening">
+
+                <ui:VisualElement class="opening-news-copy">
+
+                    <ui:Label
+                        name="opening-news-headline"
+                        text="OPENING HEADLINE"
+                        class="opening-news-headline"/>
+
+                    <ui:Label
+                        name="opening-news-body"
+                        text="Opening story."
+                        class="opening-news-body"/>
+
+                    <ui:Button
+                        name="opening-news-continue"
+                        text="CONTINUE"
+                        class="menu-button opening-news-continue"/>
+
+                
+            
+            
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement name="title-screen" class="meta-screen meta-screen--title">
                 <ui:VisualElement class="meta-buttons">
                     <ui:Button name="title-start-button" text="START THE REVOLUTION" class="menu-button"/>

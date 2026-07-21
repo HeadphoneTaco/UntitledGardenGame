@@ -643,3 +643,140 @@
     flex-shrink: 0;
     -unity-background-scale-mode: scale-to-fit;
 }
+
+.news-tv-timer-ring {
+    width: 90px;
+    height: 90px;
+    align-items: center;
+    justify-content: center;
+}
+
+.news-tv-timer-text {
+    color: rgb(190, 30, 45);
+    font-size: 11px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    
+}
+
+.news-tv-overlay {
+     position: absolute;
+     left: 0;
+     right: 0;
+     top: 0;
+     bottom: 0;
+     align-items: center;
+     justify-content: center;
+     background-color: rgba(0, 0, 0, 0.78);
+ }
+
+.news-tv-stage {
+    width: 840px;
+    height: 840px;
+    scale: 1.08 1.08;
+}
+
+.news-tv-background {
+    position: absolute;
+    left: 82px;
+    top: 70px;
+    width: 672px;
+    height: 515px;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.news-tv-frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 840px;
+    height: 840px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.news-tv-close {
+    position: absolute;
+    right: 45px;
+    top: 38px;
+    width: 42px;
+    height: 42px;
+    background-color: rgb(180, 20, 35);
+    color: white;
+    font-size: 20px;
+    -unity-font-style: bold;
+    border-width: 0;
+}
+
+.news-tv-paper {
+    position: absolute;
+    left: 95px;
+    top: 340px;
+    width: 650px;
+    height: 240px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.news-tv-headline {
+    position: absolute;
+    left: 28px;
+    top: 82px;
+    width: 410px;
+    height: 38px;
+    color: rgb(35, 30, 25);
+    font-size: 17px;
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.news-tv-body {
+    position: absolute;
+    left: 28px;
+    top: 122px;
+    width: 410px;
+    height: 90px;
+    color: rgb(35, 30, 25);
+    font-size: 12px;
+    white-space: normal;
+}
+
+.news-tv-crisis-area {
+    position: absolute;
+    right: 20px;
+    top: 76px;
+    width: 190px;
+    height: 150px;
+    align-items: center;
+}
+
+.news-tv-costs {
+    flex-direction: row;
+    justify-content: center;
+    color: rgb(145, 20, 30);
+    font-size: 12px;
+}
+
+.news-tv-decisions {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.news-tv-decision {
+    width: 68px;
+    height: 68px;
+    margin: 2px;
+    border-width: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.news-tv-continue {
+    position: absolute;
+    right: 25px;
+    bottom: 22px;
+    width: 115px;
+    height: 34px;
+    background-color: rgb(180, 20, 35);
+    color: white;
+    -unity-font-style: bold;
+    border-width: 0;
+}

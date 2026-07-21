@@ -24,7 +24,7 @@ MonoBehaviour:
   Prerequisites: []
   MinSupporters: 45
   Repeatable: 1
-  TimeCost: 12
+  TimeCost: 7
   Costs:
   - Variable: {fileID: 11400000, guid: e8eb76e0a8b00ae4f934165658729014, type: 2}
     Amount: 15
