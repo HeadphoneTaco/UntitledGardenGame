@@ -213,8 +213,7 @@
                         text="CONTINUE"
                         class="menu-button opening-news-continue"/>
 
-                </ui:VisualElement>
-            </ui:VisualElement>
+                
             
             
                 </ui:VisualElement>
@@ -272,4 +271,6 @@
                     <ui:Button name="lose-credits-button" text="VIEW CREDITS" class="menu-button"/>
                 </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

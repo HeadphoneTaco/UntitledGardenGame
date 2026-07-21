@@ -91,13 +91,26 @@ namespace RevManager {
                 {
                     if (capturedNews.Tone == NewsTone.Opening)
                     {
-                        GetComponent<MenuScreensController>()
-                            ?.ShowOpeningNews(capturedNews);
+                        MenuScreensController menuScreens = GetComponent<MenuScreensController>();
+
+                        if (menuScreens == null)
+                        {
+                            menuScreens = FindFirstObjectByType<MenuScreensController>();
+                        }
+
+                        if (menuScreens == null)
+                        {
+                            Debug.LogError("Journal cannot find MenuScreensController.");
+                            return;
+                        }
+
+                        menuScreens.ShowOpeningNews(capturedNews);
                     }
                     else
                     {
                         ShowNewsTv(capturedNews);
                     }
+                    
                 });
             }
             else if (body != null)
