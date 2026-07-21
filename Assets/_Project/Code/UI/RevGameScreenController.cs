@@ -143,8 +143,16 @@ namespace RevManager {
             m_SupportFill = root.Q<VisualElement>("support-fill");
             m_CommunityFill = root.Q<VisualElement>("community-fill");
             m_MachineFill = root.Q<VisualElement>("machine-fill");
+            ScrollView drainList = root.Q<ScrollView>("drain-list");
 
-            BuildResourceRows(root.Q<ScrollView>("drain-list"));
+            if (drainList != null)
+            {
+                BuildResourceRows(drainList);
+            }
+            else
+            {
+                Debug.LogError("Could not find the ScrollView named 'drain-list' in RevGameScreen.uxml.");
+            }
 
             m_DetailIcon = root.Q<VisualElement>("detail-icon");
             m_DetailName = root.Q<Label>("detail-name");

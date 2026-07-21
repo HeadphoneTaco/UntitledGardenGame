@@ -89,7 +89,15 @@ namespace RevManager {
 
                 container.RegisterCallback<ClickEvent>(_ =>
                 {
-                    ShowNewsTv(capturedNews);
+                    if (capturedNews.Tone == NewsTone.Opening)
+                    {
+                        GetComponent<MenuScreensController>()
+                            ?.ShowOpeningNews(capturedNews);
+                    }
+                    else
+                    {
+                        ShowNewsTv(capturedNews);
+                    }
                 });
             }
             else if (body != null)
@@ -117,6 +125,12 @@ namespace RevManager {
 
         private void ShowNewsTv(NewsEventData news, bool autoClose = false)
         {
+            
+            if (!news || news.Tone == NewsTone.Opening)
+            {
+                return;
+            }
+            
             if (!news || news.Tone == NewsTone.Flavor)
             {
                 return;
@@ -189,7 +203,7 @@ namespace RevManager {
             {
                 m_NewsTvAutoClose = m_NewsTvOverlay.schedule
                     .Execute(CloseNewsTv)
-                    .StartingIn(8000);
+                    .StartingIn(30000);
             }
             
         }

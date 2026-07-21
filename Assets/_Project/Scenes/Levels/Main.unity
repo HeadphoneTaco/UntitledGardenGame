@@ -338,6 +338,12 @@ MonoBehaviour:
   m_LocalOption: {fileID: 0}
   m_BigOption: {fileID: 0}
   m_SupportBarCap: 100
+  m_NewsTvBackgrounds: []
+  m_NewsTvFrameArt: {fileID: 0}
+  m_NewsTvImportantContainer: {fileID: 0}
+  m_NewsTvCrisisContainer: {fileID: 0}
+  m_NewsTvAttendArt: {fileID: 0}
+  m_NewsTvIgnoreArt: {fileID: 0}
 --- !u!114 &515014648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,12 +424,13 @@ MonoBehaviour:
   m_RetaliationPerWeek: 11
   m_MachineRecoveryPerWeek: 7
   m_SecondsPerHour: 15
-  m_DrainingResources: {fileID: 0}
+  m_DrainingResources: {fileID: 11400000, guid: afec8c5a2a071804687002c98756a9ea, type: 2}
   m_GameFlow: {fileID: 1896299347}
   m_Actions: {fileID: 11400000, guid: 618ef6802361fc04c90881e0e62494b4, type: 2}
   m_News: {fileID: 11400000, guid: a266e2d035984ff46935ae3bd55bf16f, type: 2}
   m_WeekendOptions: {fileID: 11400000, guid: 28a41d3dfafb38a408c68ea8c5cfa70e, type: 2}
   m_Endings: {fileID: 11400000, guid: 5b367bb9503e30e45bfa58d479034a2a, type: 2}
+  m_OpeningNews: {fileID: 11400000, guid: 202010db4fda7b4479c600b07fef7095, type: 2}
   m_OnDayStarted: {fileID: 0}
   m_OnWeekendReached: {fileID: 0}
   m_OnProtestResolved: {fileID: 0}

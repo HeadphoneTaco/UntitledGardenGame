@@ -24,7 +24,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a36ed598b3b64234aa4b229a4679761, type: 2}
   MinSupporters: 0
   Repeatable: 0
-  TimeCost: 10
+  TimeCost: 9
   Costs:
   - Variable: {fileID: 11400000, guid: b3134c282a8eda5489b2a460faafc976, type: 2}
     Amount: 15

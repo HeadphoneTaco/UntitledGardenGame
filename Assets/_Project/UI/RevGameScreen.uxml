@@ -191,6 +191,34 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="meta-layer" class="meta-layer" picking-mode="Ignore">
+            
+            <ui:VisualElement
+                name="opening-news-screen"
+                class="meta-screen meta-screen--lose meta-screen--opening">
+
+                <ui:VisualElement class="opening-news-copy">
+
+                    <ui:Label
+                        name="opening-news-headline"
+                        text="OPENING HEADLINE"
+                        class="opening-news-headline"/>
+
+                    <ui:Label
+                        name="opening-news-body"
+                        text="Opening story."
+                        class="opening-news-body"/>
+
+                    <ui:Button
+                        name="opening-news-continue"
+                        text="CONTINUE"
+                        class="menu-button opening-news-continue"/>
+
+                </ui:VisualElement>
+            </ui:VisualElement>
+            
+            
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement name="title-screen" class="meta-screen meta-screen--title">
                 <ui:VisualElement class="meta-buttons">
                     <ui:Button name="title-start-button" text="START THE REVOLUTION" class="menu-button"/>
@@ -244,6 +272,4 @@
                     <ui:Button name="lose-credits-button" text="VIEW CREDITS" class="menu-button"/>
                 </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
-    </ui:VisualElement>
 </ui:UXML>

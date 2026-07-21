@@ -9,6 +9,7 @@ namespace RevManager {
         Flavor,
         Important,
         Crisis,
+        Opening,
     }
 
     /// <summary>

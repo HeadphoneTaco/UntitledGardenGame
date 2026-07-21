@@ -32,6 +32,7 @@ namespace RevManager {
             Credits,
             Win,
             Lose,
+            Opening,
         }
 
         [SerializeField, Tooltip("Show the title screen when the scene loads. Turn off to boot straight into the game while iterating.")]
@@ -56,6 +57,10 @@ namespace RevManager {
 
         private RevGameScreenController m_GameScreen;
         private static RevGameManager Manager => RevGameManager.Exists ? RevGameManager.Instance : null;
+        
+        private VisualElement m_OpeningNewsScreen;
+        private Label m_OpeningNewsHeadline;
+        private Label m_OpeningNewsBody;
 
         private void OnEnable() {
             VisualElement root = GetComponent<UIDocument>().rootVisualElement;
@@ -69,7 +74,12 @@ namespace RevManager {
             m_LoseScreen = root.Q<VisualElement>("lose-screen");
             m_WinEndingLabel = root.Q<Label>("win-ending-label");
             m_LoseEndingLabel = root.Q<Label>("lose-ending-label");
+            
+            m_OpeningNewsScreen = root.Q<VisualElement>("opening-news-screen");
+            m_OpeningNewsHeadline = root.Q<Label>("opening-news-headline");
+            m_OpeningNewsBody = root.Q<Label>("opening-news-body");
 
+            Bind(root, "opening-news-continue", CloseOpeningNews);
             Bind(root, "title-start-button", StartFreshRun);
             Bind(root, "title-options-button", OpenOptions);
             Bind(root, "title-credits-button", OpenCredits);
@@ -136,6 +146,7 @@ namespace RevManager {
             Toggle(m_CreditsScreen, screen == MetaScreen.Credits);
             Toggle(m_WinScreen, screen == MetaScreen.Win);
             Toggle(m_LoseScreen, screen == MetaScreen.Lose);
+            Toggle(m_OpeningNewsScreen, screen == MetaScreen.Opening);
             Time.timeScale = screen == MetaScreen.None ? 1f : 0f;
         }
 
@@ -166,9 +177,33 @@ namespace RevManager {
 
         // ---- Button handlers ----
 
-        private void StartFreshRun() {
+        private void StartFreshRun()
+        {
             m_GameScreen?.ResetRunUi();
             Manager?.StartRun();
+            ShowOpeningNews();
+        }
+        
+        public void ShowOpeningNews(NewsEventData news = null)
+        {
+            if (!news)
+            {
+                news = Manager?.OpeningNews;
+            }
+
+            if (!news)
+            {
+                Show(MetaScreen.None);
+                return;
+            }
+
+            m_OpeningNewsHeadline.text = news.Headline;
+            m_OpeningNewsBody.text = news.Body;
+            Show(MetaScreen.Opening);
+        }
+
+        private void CloseOpeningNews()
+        {
             Show(MetaScreen.None);
         }
 
