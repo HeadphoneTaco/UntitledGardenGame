@@ -100,6 +100,13 @@ namespace RevManager {
                 m_Queue.Add(entry);
             }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Ghost-queue diagnostic: the fell-through bug report says actions
+            // appear on the belt unbidden. Every enqueue logs its caller so
+            // one repro in the Console names the culprit. Strip after fixing.
+            Debug.Log($"[Queue] ENQUEUED '{action.DisplayName}' (first={first}, queue now {m_Queue.Count})\n{System.Environment.StackTrace}");
+#endif
+
             QueueVersion++;
             return true;
         }
@@ -197,6 +204,9 @@ namespace RevManager {
             // (The one-shot check covers a duplicate that slipped into the queue.)
             if (action.TimeCost > m_ActionPointsLeft.Value || !action.CanAfford
                 || !action.Repeatable && IsCompleted(action)) {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                Debug.LogWarning($"[Queue] FELL THROUGH '{action.DisplayName}': time {action.TimeCost}>{m_ActionPointsLeft.Value}? afford={action.CanAfford} repeat={action.Repeatable} done={IsCompleted(action)}");
+#endif
                 AddJournalEntry(new JournalEntry(m_Week.Value, m_Day.Value,
                     $"{action.DisplayName} fell through. Not enough left to see it done.", NewsTone.Crisis));
                 return;
